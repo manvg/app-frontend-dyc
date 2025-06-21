@@ -1,0 +1,156 @@
+.login-wrapper {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f8fafc;
+}
+
+mat-card.login-card {
+  width: 100%;
+  max-width: 410px;
+  padding: 38px 32px 28px 32px;
+  border-radius: 14px;
+  box-shadow: 0 0 30px 30px #665b5b88 !important;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.login-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #232b3e;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.login-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  margin-top: 3px;
+
+  .mat-checkbox {
+    font-size: 1rem;
+  }
+}
+
+.login-link {
+  color: #4285f4;
+  font-size: 0.99rem;
+  text-decoration: none;
+  transition: color 0.18s;
+
+  &:hover {
+    color: #1a56d8;
+    text-decoration: underline;
+  }
+}
+
+.login-btn {
+  width: 100%;
+  font-weight: 600;
+  font-size: 1.08rem;
+  border-radius: 8px;
+  padding: 13px 0;
+  margin-top: 7px;
+}
+
+.login-separator {
+  display: flex;
+  align-items: center;
+  color: #828a96;
+  font-size: 1.03rem;
+  margin: 18px 0 6px;
+
+  &::before, &::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid #e2e7ef;
+  }
+  &:not(:empty)::before {
+    margin-right: .9em;
+  }
+  &:not(:empty)::after {
+    margin-left: .9em;
+  }
+}
+
+.login-social {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.login-social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  .icon {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    margin-right: 7px;
+    display: inline-block;
+    vertical-align: middle;
+    object-fit: contain;
+    font-size: 1.2em;
+  }
+}
+
+
+
+.login-register {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 0.98rem;
+}
+
+@media (max-width: 540px) {
+  .login-card {
+    padding: 18px 3vw;
+    max-width: 98vw;
+  }
+}
+
+.login-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 16px;
+}
+
+.login-logo {
+  max-width: 54px;
+  max-height: 54px;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(20,30,90,0.09);
+  background: white;
+  object-fit: contain;
+}
+
+.login-logo-top-left {
+  position: absolute;
+  top: 24px;
+  left: 32px;
+  max-width: 62px;
+  max-height: 62px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(20,30,90,0.08);
+  background: white;
+}
