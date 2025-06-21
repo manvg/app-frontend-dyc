@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>
+  {{ producto.idProducto ? 'Editar Producto' : 'Nuevo Producto' }}
+</h2>
+
+<mat-dialog-content>
+  <form #formProducto="ngForm">
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Nombre</mat-label>
+      <input matInput [(ngModel)]="producto.nombre" name="nombre" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Descripción</mat-label>
+      <textarea matInput [(ngModel)]="producto.descripcion" name="descripcion" required></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Material</mat-label>
+      <input matInput [(ngModel)]="producto.material" name="material" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Medidas</mat-label>
+      <input matInput [(ngModel)]="producto.medidas" name="medidas" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Precio</mat-label>
+      <input matInput type="number" [(ngModel)]="producto.precio" name="precio" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>URL Imagen</mat-label>
+      <input matInput [(ngModel)]="producto.urlImagen" name="urlImagen">
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="guardar()">Guardar</button>
+</mat-dialog-actions>

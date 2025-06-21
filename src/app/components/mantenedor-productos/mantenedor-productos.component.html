@@ -1,0 +1,70 @@
+<div class="contenedor-productos">
+  <mat-toolbar color="primary">
+    Mantenedor de Productos
+    <span class="espaciador"></span>
+    <button mat-raised-button color="accent" (click)="nuevoProducto()">+ Nuevo Producto</button>
+  </mat-toolbar>
+
+  <ng-container *ngIf="productos.length > 0; else sinProductos">
+    <mat-card>
+      <mat-table [dataSource]="productos" class="mat-elevation-z2">
+
+        <!-- Nombre -->
+        <ng-container matColumnDef="nombre">
+          <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+          <mat-cell *matCellDef="let producto"> {{ producto.nombre }} </mat-cell>
+        </ng-container>
+
+        <!-- Material -->
+        <ng-container matColumnDef="material">
+          <mat-header-cell *matHeaderCellDef> Material </mat-header-cell>
+          <mat-cell *matCellDef="let producto"> {{ producto.material }} </mat-cell>
+        </ng-container>
+
+        <!-- Medidas -->
+        <ng-container matColumnDef="medidas">
+          <mat-header-cell *matHeaderCellDef> Medidas </mat-header-cell>
+          <mat-cell *matCellDef="let producto"> {{ producto.medidas }} </mat-cell>
+        </ng-container>
+
+        <!-- Precio -->
+        <ng-container matColumnDef="precio">
+          <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
+          <mat-cell *matCellDef="let producto"> {{ producto.precio | currency:'$' }} </mat-cell>
+        </ng-container>
+
+        <!-- Activo -->
+        <ng-container matColumnDef="activo">
+          <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
+          <mat-cell *matCellDef="let producto"> {{ producto.activo === 1 ? 'Sí' : 'No' }} </mat-cell>
+        </ng-container>
+
+        <!-- Acciones -->
+        <ng-container matColumnDef="acciones">
+          <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+          <mat-cell *matCellDef="let producto">
+            <button mat-icon-button color="primary" (click)="editarProducto(producto.idProducto)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="desactivarProducto(producto.idProducto)" *ngIf="producto.activo === 1">
+              <mat-icon>block</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="eliminarProducto(producto.idProducto)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+
+        <!-- Filas -->
+        <mat-header-row *matHeaderRowDef="columnas"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: columnas;"></mat-row>
+      </mat-table>
+    </mat-card>
+  </ng-container>
+
+  <ng-template #sinProductos>
+    <mat-card>
+      <p>No hay productos registrados.</p>
+    </mat-card>
+  </ng-template>
+</div>
