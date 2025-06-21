@@ -1,0 +1,23 @@
+.callback-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  font-size: 1.3rem;
+}
+
+.loader {
+  margin-top: 20px;
+  border: 4px solid #e3e3e3;
+  border-top: 4px solid #2258a8;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg);}
+  100% { transform: rotate(360deg);}
+}
