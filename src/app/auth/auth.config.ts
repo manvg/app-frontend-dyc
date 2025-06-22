@@ -7,9 +7,9 @@ export const authConfig: PassedInitialConfig = {
               postLogoutRedirectUri: 'http://localhost:4200/login',
               clientId: 'pjpde8a7s02kp9h2i0keflk',
               scope: 'openid email',
-              responseType: 'code'
-              // silentRenew: true,
-              // useRefreshToken: true,
-              // renewTimeBeforeTokenExpiresInSeconds: 30,
+              responseType: 'code',
+              customParamsAuthRequest: {
+                lang: 'es'
+              }
           }
 }
