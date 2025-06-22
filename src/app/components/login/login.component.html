@@ -1,35 +1,24 @@
-<div class="login-wrapper">
-  <mat-card class="login-card">
-    <div class="login-header">
-      <img src="assets/logo_dyc.jpg" alt="Logo empresa" class="login-logo" />
-      <span class="login-title">Iniciar sesión</span>
-    </div>
-    <form [formGroup]="formLogin" (ngSubmit)="iniciarSesion()" class="login-form">
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Correo electrónico</mat-label>
-        <input matInput formControlName="email" autocomplete="username" required />
-      </mat-form-field>
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Contraseña</mat-label>
-        <input matInput type="password" formControlName="password" autocomplete="current-password" required />
-      </mat-form-field>
-      <div class="login-actions">
-        <mat-checkbox formControlName="rememberMe" color="primary">Recordarme</mat-checkbox>
-        <a class="login-link" routerLink="/recuperar">¿Olvidaste tu contraseña?</a>
+<ng-template #noAuth>
+  <div class="login-material-wrapper">
+    <button mat-raised-button color="primary" class="full-width" (click)="login()">
+      <mat-icon>login</mat-icon>
+      Iniciar sesión con AWS Cognito
+    </button>
+  </div>
+</ng-template>
+
+<div *ngIf="isAuthenticated; else noAuth" class="login-material-wrapper">
+  <mat-card>
+    <mat-card-title>¡Sesión iniciada!</mat-card-title>
+    <mat-card-content>
+      <div>
+        <strong>Usuario:</strong>
+        <pre>{{ userData$ | async | json }}</pre>
       </div>
-      <button mat-raised-button color="primary" class="login-btn" type="submit" [disabled]="formLogin.invalid">
-        Ingresar
+      <button mat-stroked-button color="accent" (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        Cerrar sesión
       </button>
-    </form>
-    <div class="login-separator">O ingresa con</div>
-    <div class="login-social">
-      <button mat-stroked-button color="primary" class="login-social-btn">
-        <img src="assets/logo_google.png" class="icon" width="18" height="18" alt="Google" />
-        <span>Google</span>
-      </button>
-    </div>
-    <div class="login-register">
-      ¿No tienes cuenta? <a class="login-link" routerLink="/registro">Regístrate</a>
-    </div>
+    </mat-card-content>
   </mat-card>
 </div>

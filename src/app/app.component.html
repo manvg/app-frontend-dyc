@@ -1,1 +1,5 @@
+<div *ngIf="isAuthenticated">
+  Bienvenido, {{ (userData$ | async)?.userData?.email || 'Usuario' }}!
+  <button (click)="logout()">Cerrar sesión</button>
+</div>
 <router-outlet></router-outlet>

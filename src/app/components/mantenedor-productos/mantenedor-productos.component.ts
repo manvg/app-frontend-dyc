@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { ProductosService } from '../../services/productos/productos.service';
 import { Producto } from '../../models/producto.model';
 import { CommonModule } from '@angular/common';
@@ -12,6 +13,7 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { FormularioProductoComponent } from '../formulario-producto/formulario-producto.component';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 @Component({
   selector: 'app-mantenedor-productos',
@@ -35,6 +37,9 @@ export class MantenedorProductosComponent implements OnInit {
   productos: Producto[] = [];
   columnas: string[] = ['nombre', 'material', 'medidas', 'precio', 'activo', 'acciones'];
 
+  private oidcSecurityService = inject(OidcSecurityService);
+  private router = inject(Router);
+
   constructor(
     private productosService: ProductosService,
     private dialog: MatDialog,
@@ -42,7 +47,13 @@ export class MantenedorProductosComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.cargarProductos();
+    this.oidcSecurityService.isAuthenticated$.subscribe(({ isAuthenticated }) => {
+      if (!isAuthenticated) {
+        this.router.navigate(['/login']);
+      } else {
+        this.cargarProductos();
+      }
+    });
   }
 
   cargarProductos(): void {

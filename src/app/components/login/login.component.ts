@@ -1,67 +1,34 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule, Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { Component, inject } from '@angular/core';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { NgIf, AsyncPipe, JsonPipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [
-    CommonModule, RouterModule, ReactiveFormsModule,
-    MatInputModule, MatFormFieldModule, MatButtonModule,
-    MatCardModule, MatCheckboxModule, MatIconModule
-  ],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  imports: [ NgIf, AsyncPipe, JsonPipe, MatButtonModule, MatCardModule, MatIconModule]
 })
-export class LoginComponent implements OnInit {
-  formLogin!: FormGroup;
-  enviado = false;
-  loginError = '';
-  loading = false;
-  titulo: string = 'Iniciar sesión';
+export class LoginComponent {
+  private oidcSecurityService = inject(OidcSecurityService);
 
-  constructor(
-    private fb: FormBuilder,
-    private router: Router
-  ) {}
+  isAuthenticated = false;
+  userData$ = this.oidcSecurityService.userData$;
 
   ngOnInit(): void {
-    this.formLogin = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]],
-      rememberMe: [true]
+    this.oidcSecurityService.isAuthenticated$.subscribe(({ isAuthenticated }) => {
+      this.isAuthenticated = isAuthenticated;
     });
   }
 
-  iniciarSesion(): void {
-    this.enviado = true;
-    this.loginError = '';
-    this.loading = true;
+  login(): void {
+    this.oidcSecurityService.authorize();
+  }
 
-    if (this.formLogin.valid) {
-      const email = this.formLogin.get('email')!.value;
-      const password = this.formLogin.get('password')!.value;
-      const rememberMe = this.formLogin.get('rememberMe')!.value;
-
-      // Aquí va tu integración con Cognito o backend
-      // Ejemplo placeholder:
-      setTimeout(() => {
-        this.loading = false;
-        // Si es exitoso
-        this.router.navigate(['/']);
-        // Si hay error, muestra feedback visual
-        // this.loginError = 'Correo o contraseña incorrectos';
-      }, 1200);
-
-    } else {
-      this.loading = false;
-    }
+  logout(): void {
+    this.oidcSecurityService.logoffAndRevokeTokens();
   }
 }
