@@ -1,19 +1,19 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { Router } from '@angular/router';
 import { NgIf, AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, AsyncPipe, NgIf],
+  imports: [RouterOutlet, NgIf, AsyncPipe],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
-  title = 'app-frontend-dyc';
-
   private readonly oidcSecurityService = inject(OidcSecurityService);
+  private readonly router = inject(Router);
 
   isAuthenticated = false;
   userData$ = this.oidcSecurityService.userData$;
@@ -21,11 +21,16 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.oidcSecurityService.isAuthenticated$.subscribe(({ isAuthenticated }) => {
       this.isAuthenticated = isAuthenticated;
-      console.warn('authenticated: ', isAuthenticated);
+
+      if (isAuthenticated && window.location.pathname === '/login/callback') {
+        this.router.navigate(['/productos']);
+      }
     });
   }
 
   logout() {
-    this.oidcSecurityService.logoff();
+    if (typeof window !== 'undefined') {
+      this.oidcSecurityService.logoffAndRevokeTokens();
+    }
   }
 }
