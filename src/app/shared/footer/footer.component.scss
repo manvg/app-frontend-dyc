@@ -1,0 +1,73 @@
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #111;
+  color: #fff;
+  padding: 24px 32px;
+  font-size: 1rem;
+  box-shadow: 0 -2px 8px #0002; // Sombra hacia arriba
+  min-height: 70px;
+  margin-top: 32px;
+
+  &__left, &__center, &__right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &__contacto {
+    font-size: 1.1rem;
+    margin-bottom: 0.5em;
+
+    strong {
+      font-size: 1.2rem;
+      margin-bottom: 4px;
+      color: #fff; // Fuerza blanco para el título
+    }
+    div, a {
+      margin-bottom: 2px;
+      color: #fff; // Blanco para los datos de contacto
+      text-decoration: none;
+    }
+    a {
+      color: #00e2c6; // Color acento para el mail
+      &:hover {
+        color: #fff;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &__copy {
+    text-align: center;
+    color: #fff !important; // Ahora SIEMPRE blanco
+    font-size: 0.95em;
+  }
+
+  &__right {
+    align-items: flex-end;
+  }
+
+  &__login {
+    background: none;
+    border: none;
+    color: #fff !important; // Ahora SIEMPRE blanco
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    gap: 6px;
+    padding: 0;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #00e2c6; // Acento al pasar el mouse
+      text-decoration: underline;
+    }
+
+    .material-icons {
+      font-size: 1.5rem;
+    }
+  }
+}

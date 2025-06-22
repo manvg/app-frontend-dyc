@@ -1,0 +1,65 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background:#111;// #e3e3e3;
+  padding: 0 32px;
+  height: 70px;
+  box-shadow: 0 2px 8px #0002;
+  &__logo {
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      margin-right: 8px;
+      filter: brightness(1.8);
+    }
+    .navbar__brand {
+      font-weight: bold;
+      font-size: 1.4rem;
+      color: #fff;
+    }
+  }
+
+  &__divider {
+    width: 1px;
+    height: 38px;
+    background: #bbb;
+    margin: 0 24px;
+  }
+
+  &__links {
+    list-style: none;
+    display: flex;
+    gap: 24px;
+    margin: 0;
+    padding: 0;
+
+    li {
+      a {
+        text-decoration: none;
+        color: #fff;
+        font-weight: 500;
+        font-size: 1.05rem;
+        transition: color 0.2s;
+        &.active, &:hover {
+          color: #00e2c6;
+        }
+      }
+    }
+  }
+
+  &__cart {
+    margin-left: auto;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #fff;
+    transition: color 0.2s;
+    &:hover {
+      color: #00e2c6;
+    }
+  }
+}
