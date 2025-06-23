@@ -28,9 +28,20 @@ export class AppComponent implements OnInit {
     });
   }
 
+  // logout() {
+  //   if (typeof window !== 'undefined') {
+  //     console.log('Cerrando sesión...');
+  //     this.oidcSecurityService.logoffAndRevokeTokens(window.location.origin + '/home');
+  //   }
+  // }
+
+
+
   logout() {
     if (typeof window !== 'undefined') {
-      this.oidcSecurityService.logoffAndRevokeTokens();
+      this.oidcSecurityService.logoff(window.location.origin + '/home');
     }
   }
+
+
 }

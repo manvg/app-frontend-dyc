@@ -14,6 +14,8 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
 import { FormularioProductoComponent } from '../formulario-producto/formulario-producto.component';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { NavbarComponent } from '../../shared/navbar/navbar.component';
+import { FooterComponent } from '../../shared/footer/footer.component';
 
 @Component({
   selector: 'app-mantenedor-productos',
@@ -27,7 +29,9 @@ import { OidcSecurityService } from 'angular-auth-oidc-client';
     MatCardModule,
     MatIconModule,
     MatDialogModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    NavbarComponent,
+    FooterComponent
   ],
   templateUrl: './mantenedor-productos.component.html',
   styleUrl: './mantenedor-productos.component.scss'
@@ -49,7 +53,7 @@ export class MantenedorProductosComponent implements OnInit {
   ngOnInit(): void {
     this.oidcSecurityService.isAuthenticated$.subscribe(({ isAuthenticated }) => {
       if (!isAuthenticated) {
-        this.router.navigate(['/login']);
+        this.router.navigate(['/home']);
       } else {
         this.cargarProductos();
       }
