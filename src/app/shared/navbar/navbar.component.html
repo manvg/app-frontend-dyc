@@ -1,19 +1,23 @@
 <nav class="navbar">
-  <div class="navbar__logo">
-    <!-- Aquí va tu logo, usa <img> o un ícono si lo tienes -->
-    <img src="assets/logo_dyc.jpg" alt="Logo" />
-    <span class="navbar__brand">DYC</span>
-  </div>
-  <div class="navbar__divider"></div>
-  <ul class="navbar__links">
-    <li><a routerLink="/home" routerLinkActive="active">INICIO</a></li>
-    <li><a routerLink="/servicio1" routerLinkActive="active">SERVICIO 1</a></li>
-    <li><a routerLink="/servicio2" routerLinkActive="active">SERVICIO 2</a></li>
-    <li><a routerLink="/servicio3" routerLinkActive="active">SERVICIO 3</a></li>
-    <li><a routerLink="/productos" routerLinkActive="active">PRODUCTOS</a></li>
-    <li><a routerLink="/pedido-personalizado" routerLinkActive="active">PEDIDO PERSONALIZADO</a></li>
-  </ul>
-  <div class="navbar__cart">
-    <span class="material-icons">shopping_cart</span>
+  <div class="navbar__container">
+    <div class="navbar__logo">
+      <img src="assets/logo_dyc.jpg" alt="Logo DYC">
+      <span class="navbar__brand">DYC</span>
+    </div>
+    <div class="navbar__divider"></div>
+
+    <!-- Menú centrado -->
+    <ul class="navbar__links">
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">INICIO</a></li>
+      <li><a routerLink="/servicio1" routerLinkActive="active">SERVICIO 1</a></li>
+      <li><a routerLink="/servicio2" routerLinkActive="active">SERVICIO 2</a></li>
+      <li><a routerLink="/servicio3" routerLinkActive="active">SERVICIO 3</a></li>
+      <li><a routerLink="/productos" routerLinkActive="active">PRODUCTOS</a></li>
+      <li><a routerLink="/pedido-personalizado" routerLinkActive="active">PEDIDO PERSONALIZADO</a></li>
+      <!-- Carrito va justo después -->
+      <li>
+        <span class="navbar__cart material-icons" title="Ver carrito">shopping_cart</span>
+      </li>
+    </ul>
   </div>
 </nav>

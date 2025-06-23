@@ -1,0 +1,7 @@
+<div class="producto-destacado">
+  <!-- <img [src]="imagen" [alt]="'Imagen de ' + titulo"> -->
+  <img [src]="imagen" [alt]="descripcion ? titulo + ' - ' + descripcion : 'Imagen de ' + titulo">
+  <h3>{{titulo}}</h3>
+  <p>{{descripcion}}</p>
+  <button>Ver producto</button>
+</div>

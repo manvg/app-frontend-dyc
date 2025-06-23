@@ -6,7 +6,7 @@
   color: #fff;
   padding: 24px 32px;
   font-size: 1rem;
-  box-shadow: 0 -2px 8px #0002; // Sombra hacia arriba
+  box-shadow: 0 -2px 8px #0002;
   min-height: 70px;
   margin-top: 32px;
 
@@ -23,15 +23,15 @@
     strong {
       font-size: 1.2rem;
       margin-bottom: 4px;
-      color: #fff; // Fuerza blanco para el título
+      color: #fff;
     }
     div, a {
       margin-bottom: 2px;
-      color: #fff; // Blanco para los datos de contacto
+      color: #fff;
       text-decoration: none;
     }
     a {
-      color: #00e2c6; // Color acento para el mail
+      color: #696877;
       &:hover {
         color: #fff;
         text-decoration: underline;
@@ -41,7 +41,7 @@
 
   &__copy {
     text-align: center;
-    color: #fff !important; // Ahora SIEMPRE blanco
+    color: #fff !important;
     font-size: 0.95em;
   }
 
@@ -52,7 +52,7 @@
   &__login {
     background: none;
     border: none;
-    color: #fff !important; // Ahora SIEMPRE blanco
+    color: #fff !important;
     font-size: 1rem;
     display: flex;
     align-items: center;
@@ -62,7 +62,7 @@
     transition: color 0.2s;
 
     &:hover {
-      color: #00e2c6; // Acento al pasar el mouse
+      color: #696877;
       text-decoration: underline;
     }
 

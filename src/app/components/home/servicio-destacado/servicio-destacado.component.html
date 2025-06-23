@@ -1,0 +1,10 @@
+<div class="servicio-destacado" [ngClass]="{'reverse': orientacion === 'derecha'}">
+  <div class="servicio-destacado__img">
+    <img [src]="imagen" alt="Imagen de {{titulo}}">
+  </div>
+  <div class="servicio-destacado__info">
+    <h2>{{titulo}}</h2>
+    <p>{{descripcion}}</p>
+    <button>Ver Servicio</button>
+  </div>
+</div>
