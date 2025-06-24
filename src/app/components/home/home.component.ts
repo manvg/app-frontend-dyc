@@ -35,38 +35,38 @@ export class HomeComponent {
     {
       titulo: 'Corte Láser de Acrílico',
       descripcion: 'Servicio de corte de acrílico de alta precisión con terminaciones limpias y profesionales para proyectos industriales y personalizados.',
-      imagen: 'https://picsum.photos/340/220?random=1',
+      imagen: 'assets/servicio_corte_laser_de_acrilico.jpg',
       orientacion: 'izquierda'
     },
     {
       titulo: 'Grabado Láser en Madera',
       descripcion: 'Personaliza tus artículos o regalos con grabado láser en madera: nombres, logotipos o diseños exclusivos, todo con máxima definición.',
-      imagen: 'https://picsum.photos/340/220?random=2',
+      imagen: 'assets/servicio_grabado_laser_en_madera.jpg',
       orientacion: 'derecha'
     },
     {
       titulo: 'Corte Láser de MDF',
       descripcion: 'Fabricación de piezas en MDF con cortes complejos y detalles finos, ideal para maquetas, decoración y señalética.',
-      imagen: 'https://picsum.photos/340/220?random=3',
+      imagen: 'assets/servicio_corte_laser_de_MDF.jpg',
       orientacion: 'izquierda'
     }
   ];
 
   productos: Producto[] = [
     {
-      titulo: 'Llavero Personalizado',
-      descripcion: 'Llavero en acrílico con grabado personalizado, ideal para empresas, eventos o regalos únicos.',
-      imagen: 'https://picsum.photos/260/180?random=4'
+      titulo: 'Letrero Luminoso Personalizado',
+      descripcion: 'Letrero en acrílico personalizado con corte láser e iluminación LED.',
+      imagen: 'assets/producto_letrero_negocio.jpg'
     },
     {
-      titulo: 'Caja Organizadora',
-      descripcion: 'Caja armable en MDF con encaje perfecto, personalizable con grabados. Práctica y elegante.',
-      imagen: 'https://picsum.photos/260/180?random=5'
+      titulo: 'Medalla Personalizada en Acrílico',
+      descripcion: 'Medalla en acrílico cortada y grabada con láser, ideal para premiaciones.',
+      imagen: 'assets/producto_premio_medalla.jpg'
     },
     {
       titulo: 'Señalética de Oficina',
       descripcion: 'Placa señalética acrílica con impresión o grabado láser, resistente y de alta calidad.',
-      imagen: 'https://picsum.photos/260/180?random=6'
+      imagen: 'assets/producto_senaletica_oficina.jpg'
     }
   ];
 }
