@@ -25,6 +25,15 @@
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Tipo de Producto</mat-label>
+      <mat-select [(ngModel)]="producto.idTipoProducto" name="idTipoProducto" required>
+        <mat-option *ngFor="let tipo of tiposProducto" [value]="tipo.idTipoProducto">
+          {{ tipo.nombre }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-full">
       <mat-label>Precio</mat-label>
       <input matInput type="number" [(ngModel)]="producto.precio" name="precio" required>
     </mat-form-field>

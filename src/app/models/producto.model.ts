@@ -5,7 +5,8 @@ export interface Producto {
   material: string;
   medidas: string;
   precio: number;
-  urlImagen?: string;
+  urlImagen: string;
   activo: number;
-  idTipoProducto: number;
+  idTipoProducto: number | null;
+  nombreTipoProducto?: string;
 }

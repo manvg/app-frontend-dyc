@@ -9,6 +9,13 @@
     <mat-card>
       <mat-table [dataSource]="productos" class="mat-elevation-z2">
 
+        <ng-container matColumnDef="tipoProducto">
+          <mat-header-cell *matHeaderCellDef> Tipo de Producto </mat-header-cell>
+          <mat-cell *matCellDef="let producto">
+            {{ producto.nombreTipoProducto }}
+          </mat-cell>
+        </ng-container>
+
         <!-- Nombre -->
         <ng-container matColumnDef="nombre">
           <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
@@ -43,13 +50,17 @@
         <ng-container matColumnDef="acciones">
           <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
           <mat-cell *matCellDef="let producto">
-            <button mat-icon-button color="primary" (click)="editarProducto(producto.idProducto)">
+            <button matTooltip="Editar" mat-icon-button color="primary" (click)="editarProducto(producto.idProducto)">
               <mat-icon>edit</mat-icon>
             </button>
-            <button mat-icon-button color="warn" (click)="desactivarProducto(producto.idProducto)" *ngIf="producto.activo === 1">
-              <mat-icon>block</mat-icon>
+            <button mat-icon-button
+              [color]="producto.activo === 1 ? 'warn' : 'primary'"
+              (click)="cambiarVigenciaProducto(producto)"
+              [matTooltip]="producto.activo === 1 ? 'Desactivar' : 'Activar'">
+                <mat-icon>{{ producto.activo === 1 ? 'block' : 'check_circle' }}</mat-icon>
             </button>
-            <button mat-icon-button color="warn" (click)="eliminarProducto(producto.idProducto)">
+
+            <button matTooltip="Eliminar" mat-icon-button color="warn" (click)="eliminarProducto(producto.idProducto)">
               <mat-icon>delete</mat-icon>
             </button>
           </mat-cell>

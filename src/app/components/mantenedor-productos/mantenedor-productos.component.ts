@@ -14,8 +14,7 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
 import { FormularioProductoComponent } from '../formulario-producto/formulario-producto.component';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
-import { NavbarComponent } from '../../shared/navbar/navbar.component';
-import { FooterComponent } from '../../shared/footer/footer.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-mantenedor-productos',
@@ -30,8 +29,7 @@ import { FooterComponent } from '../../shared/footer/footer.component';
     MatIconModule,
     MatDialogModule,
     MatSnackBarModule,
-    NavbarComponent,
-    FooterComponent
+    MatTooltipModule
   ],
   templateUrl: './mantenedor-productos.component.html',
   styleUrl: './mantenedor-productos.component.scss'
@@ -39,7 +37,7 @@ import { FooterComponent } from '../../shared/footer/footer.component';
 export class MantenedorProductosComponent implements OnInit {
 
   productos: Producto[] = [];
-  columnas: string[] = ['nombre', 'material', 'medidas', 'precio', 'activo', 'acciones'];
+  columnas: string[] = ['tipoProducto', 'nombre', 'material', 'medidas', 'precio', 'activo', 'acciones'];
 
   private oidcSecurityService = inject(OidcSecurityService);
   private router = inject(Router);
@@ -78,7 +76,9 @@ export class MantenedorProductosComponent implements OnInit {
         medidas: '',
         precio: 0,
         urlImagen: '',
-        activo: 1
+        activo: 1,
+        idTipoProducto: null,
+        nombreTipoProducto: ''
       } as Producto
     });
 
@@ -116,25 +116,32 @@ export class MantenedorProductosComponent implements OnInit {
     });
   }
 
-  desactivarProducto(id: number): void {
+  cambiarVigenciaProducto(producto: Producto): void {
+    const nuevoEstado = producto.activo === 1 ? 0 : 1;
+    const accion = nuevoEstado === 0 ? 'desactivar' : 'activar';
+
     this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
       data: {
         titulo: 'Confirmación',
-        mensaje: '¿Estás seguro de desactivar este producto?'
+        mensaje: `¿Estás seguro de ${accion} este producto?`
       }
     }).afterClosed().subscribe(result => {
       if (result) {
-        this.productosService.desactivar(id).subscribe({
+        this.productosService.cambiarEstado(producto.idProducto, nuevoEstado).subscribe({
           next: () => {
             this.cargarProductos();
-            this.snackBar.open('Producto desactivado', 'Cerrar', { duration: 3000 });
+            this.snackBar.open(
+              nuevoEstado === 0 ? 'Producto desactivado' : 'Producto activado',
+              'Cerrar', { duration: 3000 }
+            );
           },
-          error: err => console.error('Error al desactivar producto', err)
+          error: err => console.error(`Error al ${accion} producto`, err)
         });
       }
     });
   }
+
 
   eliminarProducto(id: number): void {
     this.dialog.open(ConfirmDialogComponent, {

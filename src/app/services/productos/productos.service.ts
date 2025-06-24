@@ -32,8 +32,8 @@ export class ProductosService {
     return this.http.put<Producto>(`${this.apiUrl}/${id}`, producto);
   }
 
-  desactivar(id: number): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${id}/desactivar`, {});
+  cambiarEstado(id: number, activo: number): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${id}/cambiar-estado?activo=${activo}`, {});
   }
 
   eliminar(id: number): Observable<void> {
