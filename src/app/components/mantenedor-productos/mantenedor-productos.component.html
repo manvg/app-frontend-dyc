@@ -5,73 +5,82 @@
     <button mat-raised-button color="accent" (click)="nuevoProducto()">+ Nuevo Producto</button>
   </mat-toolbar>
 
-  <ng-container *ngIf="productos.length > 0; else sinProductos">
-    <mat-card>
-      <mat-table [dataSource]="productos" class="mat-elevation-z2">
+  <ng-container *ngIf="productos !== null; else loading">
+    <ng-container *ngIf="productos.length > 0; else sinProductos">
+      <mat-card>
+        <mat-table [dataSource]="productos" class="mat-elevation-z2">
 
-        <ng-container matColumnDef="tipoProducto">
-          <mat-header-cell *matHeaderCellDef> Tipo de Producto </mat-header-cell>
-          <mat-cell *matCellDef="let producto">
-            {{ producto.nombreTipoProducto }}
-          </mat-cell>
-        </ng-container>
+          <!-- Tipo de Producto -->
+          <ng-container matColumnDef="tipoProducto">
+            <mat-header-cell *matHeaderCellDef> Tipo de Producto </mat-header-cell>
+            <mat-cell *matCellDef="let producto">
+              {{ producto.nombreTipoProducto }}
+            </mat-cell>
+          </ng-container>
 
-        <!-- Nombre -->
-        <ng-container matColumnDef="nombre">
-          <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
-          <mat-cell *matCellDef="let producto"> {{ producto.nombre }} </mat-cell>
-        </ng-container>
+          <!-- Nombre -->
+          <ng-container matColumnDef="nombre">
+            <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+            <mat-cell *matCellDef="let producto"> {{ producto.nombre }} </mat-cell>
+          </ng-container>
 
-        <!-- Material -->
-        <ng-container matColumnDef="material">
-          <mat-header-cell *matHeaderCellDef> Material </mat-header-cell>
-          <mat-cell *matCellDef="let producto"> {{ producto.material }} </mat-cell>
-        </ng-container>
+          <!-- Material -->
+          <ng-container matColumnDef="material">
+            <mat-header-cell *matHeaderCellDef> Material </mat-header-cell>
+            <mat-cell *matCellDef="let producto"> {{ producto.material }} </mat-cell>
+          </ng-container>
 
-        <!-- Medidas -->
-        <ng-container matColumnDef="medidas">
-          <mat-header-cell *matHeaderCellDef> Medidas </mat-header-cell>
-          <mat-cell *matCellDef="let producto"> {{ producto.medidas }} </mat-cell>
-        </ng-container>
+          <!-- Medidas -->
+          <ng-container matColumnDef="medidas">
+            <mat-header-cell *matHeaderCellDef> Medidas </mat-header-cell>
+            <mat-cell *matCellDef="let producto"> {{ producto.medidas }} </mat-cell>
+          </ng-container>
 
-        <!-- Precio -->
-        <ng-container matColumnDef="precio">
-          <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
-          <mat-cell *matCellDef="let producto"> {{ producto.precio | currency:'$' }} </mat-cell>
-        </ng-container>
+          <!-- Precio -->
+          <ng-container matColumnDef="precio">
+            <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
+            <mat-cell *matCellDef="let producto"> {{ producto.precio | currency:'$' }} </mat-cell>
+          </ng-container>
 
-        <!-- Activo -->
-        <ng-container matColumnDef="activo">
-          <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
-          <mat-cell *matCellDef="let producto"> {{ producto.activo === 1 ? 'Sí' : 'No' }} </mat-cell>
-        </ng-container>
+          <!-- Activo -->
+          <ng-container matColumnDef="activo">
+            <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
+            <mat-cell *matCellDef="let producto"> {{ producto.activo === 1 ? 'Sí' : 'No' }} </mat-cell>
+          </ng-container>
 
-        <!-- Acciones -->
-        <ng-container matColumnDef="acciones">
-          <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
-          <mat-cell *matCellDef="let producto">
-            <button matTooltip="Editar" mat-icon-button color="primary" (click)="editarProducto(producto.idProducto)">
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button mat-icon-button
-              [color]="producto.activo === 1 ? 'warn' : 'primary'"
-              (click)="cambiarVigenciaProducto(producto)"
-              [matTooltip]="producto.activo === 1 ? 'Desactivar' : 'Activar'">
-                <mat-icon>{{ producto.activo === 1 ? 'block' : 'check_circle' }}</mat-icon>
-            </button>
+          <!-- Acciones -->
+          <ng-container matColumnDef="acciones">
+            <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+            <mat-cell *matCellDef="let producto">
+              <button matTooltip="Editar" mat-icon-button color="primary" (click)="editarProducto(producto.idProducto)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button
+                [color]="producto.activo === 1 ? 'warn' : 'primary'"
+                (click)="cambiarVigenciaProducto(producto)"
+                [matTooltip]="producto.activo === 1 ? 'Desactivar' : 'Activar'">
+                  <mat-icon>{{ producto.activo === 1 ? 'block' : 'check_circle' }}</mat-icon>
+              </button>
+              <button matTooltip="Eliminar" mat-icon-button color="warn" (click)="eliminarProducto(producto.idProducto)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container>
 
-            <button matTooltip="Eliminar" mat-icon-button color="warn" (click)="eliminarProducto(producto.idProducto)">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </mat-cell>
-        </ng-container>
-
-        <!-- Filas -->
-        <mat-header-row *matHeaderRowDef="columnas"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: columnas;"></mat-row>
-      </mat-table>
-    </mat-card>
+          <!-- Filas -->
+          <mat-header-row *matHeaderRowDef="columnas"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: columnas;"></mat-row>
+        </mat-table>
+      </mat-card>
+    </ng-container>
   </ng-container>
+
+  <ng-template #loading>
+    <mat-card style="display: flex; align-items: center; justify-content: center; padding: 32px;">
+      <mat-spinner diameter="40"></mat-spinner>
+      <span style="margin-left: 16px;">Cargando productos...</span>
+    </mat-card>
+  </ng-template>
 
   <ng-template #sinProductos>
     <mat-card>

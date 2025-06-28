@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { Router } from '@angular/router';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 @Component({
   selector: 'app-login-callback',
@@ -9,14 +9,19 @@ import { Router } from '@angular/router';
   styleUrls: ['./login-callback.component.scss']
 })
 export class LoginCallbackComponent implements OnInit {
-  private oidcSecurityService = inject(OidcSecurityService);
-  private router = inject(Router);
+  private readonly oidcSecurityService = inject(OidcSecurityService);
+  private readonly router = inject(Router);
 
   ngOnInit(): void {
-    this.oidcSecurityService.checkAuthIncludingServer().subscribe(({ isAuthenticated }) => {
-      if (isAuthenticated) {
-        this.router.navigate(['/productos']);
-      } else {
+    this.oidcSecurityService.checkAuth().subscribe({
+      next: ({ isAuthenticated }) => {
+        if (isAuthenticated) {
+          this.router.navigate(['/productos']);
+        } else {
+          this.router.navigate(['/home']);
+        }
+      },
+      error: () => {
         this.router.navigate(['/home']);
       }
     });

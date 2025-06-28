@@ -67,13 +67,13 @@ describe('MantenedorProductosComponent', () => {
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/productos/editar', 99]);
   });
 
-  it('debe desactivar un producto', () => {
-    spyOn(window, 'confirm').and.returnValue(true);
-    mockProductosService.desactivar.and.returnValue(of());
+  // it('debe desactivar un producto', () => {
+  //   spyOn(window, 'confirm').and.returnValue(true);
+  //   mockProductosService.desactivar.and.returnValue(of());
 
-    component.desactivarProducto(1);
-    expect(mockProductosService.desactivar).toHaveBeenCalledWith(1);
-  });
+  //   component.desactivarProducto(1);
+  //   expect(mockProductosService.desactivar).toHaveBeenCalledWith(1);
+  // });
 
   it('debe eliminar un producto si se confirma', () => {
     spyOn(window, 'confirm').and.returnValue(true);

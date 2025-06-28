@@ -13,8 +13,9 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { FormularioProductoComponent } from '../formulario-producto/formulario-producto.component';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 
 @Component({
   selector: 'app-mantenedor-productos',
@@ -29,7 +30,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatIconModule,
     MatDialogModule,
     MatSnackBarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './mantenedor-productos.component.html',
   styleUrl: './mantenedor-productos.component.scss'
@@ -39,29 +41,21 @@ export class MantenedorProductosComponent implements OnInit {
   productos: Producto[] = [];
   columnas: string[] = ['tipoProducto', 'nombre', 'material', 'medidas', 'precio', 'activo', 'acciones'];
 
-  private oidcSecurityService = inject(OidcSecurityService);
-  private router = inject(Router);
-
-  constructor(
-    private productosService: ProductosService,
-    private dialog: MatDialog,
-    private snackBar: MatSnackBar
-  ) {}
+  private productosService = inject(ProductosService);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
 
   ngOnInit(): void {
-    this.oidcSecurityService.isAuthenticated$.subscribe(({ isAuthenticated }) => {
-      if (!isAuthenticated) {
-        this.router.navigate(['/home']);
-      } else {
-        this.cargarProductos();
-      }
-    });
+    this.cargarProductos();
   }
 
   cargarProductos(): void {
     this.productosService.obtenerTodos().subscribe({
       next: data => this.productos = data,
-      error: err => console.error('Error al cargar productos', err)
+      error: err => {
+        this.productos = [];
+        console.error('Error al cargar productos', err);
+      }
     });
   }
 
@@ -141,7 +135,6 @@ export class MantenedorProductosComponent implements OnInit {
       }
     });
   }
-
 
   eliminarProducto(id: number): void {
     this.dialog.open(ConfirmDialogComponent, {

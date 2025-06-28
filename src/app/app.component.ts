@@ -2,12 +2,12 @@ import { Component, OnInit, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { Router } from '@angular/router';
-import { NgIf, AsyncPipe } from '@angular/common';
+import { NgIf, AsyncPipe, NgTemplateOutlet } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NgIf, AsyncPipe],
+  imports: [RouterOutlet, NgIf, AsyncPipe, NgTemplateOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -21,27 +21,18 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.oidcSecurityService.isAuthenticated$.subscribe(({ isAuthenticated }) => {
       this.isAuthenticated = isAuthenticated;
-
-      if (isAuthenticated && window.location.pathname === '/login/callback') {
-        this.router.navigate(['/productos']);
-      }
+      console.warn('authenticated: ', isAuthenticated);
     });
   }
 
-  // logout() {
-  //   if (typeof window !== 'undefined') {
-  //     console.log('Cerrando sesión...');
-  //     this.oidcSecurityService.logoffAndRevokeTokens(window.location.origin + '/home');
-  //   }
-  // }
-
-
-
-  logout() {
-    if (typeof window !== 'undefined') {
-      this.oidcSecurityService.logoff(window.location.origin + '/home');
-    }
+  login(): void {
+    this.oidcSecurityService.authorize();
   }
 
-
+  logout(): void {
+    window.sessionStorage.clear();
+    window.location.href =
+      'https://dyc-corte-laser.auth.us-east-1.amazoncognito.com/logout?client_id=f1vmjepap0h7h1qouu45i59bi&logout_uri=' +
+      encodeURIComponent(window.location.origin + '/home');
+  }
 }
