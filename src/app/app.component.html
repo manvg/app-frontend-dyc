@@ -1,5 +1,11 @@
-<div *ngIf="isAuthenticated">
-  Bienvenido, {{ (userData$ | async)?.userData?.email || 'Usuario' }}!
-  <button (click)="logout()">Cerrar sesión</button>
+<div class="app-wrapper">
+  <div *ngIf="isAuthenticated" class="barra-sesion">
+    Bienvenido, {{ (userData$ | async)?.userData?.email || 'Usuario' }}!
+    <button (click)="logout()">Cerrar sesión</button>
+  </div>
+  <app-navbar></app-navbar>
+  <main class="contenido-principal">
+    <router-outlet></router-outlet>
+  </main>
+  <app-footer></app-footer>
 </div>
-<router-outlet></router-outlet>

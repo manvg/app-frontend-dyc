@@ -1,0 +1,19 @@
+<div class="contenedor-lista-servicios">
+  <h1 class="titulo-lista-servicios">Nuestros Servicios</h1>
+  <div class="grilla-servicios">
+    <div
+      class="card-servicio"
+      *ngFor="let servicio of servicios"
+      (click)="verDetalle(servicio.idServicio)"
+      [class.inactivo]="!servicio.activo"
+    >
+      <img [src]="servicio.urlImagen" [alt]="servicio.nombre" />
+      <div class="info-servicio">
+        <h2>{{ servicio.nombre }}</h2>
+        <p>{{ servicio.descripcion }}</p>
+        <div class="precio-servicio">Precio: {{ servicio.precio | currency:'CLP':'symbol':'1.0-0' }}</div>
+        <div *ngIf="!servicio.activo" class="servicio-inactivo">No disponible</div>
+      </div>
+    </div>
+  </div>
+</div>

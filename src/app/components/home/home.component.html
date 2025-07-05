@@ -1,32 +1,22 @@
-<app-navbar></app-navbar>
 <div class="contenedor-home">
-  <div class="contenedor-home">
-    <!-- Servicios destacados -->
-    <ng-container *ngFor="let servicio of servicios">
-      <app-servicio-destacado
-        [titulo]="servicio.titulo"
-        [descripcion]="servicio.descripcion"
-        [imagen]="servicio.imagen"
-        [orientacion]="servicio.orientacion">
-      </app-servicio-destacado>
+  <!-- Servicios destacados -->
+  <ng-container *ngFor="let servicio of servicios">
+    <app-servicio-destacado
+      [servicio]="servicio"
+      [orientacion]="servicio.orientacion">
+    </app-servicio-destacado>
+  </ng-container>
+
+  <h2 class="productos-titulo">Productos destacados</h2>
+  <div class="productos-destacados">
+    <ng-container *ngFor="let producto of productos">
+      <app-producto-destacado
+        [titulo]="producto.nombre"
+        [descripcion]="producto.descripcion"
+        [imagen]="producto.urlImagen">
+      </app-producto-destacado>
     </ng-container>
-
-    <!-- Productos destacados -->
-    <h2 class="productos-titulo">Productos destacados</h2>
-    <div class="productos-destacados">
-      <ng-container *ngFor="let producto of productos">
-        <app-producto-destacado
-          [titulo]="producto.titulo"
-          [descripcion]="producto.descripcion"
-          [imagen]="producto.imagen">
-        </app-producto-destacado>
-      </ng-container>
-    </div>
-
-    <!-- Pedido personalizado -->
-    <app-pedido-personalizado></app-pedido-personalizado>
   </div>
 
+  <app-pedido-personalizado></app-pedido-personalizado>
 </div>
-
-<app-footer></app-footer>

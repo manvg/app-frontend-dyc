@@ -1,10 +1,13 @@
-<div class="servicio-destacado" [ngClass]="{'reverse': orientacion === 'derecha'}">
+<a class="servicio-destacado"
+   [routerLink]="['/servicios', servicio.idServicio]"
+   [ngClass]="{'reverse': orientacion === 'derecha'}">
+
   <div class="servicio-destacado__img">
-    <img [src]="imagen" alt="Imagen de {{titulo}}">
+    <img [src]="servicio.urlImagen" [alt]="'Imagen de ' + servicio.nombre">
   </div>
   <div class="servicio-destacado__info">
-    <h2>{{titulo}}</h2>
-    <p>{{descripcion}}</p>
-    <button>Ver Servicio</button>
+    <h2>{{servicio.nombre}}</h2>
+    <p>{{servicio.descripcion}}</p>
+    <span class="btn-principal">Ver servicio</span>
   </div>
-</div>
+</a>

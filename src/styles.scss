@@ -2,8 +2,64 @@
 
 html, body {
   height: 100%;
+  min-height: 100%;
   margin: 0;
+  padding: 0;
   font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
   background: #f8fafc;
   color: #202020;
+}
+
+.app-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f8fafc;
+}
+
+.barra-sesion {
+  padding: 8px 16px;
+  background: #e9f5ff;
+  color: #212121;
+  font-size: 1rem;
+  text-align: right;
+}
+
+.contenido-principal {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+app-footer {
+  flex-shrink: 0;
+}
+
+/* ---- Botón principal global ---- */
+.btn-principal {
+  padding: 14px 36px;
+  font-size: 1.13rem;
+  border: 2px solid #181818;  // Negro
+  border-radius: 8px;
+  background: #fff;
+  color: #181818;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+  transition: background 0.18s, color 0.18s, border 0.18s;
+
+  &:hover,
+  &:focus {
+    background: #181818;    // Fondo negro en hover
+    color: #fff;            // Texto blanco en hover
+    border: 2px solid #181818;
+  }
+}
+
+.btn-principal:active {
+  transform: scale(0.98);
+}
+
+main {
+  padding-top: 40px;
 }

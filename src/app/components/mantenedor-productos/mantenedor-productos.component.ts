@@ -34,7 +34,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatProgressSpinnerModule
   ],
   templateUrl: './mantenedor-productos.component.html',
-  styleUrl: './mantenedor-productos.component.scss'
+  styleUrls: ['./mantenedor-productos.component.scss'],
 })
 export class MantenedorProductosComponent implements OnInit {
 
