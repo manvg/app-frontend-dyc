@@ -1,0 +1,26 @@
+<div class="panel-admin-wrapper">
+  <div class="panel-admin-header">
+    <h2>Bienvenido {{ usuario }}</h2>
+    <h1>PANEL DE ADMINISTRACIÓN</h1>
+  </div>
+  <div class="panel-admin-cards">
+    <div class="panel-admin-card" (click)="irAMantenedorProductos()">
+      <span class="panel-admin-card__icon">🏠</span>
+      <div>
+        <div class="panel-admin-card__title">Productos</div>
+      </div>
+    </div>
+    <div class="panel-admin-card" (click)="irAMantenedorTipos()">
+      <span class="panel-admin-card__icon">📋</span>
+      <div>
+        <div class="panel-admin-card__title">Tipos de Productos</div>
+      </div>
+    </div>
+    <div class="panel-admin-card" (click)="irAVisualizadorSolicitudes()">
+      <span class="panel-admin-card__icon">💬</span>
+      <div>
+        <div class="panel-admin-card__title">Solicitudes</div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -63,3 +63,25 @@ app-footer {
 main {
   padding-top: 40px;
 }
+
+.btn-link {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 0 8px;
+  font-weight: 500;
+  transition: color 0.18s;
+  .material-icons {
+    font-size: 1.3rem;
+    vertical-align: middle;
+  }
+  &:hover {
+    color: #53b9f8;
+    text-decoration: underline;
+  }
+}

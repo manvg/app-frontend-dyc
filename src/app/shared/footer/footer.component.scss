@@ -9,8 +9,11 @@
   box-shadow: 0 -2px 8px #0002;
   min-height: 70px;
   margin-top: 32px;
+  flex-wrap: wrap;
 
-  &__left, &__center, &__right {
+  &__left,
+  &__center,
+  &__right {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -24,11 +27,13 @@
       font-size: 1.2rem;
       margin-bottom: 4px;
       color: #fff;
+      display: block;
     }
     div, a {
       margin-bottom: 2px;
       color: #fff;
       text-decoration: none;
+      font-size: 0.98rem;
     }
     a {
       color: #696877;
@@ -43,31 +48,32 @@
     text-align: center;
     color: #fff !important;
     font-size: 0.95em;
+    margin-top: 3px;
   }
 
   &__right {
     align-items: flex-end;
+    min-width: 100px;
+    margin-top: 0;
   }
+}
 
-  &__login {
-    background: none;
-    border: none;
-    color: #fff !important;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    gap: 6px;
-    padding: 0;
-    transition: color 0.2s;
+@media (max-width: 900px) {
+  .footer {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: left;
+    padding: 18px 12px 10px 12px;
 
-    &:hover {
-      color: #696877;
-      text-decoration: underline;
+    &__center {
+      margin: 12px 0;
+      align-items: flex-start;
+      text-align: left;
     }
-
-    .material-icons {
-      font-size: 1.5rem;
+    &__right {
+      align-items: flex-start;
+      justify-content: flex-start;
+      margin-top: 12px;
     }
   }
 }

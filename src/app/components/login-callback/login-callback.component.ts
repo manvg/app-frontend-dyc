@@ -16,7 +16,7 @@ export class LoginCallbackComponent implements OnInit {
     this.oidcSecurityService.checkAuth().subscribe({
       next: ({ isAuthenticated }) => {
         if (isAuthenticated) {
-          this.router.navigate(['/productos']);
+          this.router.navigate(['/panel-admin']);
         } else {
           this.router.navigate(['/home']);
         }

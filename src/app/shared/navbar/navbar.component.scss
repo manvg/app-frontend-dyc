@@ -43,6 +43,7 @@
     margin: 0 24px;
   }
 
+  // ===== CLIENTE =====
   &__links {
     display: flex;
     align-items: center;
@@ -79,6 +80,54 @@
       }
     }
   }
+
+  // ===== ADMIN: Menú centrado + Log out derecha =====
+  &__panel {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+  }
+
+  &__links--center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    gap: 38px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 1.05rem;
+    width: auto;
+
+    li {
+      display: flex;
+      align-items: center;
+
+      a {
+        text-decoration: none;
+        color: #fff;
+        font-weight: 600;
+        transition: color 0.2s;
+        &.active, &:hover { color: #696877; }
+      }
+    }
+  }
+
+  &__logout {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    button {
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+  }
 }
 
 body, app-root {
@@ -90,7 +139,8 @@ body, app-root {
     height: 60px;
     &__container { padding: 0 8px; }
     &__logo img { width: 36px; height: 36px; }
-    &__links { gap: 10px; font-size: 0.95rem; }
+    &__links,
+    &__links--center { gap: 10px; font-size: 0.95rem; }
     &__cart { font-size: 1.4rem !important; }
   }
 }
