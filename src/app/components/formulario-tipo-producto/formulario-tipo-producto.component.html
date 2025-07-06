@@ -1,0 +1,58 @@
+<h2 mat-dialog-title>
+  {{ tipoProducto.idTipoProducto ? 'Editar Tipo de Producto' : 'Nuevo Tipo de Producto' }}
+</h2>
+
+<mat-dialog-content>
+  <form #formTipoProducto="ngForm">
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Nombre</mat-label>
+      <input matInput [(ngModel)]="tipoProducto.nombre" name="nombre" required>
+    </mat-form-field>
+
+    <!-- Imagen (upload & preview) -->
+    <div class="imagen-producto-upload">
+      <label class="imagen-label">Imagen</label>
+      <div class="imagen-preview-wrapper">
+        <img
+          *ngIf="imagenPreview"
+          [src]="imagenPreview"
+          alt="Imagen seleccionada"
+          class="imagen-preview"
+        />
+        <span *ngIf="!imagenPreview" class="no-img">Sin imagen</span>
+      </div>
+      <input
+        type="file"
+        accept="image/*"
+        (change)="onImagenSeleccionada($event)"
+        id="input-imagen"
+        hidden
+      />
+      <button
+        type="button"
+        mat-stroked-button
+        color="primary"
+        (click)="seleccionarImagen()"
+      >
+        Seleccionar imagen
+      </button>
+      <div *ngIf="nombreImagenSeleccionada" class="nombre-archivo">
+        {{ nombreImagenSeleccionada }}
+      </div>
+    </div>
+
+    <!-- Activo -->
+    <!-- <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Activo</mat-label>
+      <mat-select [(ngModel)]="tipoProducto.activo" name="activo" required>
+        <mat-option [value]="1">Sí</mat-option>
+        <mat-option [value]="0">No</mat-option>
+      </mat-select>
+    </mat-form-field> -->
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="guardar()">Guardar</button>
+</mat-dialog-actions>

@@ -19,14 +19,14 @@ export class NavbarComponent {
   readonly linksAdmin = [
     { label: 'Panel de Administración', route: '/panel-admin' },
     { label: 'Productos', route: '/mantenedor-productos' },
-    { label: 'Tipos de Productos', route: '/mantenedor-tipos-productos' },
+    { label: 'Tipos de Producto', route: '/mantenedor-tipo-producto' },
     { label: 'Solicitudes', route: '/visualizador-solicitudes' }
   ];
 
   private readonly rutasAdmin = [
     '/panel-admin',
     '/mantenedor-productos',
-    '/mantenedor-tipos-productos',
+    '/mantenedor-tipo-producto',
     '/visualizador-solicitudes'
   ];
 

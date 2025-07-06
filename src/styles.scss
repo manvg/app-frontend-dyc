@@ -92,3 +92,251 @@ main {
   --color-bg-table-header: #f6f7fa;
   --color-table-text: #23243a;
 }
+
+/* =========================================================
+   ESTILOS GLOBALES PARA MANTENEDORES DE TABLAS Y FORMULARIOS
+   ---------------------------------------------------------
+   Aplica a .contenedor-productos y .contenedor-tipo-producto
+   Unifica el look de tablas, toolbar y acciones CRUD
+   ========================================================= */
+.contenedor-productos,
+.contenedor-tipo-producto {
+  padding: 38px 18px 0 18px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  // Toolbar superior (título y botón de nuevo)
+  mat-toolbar {
+    margin-bottom: 22px;
+    border-radius: 12px;
+    background: #4857bb !important;
+    color: #fff !important;
+    font-size: 1.6rem;
+    font-weight: 600;
+    box-shadow: 0 2px 10px #0001;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+
+    .espaciador {
+      flex: 1 1 auto;
+    }
+
+    button[mat-raised-button] {
+      font-weight: 600;
+      font-size: 1.09rem;
+      border-radius: 8px;
+      letter-spacing: 0.2px;
+      padding: 0 18px;
+      box-shadow: 0 2px 8px #b7004012;
+      background: #ff417d;
+      color: #fff;
+      transition: background 0.18s;
+      &:hover {
+        background: #e8386f;
+      }
+    }
+  }
+
+  // Card principal (tabla)
+  mat-card {
+    margin-top: 0;
+    border-radius: 18px;
+    box-shadow: 0 2px 12px #0002;
+    padding: 0;
+    background: #fff;
+    overflow-x: unset; // Quitar scroll innecesario en escritorio
+  }
+
+  // Tabla Material
+  mat-table {
+    width: 100%;
+    background: transparent;
+    border-radius: 10px;
+    font-size: 15px;
+    border-collapse: collapse; // Evita suma de bordes
+    border-spacing: 0;
+    overflow: hidden;
+    box-shadow: 0 1.5px 8px #0001;
+    border: 1.5px solid #e2e4ed;
+    margin-bottom: 0;
+    table-layout: fixed; // Columnas proporcionales
+  }
+
+  mat-header-row,
+  mat-row {
+    min-height: 50px;
+    background: transparent;
+  }
+
+  mat-header-cell, mat-cell {
+    padding: 12px 10px;
+    border-bottom: 1px solid #e2e4ed;
+    border-right: 1.2px solid #e2e4ed;
+    font-size: 1.01rem;
+    color: #23243a;
+    background: #fff;
+    word-break: break-word;
+    &:last-child { border-right: none; }
+  }
+
+  mat-header-cell {
+    background: #f6f7fa;
+    font-weight: 700;
+    font-size: 1.06rem;
+    border-bottom: 2px solid #e2e4ed;
+    letter-spacing: 0.01em;
+  }
+
+  mat-row:last-child mat-cell {
+    border-bottom: none;
+  }
+
+  mat-row:hover mat-cell {
+    background: #f2f6fb;
+    transition: background 0.18s;
+  }
+
+  mat-cell button[mat-icon-button] {
+    margin-right: 3px;
+    &.mat-warn { color: #ff417d; }
+    &.mat-primary { color: #4857bb; }
+    &:last-child { margin-right: 0; }
+  }
+
+  // Mensaje vacío o info
+  p {
+    font-style: italic;
+    color: #5e5e5e;
+    margin: 18px 0;
+    text-align: center;
+    font-size: 1.02rem;
+  }
+
+  // Responsive: solo permite scroll horizontal en móvil si es necesario
+  @media (max-width: 900px) {
+    mat-card {
+      overflow-x: auto;
+    }
+    mat-table {
+      min-width: 700px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    padding: 14px 3px 0 3px;
+
+    mat-toolbar {
+      font-size: 1.14rem;
+      min-height: 40px;
+      border-radius: 8px;
+      button[mat-raised-button] {
+        font-size: 0.98rem;
+        padding: 0 8px;
+      }
+    }
+
+    mat-header-cell,
+    mat-cell {
+      font-size: 0.96rem;
+      padding: 8px 4px;
+    }
+  }
+}
+
+/* =========================================================
+   Selector de imagen (upload & preview) - reutilizable
+   Para formularios de productos y tipos de productos
+   ========================================================= */
+.w-full {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.imagen-producto-upload {
+  margin: 18px 0 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+
+  .imagen-label {
+    font-weight: 600;
+    font-size: 1.18rem;
+    margin-bottom: 4px;
+    color: #222;
+  }
+
+  .imagen-preview-wrapper {
+    width: 112px;
+    height: 112px;
+    border-radius: 13px;
+    background: #f8f8fa;
+    border: 1.5px solid #e2e4ed;
+    box-shadow: 0 2px 8px #0001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+
+    .imagen-preview {
+      max-width: 100px;
+      max-height: 100px;
+      border-radius: 10px;
+      object-fit: cover;
+      box-shadow: 0 2px 12px #0001;
+    }
+    .no-img {
+      color: #999;
+      font-size: 1rem;
+      font-style: italic;
+      padding: 8px;
+      text-align: center;
+      width: 100%;
+    }
+  }
+
+  button[mat-stroked-button] {
+    min-width: 320px;
+    font-size: 1.08rem;
+    font-weight: 500;
+    margin-bottom: 3px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 6px #00000011;
+    transition: background 0.15s, border-color 0.15s;
+    &:hover {
+      background: #f4f6fd;
+      border-color: #4857bb;
+    }
+  }
+
+  .nombre-archivo {
+    font-size: 0.97rem;
+    color: #656565;
+    margin-top: 1px;
+    margin-left: 2px;
+    max-width: 320px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background: #fafbfc;
+    border-radius: 6px;
+    padding: 2px 8px;
+  }
+}
+
+@media (max-width: 600px) {
+  .imagen-producto-upload {
+    .imagen-preview-wrapper {
+      width: 90px;
+      height: 90px;
+      .imagen-preview { max-width: 75px; max-height: 75px; }
+    }
+    button[mat-stroked-button] { min-width: 100%; font-size: 1rem; }
+  }
+}
+
+/*
+----- FIN ESTILOS DE MANTENEDORES -----
+*/

@@ -29,7 +29,7 @@ export class PanelAdminComponent implements OnInit {
   }
 
   irAMantenedorTipos() {
-    this.router.navigate(['/mantenedor-tipos-productos']);
+    this.router.navigate(['/mantenedor-tipo-producto']);
   }
 
   irAVisualizadorSolicitudes() {

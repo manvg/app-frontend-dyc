@@ -31,4 +31,8 @@ export class TipoProductoService {
     const params = new HttpParams().set('activo', activo.toString());
     return this.http.put<ResponseModel>(`${this.apiUrl}/${id}/cambiar-estado`, null, { params });
   }
+
+  eliminar(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
 }

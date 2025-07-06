@@ -1,0 +1,68 @@
+<div class="contenedor-productos">
+  <mat-toolbar color="primary">
+    Mantenedor de Tipos de Producto
+    <span class="espaciador"></span>
+    <button mat-raised-button color="accent" (click)="nuevoTipoProducto()">+ Nuevo Tipo</button>
+  </mat-toolbar>
+
+  <ng-container *ngIf="tiposProducto !== null; else loading">
+    <ng-container *ngIf="tiposProducto.length > 0; else sinTipos">
+      <mat-card>
+        <mat-table [dataSource]="tiposProducto" class="mat-elevation-z2">
+          <!-- Nombre -->
+          <ng-container matColumnDef="nombre">
+            <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+            <mat-cell *matCellDef="let tipo"> {{ tipo.nombre }} </mat-cell>
+          </ng-container>
+          <!-- Imagen -->
+          <ng-container matColumnDef="urlImagen">
+            <mat-header-cell *matHeaderCellDef> Imagen </mat-header-cell>
+            <mat-cell *matCellDef="let tipo">
+              <img *ngIf="tipo.urlImagen" [src]="tipo.urlImagen" alt="Imagen tipo" style="height: 44px; border-radius: 7px;" />
+              <span *ngIf="!tipo.urlImagen" style="color: #bbb; font-size: 0.95em;">Sin imagen</span>
+            </mat-cell>
+          </ng-container>
+          <!-- Activo -->
+          <ng-container matColumnDef="activo">
+            <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
+            <mat-cell *matCellDef="let tipo"> {{ tipo.activo === 1 ? 'Sí' : 'No' }} </mat-cell>
+          </ng-container>
+          <!-- Acciones -->
+          <ng-container matColumnDef="acciones">
+            <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+            <mat-cell *matCellDef="let tipo">
+              <button matTooltip="Editar" mat-icon-button color="primary" (click)="editarTipoProducto(tipo.idTipoProducto)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button
+                [color]="tipo.activo === 1 ? 'warn' : 'primary'"
+                (click)="cambiarVigenciaTipoProducto(tipo)"
+                [matTooltip]="tipo.activo === 1 ? 'Desactivar' : 'Activar'">
+                  <mat-icon>{{ tipo.activo === 1 ? 'block' : 'check_circle' }}</mat-icon>
+              </button>
+              <button matTooltip="Eliminar" mat-icon-button color="warn" (click)="eliminarTipoProducto(tipo.idTipoProducto)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="columnas"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: columnas; trackBy: trackById"></mat-row>
+        </mat-table>
+      </mat-card>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #loading>
+    <mat-card style="display: flex; align-items: center; justify-content: center; padding: 32px;">
+      <mat-spinner diameter="40"></mat-spinner>
+      <span style="margin-left: 16px;">Cargando tipos de producto...</span>
+    </mat-card>
+  </ng-template>
+
+  <ng-template #sinTipos>
+    <mat-card>
+      <p>No hay tipos de producto registrados.</p>
+    </mat-card>
+  </ng-template>
+</div>
