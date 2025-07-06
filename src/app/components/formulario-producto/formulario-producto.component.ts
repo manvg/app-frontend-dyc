@@ -34,8 +34,6 @@ export class FormularioProductoComponent implements OnInit {
   nombreImagenSeleccionada: string | null = null;
   imagenFile: File | null = null;
 
-  imagenRota = false;
-
   constructor(
     public dialogRef: MatDialogRef<FormularioProductoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Producto,
@@ -46,7 +44,6 @@ export class FormularioProductoComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarTiposProducto();
-    this.imagenRota = false;
   }
 
   cargarTiposProducto(): void {
@@ -67,7 +64,6 @@ export class FormularioProductoComponent implements OnInit {
       const file = input.files[0];
       this.nombreImagenSeleccionada = file.name;
       this.imagenFile = file;
-      this.imagenRota = false;
 
       const reader = new FileReader();
       reader.onload = () => {
@@ -75,10 +71,6 @@ export class FormularioProductoComponent implements OnInit {
       };
       reader.readAsDataURL(file);
     }
-  }
-
-  esUrlImagenValida(url: string | null | undefined): boolean {
-    return !!url && typeof url === 'string' && url.trim().length > 0;
   }
 
   guardar(): void {
