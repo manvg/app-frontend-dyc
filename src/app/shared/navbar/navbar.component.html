@@ -1,35 +1,48 @@
 <nav class="navbar">
   <div class="navbar__container">
-    <div class="navbar__logo">
-      <img src="assets/logo_dyc.jpg" alt="Logo DYC">
-      <span class="navbar__brand">DYC</span>
+    <!-- Columna IZQUIERDA: Logo (siempre visible) -->
+    <div class="navbar__col navbar__col--left">
+      <div class="navbar__logo">
+        <img src="assets/logo_dyc.jpg" alt="Logo DYC">
+        <span class="navbar__brand">DYC</span>
+      </div>
+      <div class="navbar__divider"></div>
     </div>
-    <div class="navbar__divider"></div>
 
-    <div *ngIf="isPanelAdmin" class="navbar__panel">
-      <ul class="navbar__links navbar__links--center">
+    <!-- Columna CENTRAL: Menú -->
+    <div class="navbar__col navbar__col--center">
+      <!-- ADMIN -->
+      <ul *ngIf="isPanelAdmin" class="navbar__links navbar__links--center">
         <li *ngFor="let link of linksAdmin">
           <a [routerLink]="link.route" routerLinkActive="active">{{ link.label }}</a>
         </li>
       </ul>
-      <div class="navbar__logout">
-        <button class="btn-link" (click)="onLogoutClick()">
-          <span class="material-icons">logout</span> Log out
-        </button>
-      </div>
+      <!-- CLIENTE -->
+      <ul *ngIf="!isPanelAdmin" class="navbar__links navbar__links--center">
+        <li>
+          <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">INICIO</a>
+        </li>
+        <li><a routerLink="/servicios/1" routerLinkActive="active">ACRÍLICO</a></li>
+        <li><a routerLink="/servicios/2" routerLinkActive="active">MADERA</a></li>
+        <li><a routerLink="/servicios/3" routerLinkActive="active">MDF</a></li>
+        <li><a routerLink="/productos" routerLinkActive="active">CATÁLOGO</a></li>
+        <li><a routerLink="/pedido-personalizado" routerLinkActive="active">PERSONALIZADO</a></li>
+      </ul>
     </div>
 
-    <!-- Menú cliente normal -->
-    <ul *ngIf="!isPanelAdmin" class="navbar__links">
-      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">INICIO</a></li>
-      <li><a routerLink="/servicios/1" routerLinkActive="active">ACRÍLICO</a></li>
-      <li><a routerLink="/servicios/2" routerLinkActive="active">MADERA</a></li>
-      <li><a routerLink="/servicios/3" routerLinkActive="active">MDF</a></li>
-      <li><a routerLink="/productos" routerLinkActive="active">PRODUCTOS</a></li>
-      <li><a routerLink="/pedido-personalizado" routerLinkActive="active">PEDIDO PERSONALIZADO</a></li>
-      <li>
-        <span class="navbar__cart material-icons" title="Ver carrito">shopping_cart</span>
-      </li>
-    </ul>
+    <!-- Columna DERECHA: Logout o carrito -->
+    <div class="navbar__col navbar__col--right">
+      <button
+        *ngIf="isPanelAdmin"
+        class="btn-link"
+        (click)="onLogoutClick()"
+        style="margin-left: auto;">
+        <span class="material-icons">logout</span> Log out
+      </button>
+      <span
+        *ngIf="!isPanelAdmin"
+        class="navbar__cart material-icons"
+        title="Ver carrito">shopping_cart</span>
+    </div>
   </div>
 </nav>

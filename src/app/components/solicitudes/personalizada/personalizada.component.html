@@ -1,0 +1,56 @@
+<section class="personalizada-wrapper">
+  <h2 class="personalizada-title">SOLICITUD PERSONALIZADA</h2>
+  <form [formGroup]="form" class="personalizada-form" (ngSubmit)="enviarSolicitud()">
+
+    <!-- Mensaje de éxito -->
+    <div *ngIf="enviado" class="mensaje-exito">¡Solicitud enviada correctamente! Te contactaremos pronto.</div>
+
+    <h3 class="personalizada-subtitle">Especificaciones</h3>
+
+    <div class="form-group">
+      <label for="nombre">Nombre <span class="requerido">*</span></label>
+      <input type="text" id="nombre" formControlName="nombre" autocomplete="off" [ngClass]="{'campo-error': campoInvalido('nombre')}" />
+      <div class="mensaje-error" *ngIf="campoInvalido('nombre')">Este campo es obligatorio.</div>
+    </div>
+    <div class="form-group">
+      <label for="apellidos">Apellidos <span class="requerido">*</span></label>
+      <input type="text" id="apellidos" formControlName="apellidos" autocomplete="off" [ngClass]="{'campo-error': campoInvalido('apellidos')}" />
+      <div class="mensaje-error" *ngIf="campoInvalido('apellidos')">Este campo es obligatorio.</div>
+    </div>
+    <div class="form-group">
+      <label for="email">E-Mail <span class="requerido">*</span></label>
+      <input type="email" id="email" formControlName="email" autocomplete="off" [ngClass]="{'campo-error': campoInvalido('email')}" />
+      <div class="mensaje-error" *ngIf="emailErrors?.['required']">El correo es obligatorio.</div>
+      <div class="mensaje-error" *ngIf="emailErrors?.['email']">Debe ingresar un correo válido.</div>
+    </div>
+    <div class="form-group">
+      <label for="telefono">Número Telefónico</label>
+      <input type="tel" id="telefono" formControlName="telefono" autocomplete="off" />
+    </div>
+    <div class="form-group">
+      <label for="descripcion">Descripción Solicitud <span class="requerido">*</span></label>
+      <input type="text" id="descripcion" formControlName="descripcion" placeholder="Diseño, dimensiones, material, detalles, etc." autocomplete="off" [ngClass]="{'campo-error': campoInvalido('descripcion')}" />
+      <div class="mensaje-error" *ngIf="campoInvalido('descripcion')">Este campo es obligatorio.</div>
+    </div>
+    <div class="form-group">
+      <label for="archivo">Archivo referencia</label>
+      <div class="archivo-upload">
+        <input type="file" id="archivo" (change)="onArchivoChange($event)" />
+        <button type="button" class="archivo-btn" (click)="seleccionarArchivo()" tabindex="0"><span>Subir Archivo</span><span class="icono">+</span></button>
+        <span *ngIf="archivoNombre" class="archivo-nombre">{{ archivoNombre }}</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="cantidad">Cantidad <span class="requerido">*</span></label>
+      <input type="number" id="cantidad" formControlName="cantidad" min="1" [ngClass]="{'campo-error': campoInvalido('cantidad')}" />
+      <div class="mensaje-error" *ngIf="cantidadErrors?.['min']">La cantidad debe ser al menos 1.</div>
+    </div>
+
+    <div class="form-btn">
+      <button class="btn-principal" type="submit" [disabled]="form.invalid || enviando">
+        <ng-container *ngIf="!enviando">Enviar solicitud</ng-container>
+        <ng-container *ngIf="enviando"><span class="spinner"></span> Enviando...</ng-container>
+      </button>
+    </div>
+  </form>
+</section>

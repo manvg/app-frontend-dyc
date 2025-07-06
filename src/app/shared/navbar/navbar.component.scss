@@ -5,7 +5,7 @@
   width: 100vw;
   z-index: 9999;
   background: #111;
-  box-shadow: 0 2px 8px #0002;
+  box-shadow: 0 3px 18px #0003; // Sombra más moderna
   height: 70px;
   display: flex;
   align-items: center;
@@ -14,9 +14,9 @@
     display: flex;
     align-items: center;
     width: 100%;
-    max-width: 1600px;
+    max-width: 1300px; // Mejor centrado en pantallas notebook
     margin: 0 auto;
-    padding: 0 32px;
+    padding: 0 48px;   // Más separación en bordes
   }
 
   &__logo {
@@ -26,13 +26,18 @@
       width: 48px;
       height: 48px;
       object-fit: contain;
-      margin-right: 8px;
+      margin-right: 12px; // +espacio logo-menú
       filter: brightness(1.8);
+      vertical-align: middle;
     }
     .navbar__brand {
       font-weight: bold;
       font-size: 1.4rem;
       color: #fff;
+      line-height: 48px; // Alinear con logo
+      vertical-align: middle;
+      display: flex;
+      align-items: center;
     }
   }
 
@@ -40,20 +45,38 @@
     width: 1px;
     height: 38px;
     background: #bbb;
-    margin: 0 24px;
+    margin: 0 32px; // +separación
   }
 
-  // ===== CLIENTE =====
-  &__links {
+  // ===== CLIENTE: 3 columnas =====
+  &__col {
+    display: flex;
+    align-items: center;
+    min-height: 70px;
+  }
+  &__col--left {
+    flex: 1;
+  }
+  &__col--center {
+    flex: 2;
+    justify-content: center;
+  }
+  &__col--right {
+    flex: 1;
+    justify-content: flex-end;
+    min-width: 64px; // Para evitar solapamiento carrito
+  }
+
+  &__links,
+  &__links--center {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex: 1;
-    gap: 32px;
+    gap: 36px; // Un poco más amplio
     list-style: none;
     margin: 0;
     padding: 0;
-    font-size: 1.05rem;
+    font-size: 1.08rem; // Ligero aumento
     width: 100%;
 
     li {
@@ -63,22 +86,43 @@
       a {
         text-decoration: none;
         color: #fff;
-        font-weight: 500;
-        transition: color 0.2s;
+        font-weight: 500; // intermedio para look elegante
+        letter-spacing: 0.2px;
+        transition: color 0.2s, outline 0.18s;
+        outline: none;
+        // Mejorar el focus para accesibilidad
+        &:focus-visible {
+          outline: 2px solid #ff417d;
+          outline-offset: 2px;
+        }
         &.active, &:hover { color: #696877; }
       }
-
-      .navbar__cart {
-        font-size: 2rem;
-        color: #fff;
-        margin-left: 8px;
-        margin-right: 0;
-        cursor: pointer;
-        transition: color 0.2s;
-        &:hover { color: #696877; }
-        vertical-align: middle;
-      }
     }
+  }
+
+  &__links--center {
+    font-weight: 600;
+    gap: 44px; // Más separación menú admin
+    width: auto;
+    li a { font-weight: 600; }
+  }
+
+  // Carrito a la derecha
+  &__cart {
+    font-size: 2.3rem; // Más grande y elegante
+    color: #fff;
+    margin-left: auto;
+    cursor: pointer;
+    transition: color 0.18s, background 0.18s;
+    border-radius: 50%;
+    padding: 3px 6px;
+    min-width: 44px;
+    text-align: center;
+    &:hover {
+      color: #ff417d;
+      background: #fff2;
+    }
+    vertical-align: middle;
   }
 
   // ===== ADMIN: Menú centrado + Log out derecha =====
@@ -89,32 +133,6 @@
     justify-content: center;
     position: relative;
     width: 100%;
-  }
-
-  &__links--center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex: 1;
-    gap: 38px;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    font-size: 1.05rem;
-    width: auto;
-
-    li {
-      display: flex;
-      align-items: center;
-
-      a {
-        text-decoration: none;
-        color: #fff;
-        font-weight: 600;
-        transition: color 0.2s;
-        &.active, &:hover { color: #696877; }
-      }
-    }
   }
 
   &__logout {
@@ -134,6 +152,10 @@ body, app-root {
   padding-top: 70px;
 }
 
+@media (max-width: 1300px) {
+  .navbar__container { max-width: 1600px; }
+}
+
 @media (max-width: 900px) {
   .navbar {
     height: 60px;
@@ -142,5 +164,31 @@ body, app-root {
     &__links,
     &__links--center { gap: 10px; font-size: 0.95rem; }
     &__cart { font-size: 1.4rem !important; }
+    &__col--left, &__col--right, &__col--center { min-height: 60px; }
+    &__divider { margin: 0 14px; }
+    &__col--right { min-width: 44px; }
+  }
+}
+
+a {
+  position: relative;
+  &:after {
+    content: "";
+    display: block;
+    height: 2px;
+    background: #ff417d;
+    position: absolute;
+    left: 0; right: 0; bottom: -3px;
+    opacity: 0;
+    transform: scaleX(0);
+    transition: all 0.18s;
+  }
+  &:hover:after, &.active:after {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+  &:focus-visible {
+    outline: 2px solid #ff417d;
+    outline-offset: 2px;
   }
 }
