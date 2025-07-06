@@ -1,0 +1,16 @@
+<h1 class="productos-titulo">{{ tipoProductoNombre }}</h1>
+<div class="productos-lista-grid">
+  <div class="producto-modelo-card" *ngFor="let producto of productos">
+    <img [src]="producto.urlImagen" [alt]="producto.nombre">
+    <h3>{{ producto.nombre }}</h3>
+    <p class="producto-desc">{{ producto.descripcion }}</p>
+    <div class="producto-detalle">
+      <span><b>Medidas:</b> {{ producto.medidas }}</span>
+      <span><b>Material:</b> {{ producto.material }}</span>
+    </div>
+    <div class="producto-precio">
+      <span class="precio">Precio: {{ producto.precio | currency:'CLP':'symbol':'1.0-0' }}</span>
+    </div>
+    <button class="btn-principal"><span>Agregar al carrito</span></button>
+  </div>
+</div>

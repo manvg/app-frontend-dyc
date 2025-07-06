@@ -1,0 +1,12 @@
+<div class="contenedor-lista-productos">
+  <h1 class="titulo-productos">PRODUCTOS</h1>
+  <div class="grid-productos">
+    <ng-container *ngFor="let tipo of tiposProducto">
+      <div class="card-tipo-producto">
+        <img [src]="tipo.urlImagen" [alt]="tipo.nombre" class="img-tipo-producto">
+        <h2>{{ tipo.nombre }}</h2>
+        <button class="btn-principal" (click)="verModelos(tipo)">Ver modelos</button>
+      </div>
+    </ng-container>
+  </div>
+</div>

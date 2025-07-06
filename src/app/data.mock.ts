@@ -1,5 +1,6 @@
 import { Servicio } from "./models/servicio.model";
 import { Producto } from "./models/producto.model";
+import { TipoProducto } from "./models/tipo-producto.model";
 
 export const SERVICIOS_MOCK: Servicio[] = [
   {
@@ -65,4 +66,10 @@ export const PRODUCTOS_MOCK: Producto[] = [
     idTipoProducto: 3,
     nombreTipoProducto: 'Señalética'
   }
+];
+
+export const TIPOS_PRODUCTO: TipoProducto[] = [
+  { idTipoProducto: 1, nombre: 'Galvanos', activo: 1, urlImagen: 'assets/tipos/tipo_galvano.jpg' },
+  { idTipoProducto: 2, nombre: 'Medallas', activo: 1, urlImagen: 'assets/tipos/tipo_medalla.jpg' },
+  { idTipoProducto: 3, nombre: 'Tablas picoteo', activo: 1, urlImagen: 'assets/tipos/tipo_tabla_picoteo.jpg' },
 ];

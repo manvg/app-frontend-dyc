@@ -3,7 +3,6 @@ import { NgFor } from '@angular/common';
 import { ServicioDestacadoComponent } from '../../components/home/servicio-destacado/servicio-destacado.component';
 import { ProductoDestacadoComponent } from '../../components/home/producto-destacado/producto-destacado.component';
 import { PedidoPersonalizadoComponent } from '../../components/home/pedido-personalizado/pedido-personalizado.component';
-
 import { SERVICIOS_MOCK, PRODUCTOS_MOCK } from './../../data.mock';
 import { Servicio } from '../../models/servicio.model';
 import { Producto } from '../../models/producto.model';
