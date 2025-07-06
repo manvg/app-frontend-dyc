@@ -16,7 +16,6 @@ import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-
 @Component({
   selector: 'app-mantenedor-productos',
   standalone: true,
@@ -38,22 +37,26 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 })
 export class MantenedorProductosComponent implements OnInit {
 
-  productos: Producto[] = [];
-  columnas: string[] = ['tipoProducto', 'nombre', 'material', 'medidas', 'precio', 'activo', 'acciones'];
+  productos: Producto[] | null = null;
+  columnas: string[] = [
+    'tipoProducto', 'nombre', 'material', 'medidas', 'precio', 'activo', 'acciones'
+  ];
 
-  private productosService = inject(ProductosService);
-  private dialog = inject(MatDialog);
-  private snackBar = inject(MatSnackBar);
+  private readonly productosService = inject(ProductosService);
+  private readonly dialog = inject(MatDialog);
+  private readonly snackBar = inject(MatSnackBar);
 
   ngOnInit(): void {
     this.cargarProductos();
   }
 
   cargarProductos(): void {
+    this.productos = null; // Estado loading
     this.productosService.obtenerTodos().subscribe({
       next: data => this.productos = data,
       error: err => {
         this.productos = [];
+        this.snackBar.open('Error al cargar productos', 'Cerrar', { duration: 3500, panelClass: 'snack-error' });
         console.error('Error al cargar productos', err);
       }
     });
@@ -76,14 +79,17 @@ export class MantenedorProductosComponent implements OnInit {
       } as Producto
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result?: Producto) => {
       if (result) {
         this.productosService.crear(result).subscribe({
           next: () => {
             this.cargarProductos();
             this.snackBar.open('Producto creado con éxito', 'Cerrar', { duration: 3000 });
           },
-          error: err => console.error('Error al crear producto', err)
+          error: err => {
+            this.snackBar.open('Error al crear producto', 'Cerrar', { duration: 3500, panelClass: 'snack-error' });
+            console.error('Error al crear producto', err);
+          }
         });
       }
     });
@@ -96,14 +102,17 @@ export class MantenedorProductosComponent implements OnInit {
         data: producto
       });
 
-      dialogRef.afterClosed().subscribe(result => {
+      dialogRef.afterClosed().subscribe((result?: Producto) => {
         if (result) {
           this.productosService.actualizar(id, result).subscribe({
             next: () => {
               this.cargarProductos();
               this.snackBar.open('Producto actualizado con éxito', 'Cerrar', { duration: 3000 });
             },
-            error: err => console.error('Error al actualizar producto', err)
+            error: err => {
+              this.snackBar.open('Error al actualizar producto', 'Cerrar', { duration: 3500, panelClass: 'snack-error' });
+              console.error('Error al actualizar producto', err);
+            }
           });
         }
       });
@@ -120,7 +129,7 @@ export class MantenedorProductosComponent implements OnInit {
         titulo: 'Confirmación',
         mensaje: `¿Estás seguro de ${accion} este producto?`
       }
-    }).afterClosed().subscribe(result => {
+    }).afterClosed().subscribe((result?: boolean) => {
       if (result) {
         this.productosService.cambiarEstado(producto.idProducto, nuevoEstado).subscribe({
           next: () => {
@@ -130,7 +139,10 @@ export class MantenedorProductosComponent implements OnInit {
               'Cerrar', { duration: 3000 }
             );
           },
-          error: err => console.error(`Error al ${accion} producto`, err)
+          error: err => {
+            this.snackBar.open(`Error al ${accion} producto`, 'Cerrar', { duration: 3500, panelClass: 'snack-error' });
+            console.error(`Error al ${accion} producto`, err);
+          }
         });
       }
     });
@@ -143,16 +155,24 @@ export class MantenedorProductosComponent implements OnInit {
         titulo: 'Confirmación',
         mensaje: '¿Estás seguro de eliminar este producto permanentemente?'
       }
-    }).afterClosed().subscribe(result => {
+    }).afterClosed().subscribe((result?: boolean) => {
       if (result) {
         this.productosService.eliminar(id).subscribe({
           next: () => {
             this.cargarProductos();
             this.snackBar.open('Producto eliminado', 'Cerrar', { duration: 3000 });
           },
-          error: err => console.error('Error al eliminar producto', err)
+          error: err => {
+            this.snackBar.open('Error al eliminar producto', 'Cerrar', { duration: 3500, panelClass: 'snack-error' });
+            console.error('Error al eliminar producto', err);
+          }
         });
       }
     });
   }
+
+  trackById(index: number, item: Producto): number {
+    return item.idProducto;
+  }
+
 }

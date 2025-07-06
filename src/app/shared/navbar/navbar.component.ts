@@ -15,6 +15,7 @@ export class NavbarComponent {
 
   isPanelAdmin = false;
 
+  // Links visibles en el menú admin
   readonly linksAdmin = [
     { label: 'Panel de Administración', route: '/panel-admin' },
     { label: 'Productos', route: '/mantenedor-productos' },
@@ -22,15 +23,24 @@ export class NavbarComponent {
     { label: 'Solicitudes', route: '/visualizador-solicitudes' }
   ];
 
+  private readonly rutasAdmin = [
+    '/panel-admin',
+    '/mantenedor-productos',
+    '/mantenedor-tipos-productos',
+    '/visualizador-solicitudes'
+  ];
+
   constructor(private router: Router) {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
-        this.isPanelAdmin = this.router.url.startsWith('/panel-admin');
+        this.isPanelAdmin = this.rutasAdmin.some(ruta =>
+          this.router.url.startsWith(ruta)
+        );
       });
   }
 
-  onLogoutClick() {
+  onLogoutClick(): void {
     this.cerrarSesion.emit();
   }
 }

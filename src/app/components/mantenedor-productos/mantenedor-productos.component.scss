@@ -1,58 +1,139 @@
 .contenedor-productos {
-  padding: 24px;
+  padding: 38px 18px 0 18px;
   max-width: 1200px;
   margin: 0 auto;
 
   mat-toolbar {
-    margin-bottom: 18px;
-    border-radius: 8px;
-  }
+    margin-bottom: 22px;
+    border-radius: 12px;
+    background: #4857bb !important;
+    color: #fff !important;
+    font-size: 1.6rem;
+    font-weight: 600;
+    box-shadow: 0 2px 10px #0001;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
 
-  .espaciador {
-    flex: 1 1 auto;
+    .espaciador {
+      flex: 1 1 auto;
+    }
+
+    button[mat-raised-button] {
+      font-weight: 600;
+      font-size: 1.09rem;
+      border-radius: 8px;
+      letter-spacing: 0.2px;
+      padding: 0 18px;
+      box-shadow: 0 2px 8px #b7004012;
+      background: #ff417d;
+      color: #fff;
+      transition: background 0.18s;
+      &:hover {
+        background: #e8386f;
+      }
+    }
   }
 
   mat-card {
-    margin-top: 16px;
-    overflow-x: auto;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px #0002;
-    padding: 8px 0;
+    margin-top: 0;
+    border-radius: 18px;
+    box-shadow: 0 2px 12px #0002;
+    padding: 0;
+    background: #fff;
+    overflow-x: unset; // Quitar scroll innecesario en escritorio
   }
 
   mat-table {
     width: 100%;
-    background: white;
-    border-radius: 6px;
-    font-size: 14px;
+    background: transparent;
+    border-radius: 10px;
+    font-size: 15px;
+    border-collapse: collapse; // ¡Clave para evitar suma de bordes!
+    border-spacing: 0;
+    overflow: hidden;
+    box-shadow: 0 1.5px 8px #0001;
+    border: 1.5px solid #e2e4ed;
+    margin-bottom: 0;
+    table-layout: fixed; // Para columnas proporcionadas
   }
 
   mat-header-row,
   mat-row {
-    min-height: 44px;
+    min-height: 50px;
+    background: transparent;
+  }
+
+  mat-header-cell, mat-cell {
+    padding: 12px 10px;
+    border-bottom: 1px solid #e2e4ed;
+    border-right: 1.2px solid #e2e4ed;
+    font-size: 1.01rem;
+    color: #23243a;
+    background: #fff;
+    word-break: break-word;
+    &:last-child { border-right: none; }
   }
 
   mat-header-cell {
-    background: #f4f4f4;
-    font-weight: 600;
-    font-size: 15px;
-    border-bottom: 1px solid #ececec;
+    background: #f6f7fa;
+    font-weight: 700;
+    font-size: 1.06rem;
+    border-bottom: 2px solid #e2e4ed;
+    letter-spacing: 0.01em;
   }
 
-  mat-cell,
-  mat-header-cell {
-    padding: 12px 8px;
-    border-bottom: 1px solid #ececec;
+  mat-row:last-child mat-cell {
+    border-bottom: none;
+  }
+
+  mat-row:hover mat-cell {
+    background: #f2f6fb;
+    transition: background 0.18s;
   }
 
   mat-cell button[mat-icon-button] {
     margin-right: 3px;
+    &.mat-warn { color: #ff417d; }
+    &.mat-primary { color: #4857bb; }
+    &:last-child { margin-right: 0; }
   }
 
   p {
     font-style: italic;
-    color: #666;
+    color: #5e5e5e;
     margin: 18px 0;
     text-align: center;
+    font-size: 1.02rem;
+  }
+
+  // Responsive: solo permite scroll horizontal en móvil si es necesario
+  @media (max-width: 900px) {
+    mat-card {
+      overflow-x: auto;
+    }
+    mat-table {
+      min-width: 700px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    padding: 14px 3px 0 3px;
+
+    mat-toolbar {
+      font-size: 1.14rem;
+      min-height: 40px;
+      border-radius: 8px;
+      button[mat-raised-button] {
+        font-size: 0.98rem;
+        padding: 0 8px;
+      }
+    }
+
+    mat-header-cell,
+    mat-cell {
+      font-size: 0.96rem;
+      padding: 8px 4px;
+    }
   }
 }
