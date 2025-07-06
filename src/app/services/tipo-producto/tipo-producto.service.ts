@@ -7,7 +7,7 @@ import { ResponseModel } from '../../models/response-model.model';
   providedIn: 'root'
 })
 export class TipoProductoService {
-  private apiUrl = 'http://localhost:8081/api/productos/tipos';
+  private apiUrl = 'http://localhost:8080/api/productos/tipos';
 
   constructor(private http: HttpClient) { }
 

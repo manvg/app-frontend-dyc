@@ -30,6 +30,12 @@ export class FormularioProductoComponent implements OnInit {
   producto: Producto;
   tiposProducto: TipoProducto[] = [];
 
+  imagenPreview: string | null = null;
+  nombreImagenSeleccionada: string | null = null;
+  imagenFile: File | null = null;
+
+  imagenRota = false;
+
   constructor(
     public dialogRef: MatDialogRef<FormularioProductoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Producto,
@@ -40,6 +46,7 @@ export class FormularioProductoComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarTiposProducto();
+    this.imagenRota = false;
   }
 
   cargarTiposProducto(): void {
@@ -49,8 +56,36 @@ export class FormularioProductoComponent implements OnInit {
     });
   }
 
+  seleccionarImagen(): void {
+    const input = document.getElementById('input-imagen') as HTMLInputElement;
+    if (input) input.click();
+  }
+
+  onImagenSeleccionada(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input?.files && input.files[0]) {
+      const file = input.files[0];
+      this.nombreImagenSeleccionada = file.name;
+      this.imagenFile = file;
+      this.imagenRota = false;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagenPreview = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  esUrlImagenValida(url: string | null | undefined): boolean {
+    return !!url && typeof url === 'string' && url.trim().length > 0;
+  }
+
   guardar(): void {
-    this.dialogRef.close(this.producto);
+    this.dialogRef.close({
+      ...this.producto,
+      imagenFile: this.imagenFile
+    });
   }
 
   cancelar(): void {

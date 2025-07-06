@@ -38,10 +38,37 @@
       <input matInput type="number" [(ngModel)]="producto.precio" name="precio" required>
     </mat-form-field>
 
-    <mat-form-field appearance="fill" class="w-full">
-      <mat-label>URL Imagen</mat-label>
-      <input matInput [(ngModel)]="producto.urlImagen" name="urlImagen">
-    </mat-form-field>
+    <!-- Imagen (upload & preview) -->
+    <div class="imagen-producto-upload">
+      <label class="imagen-label">Imagen</label>
+      <div class="imagen-preview-wrapper">
+        <img
+          *ngIf="imagenPreview"
+          [src]="imagenPreview"
+          alt="Imagen seleccionada"
+          class="imagen-preview"
+        />
+        <span *ngIf="!imagenPreview" class="no-img">Sin imagen</span>
+      </div>
+      <input
+        type="file"
+        accept="image/*"
+        (change)="onImagenSeleccionada($event)"
+        id="input-imagen"
+        hidden
+      />
+      <button
+        type="button"
+        mat-stroked-button
+        color="primary"
+        (click)="seleccionarImagen()"
+      >
+        Seleccionar imagen
+      </button>
+      <div *ngIf="nombreImagenSeleccionada" class="nombre-archivo">
+        {{ nombreImagenSeleccionada }}
+      </div>
+    </div>
   </form>
 </mat-dialog-content>
 

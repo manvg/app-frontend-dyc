@@ -1,10 +1,12 @@
 <footer class="footer">
   <div class="footer__left">
-    <div class="footer__contacto">
-      <strong>Contacto</strong>
-      <div>📞 +56 9 1234 5678</div>
-      <div>✉️ email</div>
-    </div>
+    <ng-container *ngIf="!isAuthenticated">
+      <div class="footer__contacto">
+        <strong>Contacto</strong>
+        <div>📞 +56 9 1234 5678</div>
+        <div>✉️ email</div>
+      </div>
+    </ng-container>
   </div>
   <div class="footer__center">
     <div class="footer__copy">
@@ -12,8 +14,10 @@
     </div>
   </div>
   <div class="footer__right">
-    <button class="btn-link" (click)="onLogin()">
-      <span class="material-icons">login</span> Login
-    </button>
+    <ng-container *ngIf="!isAuthenticated">
+      <button class="btn-link" (click)="onLogin()">
+        <span class="material-icons">login</span> Iniciar sesión
+      </button>
+    </ng-container>
   </div>
 </footer>

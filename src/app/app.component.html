@@ -2,7 +2,7 @@
   <div *ngIf="isAuthenticated" class="barra-sesion">
     Bienvenido, {{ (userData$ | async)?.userData?.email || 'Usuario' }}!
     <button class="btn-link" (click)="logout()">
-      <span class="material-icons">logout</span> Log out
+      <span class="material-icons">logout</span> Cerrar sesión
     </button>
   </div>
   <app-navbar (cerrarSesion)="logout()"></app-navbar>

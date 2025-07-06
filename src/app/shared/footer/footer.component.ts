@@ -1,26 +1,23 @@
-import { Component } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Component, OnInit, inject } from '@angular/core';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
-import { filter } from 'rxjs';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
+  imports: [NgIf],
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
 })
-export class FooterComponent {
-  mostrarLogin = true;
+export class FooterComponent implements OnInit {
+  isAuthenticated = false;
 
-  constructor(
-    private oidcSecurityService: OidcSecurityService,
-    private router: Router
-  ) {
-    this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(() => {
-        this.mostrarLogin = !this.router.url.startsWith('/panel-admin');
-      });
+  private oidcSecurityService = inject(OidcSecurityService);
+
+  ngOnInit(): void {
+    this.oidcSecurityService.isAuthenticated$.subscribe(({ isAuthenticated }) => {
+      this.isAuthenticated = isAuthenticated;
+    });
   }
 
   onLogin(): void {
