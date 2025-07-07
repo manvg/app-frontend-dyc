@@ -1,0 +1,43 @@
+<h2 mat-dialog-title>
+  {{ material.idMaterial ? 'Editar Material' : 'Nuevo Material' }}
+</h2>
+
+<mat-dialog-content>
+  <form #formMaterial="ngForm">
+    <!-- Nombre -->
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Nombre</mat-label>
+      <input
+        matInput
+        [(ngModel)]="material.nombre"
+        name="nombre"
+        required
+      />
+    </mat-form-field>
+
+    <!-- Activo -->
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Activo</mat-label>
+      <mat-select
+        [(ngModel)]="material.activo"
+        name="activo"
+        required
+      >
+        <mat-option [value]="1">Sí</mat-option>
+        <mat-option [value]="0">No</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="guardar()"
+    [disabled]="formMaterial.invalid"
+  >
+    Guardar
+  </button>
+</mat-dialog-actions>

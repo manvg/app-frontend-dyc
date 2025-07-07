@@ -69,13 +69,14 @@ export class MantenedorProductosComponent implements OnInit {
         idProducto: 0,
         nombre: '',
         descripcion: '',
-        material: '',
         medidas: '',
         precio: 0,
         urlImagen: '',
         activo: 1,
         idTipoProducto: null,
-        nombreTipoProducto: ''
+        nombreTipoProducto: '',
+        idMaterial: 0,
+        nombreMaterial: ''
       } as Producto
     });
 

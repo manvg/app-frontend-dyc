@@ -11,6 +11,7 @@ import { ListaProductosComponent } from './components/productos/lista-productos/
 import { PanelAdminComponent } from './components/panel-admin/panel-admin.component';
 import { PersonalizadaComponent } from './components/solicitudes/personalizada/personalizada.component';
 import { MantenedorTipoProductoComponent } from './components/mantenedor-tipo-producto/mantenedor-tipo-producto.component';
+import { MantenedorMaterialesComponent } from './components/mantenedor-materiales/mantenedor-materiales.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -25,6 +26,7 @@ export const routes: Routes = [
   { path: 'mantenedor-productos', component: MantenedorProductosComponent, canActivate: [authGuard] },
   { path: 'mantenedor-tipo-producto', component: MantenedorTipoProductoComponent, canActivate: [authGuard] },
   { path: 'panel-admin', component: PanelAdminComponent, canActivate: [authGuard] },
+  { path: 'mantenedor-materiales', component: MantenedorMaterialesComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: '' }
 ];
 

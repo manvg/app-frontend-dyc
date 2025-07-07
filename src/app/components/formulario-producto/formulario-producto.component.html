@@ -16,7 +16,11 @@
 
     <mat-form-field appearance="fill" class="w-full">
       <mat-label>Material</mat-label>
-      <input matInput [(ngModel)]="producto.material" name="material" required>
+      <mat-select [(ngModel)]="producto.idMaterial" name="idMaterial" required>
+        <mat-option *ngFor="let mat of materiales" [value]="mat.idMaterial">
+          {{ mat.nombre }}
+        </mat-option> 
+      </mat-select>
     </mat-form-field>
 
     <mat-form-field appearance="fill" class="w-full">
