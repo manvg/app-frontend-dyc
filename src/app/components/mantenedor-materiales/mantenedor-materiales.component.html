@@ -1,0 +1,67 @@
+<div class="contenedor-materiales">
+  <mat-toolbar color="primary">
+    Mantenedor de Materiales
+    <span class="espaciador"></span>
+    <button mat-raised-button color="accent" (click)="nuevoMaterial()">+ Nuevo Material</button>
+  </mat-toolbar>
+
+  <ng-container *ngIf="materiales !== null; else loading">
+    <ng-container *ngIf="materiales.length > 0; else sinMateriales">
+      <mat-card>
+        <mat-table [dataSource]="materiales" class="mat-elevation-z2">
+
+          <!-- Nombre -->
+          <ng-container matColumnDef="nombre">
+            <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+            <mat-cell *matCellDef="let mat"> {{ mat.nombre }} </mat-cell>
+          </ng-container>
+
+          <!-- Activo -->
+          <ng-container matColumnDef="activo">
+            <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
+            <mat-cell *matCellDef="let mat">
+              {{ mat.activo === 1 ? 'Sí' : 'No' }}
+            </mat-cell>
+          </ng-container>
+
+          <!-- Acciones -->
+          <ng-container matColumnDef="acciones">
+            <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+            <mat-cell *matCellDef="let mat">
+              <button matTooltip="Editar" mat-icon-button color="primary"
+                      (click)="editarMaterial(mat.idMaterial)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button
+                      [color]="mat.activo === 1 ? 'warn' : 'primary'"
+                      (click)="cambiarVigenciaMaterial(mat)"
+                      [matTooltip]="mat.activo === 1 ? 'Desactivar' : 'Activar'">
+                <mat-icon>{{ mat.activo === 1 ? 'block' : 'check_circle' }}</mat-icon>
+              </button>
+              <button matTooltip="Eliminar" mat-icon-button color="warn"
+                      (click)="eliminarMaterial(mat.idMaterial)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="columnas"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: columnas; trackBy: trackById"></mat-row>
+        </mat-table>
+      </mat-card>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #loading>
+    <mat-card class="loading-card">
+      <mat-spinner diameter="40"></mat-spinner>
+      <span>Cargando materiales...</span>
+    </mat-card>
+  </ng-template>
+
+  <ng-template #sinMateriales>
+    <mat-card>
+      <p>No hay materiales registrados.</p>
+    </mat-card>
+  </ng-template>
+</div>

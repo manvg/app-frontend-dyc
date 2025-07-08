@@ -20,14 +20,16 @@ export class NavbarComponent {
     { label: 'Panel de Administración', route: '/panel-admin' },
     { label: 'Productos', route: '/mantenedor-productos' },
     { label: 'Tipos de Producto', route: '/mantenedor-tipo-producto' },
-    { label: 'Solicitudes', route: '/visualizador-solicitudes' }
+    { label: 'Materiales', route: '/mantenedor-materiales' },
+    { label: 'Solicitudes', route: '/visualizador-solicitudes' }    
   ];
 
   private readonly rutasAdmin = [
     '/panel-admin',
     '/mantenedor-productos',
     '/mantenedor-tipo-producto',
-    '/visualizador-solicitudes'
+    '/mantenedor-materiales',
+    '/visualizador-solicitudes'    
   ];
 
   constructor(private router: Router) {

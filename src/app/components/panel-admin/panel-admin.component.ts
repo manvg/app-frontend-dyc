@@ -35,4 +35,8 @@ export class PanelAdminComponent implements OnInit {
   irAVisualizadorSolicitudes() {
     this.router.navigate(['/visualizador-solicitudes']);
   }
+
+  irAMantenedorMateriales() {
+    this.router.navigate(['/mantenedor-materiales']);
+  }
 }

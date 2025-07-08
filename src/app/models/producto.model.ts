@@ -2,7 +2,8 @@ export interface Producto {
   idProducto: number;
   nombre: string;
   descripcion: string;
-  material: string;
+  idMaterial: number;
+  nombreMaterial: string;
   medidas: string;
   precio: number;
   urlImagen: string;

@@ -1,0 +1,21 @@
+/* src/app/components/mantenedor-materiales/mantenedor-materiales.component.scss */
+.contenedor-materiales {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.espaciador {
+  flex: 1 1 auto;
+}
+
+.loading-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+}
+
+mat-table {
+  width: 100%;
+}

@@ -6,7 +6,7 @@
     <p class="producto-desc">{{ producto.descripcion }}</p>
     <div class="producto-detalle">
       <span><b>Medidas:</b> {{ producto.medidas }}</span>
-      <span><b>Material:</b> {{ producto.material }}</span>
+      <span><b>Material:</b> {{ producto.nombreMaterial }}</span>
     </div>
     <div class="producto-precio">
       <span class="precio">Precio: {{ producto.precio | currency:'CLP':'symbol':'1.0-0' }}</span>

@@ -9,6 +9,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { Producto } from '../../models/producto.model';
 import { TipoProductoService } from '../../services/tipo-producto/tipo-producto.service';
 import { TipoProducto } from '../../models/tipo-producto.model';
+import { Material } from '../../models/material.model';
+import { MaterialService } from '../../services/material/material.service';
 
 @Component({
   selector: 'app-formulario-producto',
@@ -29,6 +31,7 @@ export class FormularioProductoComponent implements OnInit {
 
   producto: Producto;
   tiposProducto: TipoProducto[] = [];
+  materiales: Material[] = [];
 
   imagenPreview: string | null = null;
   nombreImagenSeleccionada: string | null = null;
@@ -37,19 +40,28 @@ export class FormularioProductoComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<FormularioProductoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Producto,
-    private tipoProductoService: TipoProductoService
+    private tipoProductoService: TipoProductoService,
+    private materialService: MaterialService
   ) {
     this.producto = { ...data };
   }
 
   ngOnInit(): void {
     this.cargarTiposProducto();
+    this.cargarMateriales();
   }
 
   cargarTiposProducto(): void {
     this.tipoProductoService.obtenerTodos().subscribe({
       next: (tipos) => this.tiposProducto = tipos,
       error: () => this.tiposProducto = []
+    });
+  }
+
+  private cargarMateriales(): void {
+    this.materialService.obtenerTodos().subscribe({
+      next: mats => this.materiales = mats,
+      error: () => this.materiales = []
     });
   }
 
