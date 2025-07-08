@@ -7,12 +7,12 @@ import { ResponseModel } from '../../models/response-model.model';
   providedIn: 'root'
 })
 export class TipoProductoService {
-  private apiUrl = 'http://localhost:8080/api/productos/tipos';
+  private apiUrl = 'https://uwwdb8o872.execute-api.us-east-1.amazonaws.com/producto/tipo';
 
   constructor(private http: HttpClient) { }
 
   obtenerTodos(): Observable<TipoProducto[]> {
-    return this.http.get<TipoProducto[]>(this.apiUrl);
+    return this.http.get<TipoProducto[]>(`${this.apiUrl}/all`);
   }
 
   obtenerPorId(id: number): Observable<TipoProducto> {
