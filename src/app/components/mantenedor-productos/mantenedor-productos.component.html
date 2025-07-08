@@ -69,9 +69,7 @@
 
           <!-- Filas -->
           <mat-header-row *matHeaderRowDef="columnas"></mat-header-row>
-          <mat-row
-            *matRowDef="let row; columns: columnas; trackBy: trackById">
-          </mat-row>
+          <mat-row *matRowDef="let row; columns: columnas; trackBy: trackById"></mat-row>
         </mat-table>
       </mat-card>
     </ng-container>
