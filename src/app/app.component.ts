@@ -2,14 +2,14 @@ import { Component, OnInit, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { Router } from '@angular/router';
-import { NgIf, AsyncPipe, NgTemplateOutlet } from '@angular/common';
+import { NgIf, AsyncPipe } from '@angular/common';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { FooterComponent } from './shared/footer/footer.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NgIf, AsyncPipe, NgTemplateOutlet, NavbarComponent, FooterComponent],
+  imports: [RouterOutlet, NgIf, AsyncPipe, NavbarComponent, FooterComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

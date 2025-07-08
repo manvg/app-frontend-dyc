@@ -8,16 +8,16 @@ import { Producto } from '../../models/producto.model';
 })
 export class ProductosService {
 
-  private apiUrl = 'http://localhost:8080/api/productos';
+  private apiUrl = 'https://uwwdb8o872.execute-api.us-east-1.amazonaws.com/producto';
 
   constructor(private http: HttpClient) {}
 
   obtenerTodos(): Observable<Producto[]> {
-    return this.http.get<Producto[]>(this.apiUrl);
+    return this.http.get<Producto[]>(`${this.apiUrl}/all`);
   }
 
   obtenerActivos(): Observable<Producto[]> {
-    return this.http.get<Producto[]>(`${this.apiUrl}/activos`);
+    return this.http.get<Producto[]>(`${this.apiUrl}/all/activo`);
   }
 
   obtenerPorId(id: number): Observable<Producto> {
