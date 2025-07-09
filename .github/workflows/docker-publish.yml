@@ -100,7 +100,7 @@ jobs:
           HOST: ${{ secrets.EC2_HOST }}
           IMAGE: jayirong/app-frontend-dyc:latest
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@$HOST << 'EOF'
+          ssh -o StrictHostKeyChecking=no ububtu@$HOST << 'EOF'
             docker pull $IMAGE
             docker stop frontend  || true
             docker rm frontend   || true
