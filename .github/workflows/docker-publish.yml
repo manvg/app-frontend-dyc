@@ -33,17 +33,11 @@ jobs:
           path: dist/app-frontend-dyc
 
   docker:
-    name: 🐳 Build & Push Docker Image
+    name: 🐳 Build & Push Docker
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Download dist artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: dist
+      - uses: actions/checkout@v4
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
@@ -51,17 +45,14 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build Docker image
-        run: |
-          docker build \
-            -t jayirong/app-frontend-dyc:${{ github.sha }} \
-            -t jayirong/app-frontend-dyc:latest \
-            .
-
-      - name: Push Docker image
-        run: |
-          docker push jayirong/app-frontend-dyc:${{ github.sha }}
-          docker push jayirong/app-frontend-dyc:latest
+      - name: Build & push image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: |
+            jayirong/app-frontend-dyc:latest
+            jayirong/app-frontend-dyc:${{ github.sha }}
 
   deploy:
     name: 🚀 Deploy to EC2
