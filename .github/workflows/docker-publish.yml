@@ -45,9 +45,56 @@ jobs:
       - name: Start SSH agent
         uses: webfactory/ssh-agent@v0.5.4
         with:
-            ssh-private-key: |
-                ${{ secrets.EC2_SSH_KEY }}
-
+          ssh-private-key: |
+            -----BEGIN OPENSSH PRIVATE KEY-----
+            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
+            -----END OPENSSH PRIVATE KEY-----
       - name: Deploy to EC2
         env:
           HOST: ${{ secrets.EC2_HOST }}
