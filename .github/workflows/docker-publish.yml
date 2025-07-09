@@ -1,0 +1,60 @@
+# .github/workflows/docker-publish-deploy.yml
+name: 🚀 Build, Publish & Deploy Frontend
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build-push-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci -- --legacy-peer-deps
+
+      - name: Build Angular (prod)
+        run: npm run build -- --configuration production
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build & push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: |
+            jayirong/app-frontend-dyc:latest
+            jayirong/app-frontend-dyc:${{ github.sha }}
+
+      # --- Deploy section ---
+      - name: Start SSH agent
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+      - name: Deploy to EC2
+        env:
+          HOST: ${{ secrets.EC2_HOST }}
+          IMAGE: jayirong/app-frontend-dyc:latest
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@$HOST << 'EOF'
+            docker pull $IMAGE
+            docker stop frontend  || true
+            docker rm frontend   || true
+            docker run -d --name frontend -p 80:80 $IMAGE
+          EOF
