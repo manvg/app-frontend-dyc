@@ -1,20 +1,20 @@
-name: 🚀 Frontend CI/CD
+name: 🚀 Build, Publish & Deploy Frontend
 
 on:
   push:
     branches:
-      - master
+      - main
       - develop
 
 jobs:
-  build:
-    name: 🛠️ Build Angular
+  build-push:
+    name: 🛠️ Build & Push Docker Image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -22,51 +22,51 @@ jobs:
       - name: Install dependencies
         run: npm ci -- --legacy-peer-deps
 
-      - name: Build production bundle
+      - name: Build Angular (production)
         run: npm run build -- --configuration production
 
-      - name: Upload dist artifact
-        uses: actions/upload-artifact@v4
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
         with:
-          name: dist
-          path: dist/app-frontend-dyc
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build & push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: |
+            jayirong/app-frontend-dyc:latest
+            jayirong/app-frontend-dyc:${{ github.sha }}
 
   deploy:
     name: 🚀 Deploy to EC2
     runs-on: ubuntu-latest
-    needs: build
+    needs: build-push
     steps:
-      - name: Download dist artifact
-        uses: actions/download-artifact@v4
+      - name: Start SSH agent
+        uses: webfactory/ssh-agent@v0.5.4
         with:
-          name: dist
-          path: dist
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
-      - name: Copy static files to EC2
-        uses: appleboy/scp-action@v0.1.0
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
-          port: 22
-          source: "dist/*"
-          target: "/tmp/frontend/"
+      - name: Pull & run on EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
+            # Pull latest image
+            docker pull jayirong/app-frontend-dyc:latest
 
-      - name: Deploy on EC2 via SSH
-        uses: appleboy/ssh-action@v0.1.7
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
-          port: 22
-          script: |
-            # Detener Nginx del host para liberar el 80
-            sudo systemctl stop nginx || true
+            # Stop & remove existing container
+            docker stop frontend  || true
+            docker rm   frontend  || true
 
-            # Limpiar y copiar los nuevos estáticos
-            sudo rm -rf /usr/share/nginx/html/*
-            sudo cp -r /tmp/frontend/* /usr/share/nginx/html/
-            sudo chown -R www-data:www-data /usr/share/nginx/html/
-
-            # Volver a arrancar Nginx
-            sudo systemctl start nginx
+            # Run new container, mounting host certs for HTTPS
+            docker run -d \
+              --name frontend \
+              --restart unless-stopped \
+              -p 80:80 \
+              -p 443:443 \
+              -v /etc/letsencrypt:/etc/letsencrypt:ro \
+              -v /var/lib/letsencrypt:/var/lib/letsencrypt:ro \
+              jayirong/app-frontend-dyc:latest
+          EOF

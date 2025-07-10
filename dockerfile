@@ -2,26 +2,23 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 
-# Copiamos package.json y lock para cachear npm install
 COPY package*.json ./
-RUN npm ci -- – legacy-peer-deps
+RUN npm ci -- --legacy-peer-deps
 
-# Copiamos el resto y generamos el build de producción
 COPY . .
 RUN npm run build -- --configuration production
 
 # 2) Servir con Nginx
 FROM nginx:stable-alpine
-# Eliminamos la configuración por defecto de nginx
 RUN rm /etc/nginx/conf.d/default.conf
-# Copiamos nuestro config 
-COPY nginx.conf /etc/nginx/conf.d
 
-# Copiamos la carpeta dist al directorio de nginx
+# Copiamos nuestro nginx.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copiamos el build al html de nginx
 COPY --from=builder /app/dist/app-frontend-dyc /usr/share/nginx/html
 
-# Exponemos el puerto 80
-EXPOSE 80
+# Exponemos 80 y 443
+EXPOSE 80 443
 
-# Arrancamos nginx en primer plano
 CMD ["nginx", "-g", "daemon off;"]
