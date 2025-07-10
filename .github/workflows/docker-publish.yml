@@ -64,8 +64,7 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
-          key: |
-            ${{ secrets.EC2_SSH_KEY }}
+          key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             docker pull jayirong/app-frontend-dyc:latest
             docker stop frontend || true
