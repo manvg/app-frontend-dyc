@@ -1,9 +1,11 @@
+# .github/workflows/docker-publish.yml
+
 name: 🚀 Build, Publish & Deploy Frontend
 
 on:
   push:
     branches:
-      - master
+      - main
       - develop
 
 jobs:
@@ -53,14 +55,18 @@ jobs:
       - name: Pull & run on EC2
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
-            # Pull latest image
+            # 0) Para el Nginx de host para liberar el 80/443
+            sudo systemctl stop nginx || true
+            sudo systemctl disable nginx || true
+
+            # 1) Pull latest image
             docker pull jayirong/app-frontend-dyc:latest
 
-            # Stop & remove existing container
+            # 2) Stop & remove existing container
             docker stop frontend  || true
             docker rm   frontend  || true
 
-            # Run new container, mounting host certs for HTTPS
+            # 3) Run new container, montando certificados para HTTPS
             docker run -d \
               --name frontend \
               --restart unless-stopped \
