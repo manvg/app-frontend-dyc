@@ -3,7 +3,7 @@ name: 🚀 Build, Publish & Deploy Frontend
 on:
   push:
     branches:
-      - main
+      - master
       - develop
 
 jobs:
