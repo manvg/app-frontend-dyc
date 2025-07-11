@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
   logout(): void {
     window.sessionStorage.clear();
     window.location.href =
-      'https://dyc-corte-laser.auth.us-east-1.amazoncognito.com/logout?client_id=f1vmjepap0h7h1qouu45i59bi&logout_uri=' +
+      'https://cortelaserdyc.auth.us-east-1.amazoncognito.com/logout?client_id=f1vmjepap0h7h1qouu45i59bi&logout_uri=' +
       encodeURIComponent(window.location.origin + '/home');
   }
 }
