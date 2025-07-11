@@ -1,5 +1,4 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { Router } from '@angular/router';
 import { ProductosService } from '../../services/productos/productos.service';
 import { Producto } from '../../models/producto.model';
 import { CommonModule } from '@angular/common';
@@ -51,7 +50,7 @@ export class MantenedorProductosComponent implements OnInit {
   }
 
   cargarProductos(): void {
-    this.productos = null; // Estado loading
+    this.productos = null;
     this.productosService.obtenerTodos().subscribe({
       next: data => this.productos = data,
       error: err => {
