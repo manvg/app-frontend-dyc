@@ -99,7 +99,7 @@ export class FormularioProductoComponent implements OnInit {
     this.producto.nombreTipoProducto = tip?.nombre || '';
 
     if (this.imagenFile) {
-      const key = `${Date.now()}_${uuid()}_${this.imagenFile.name}`;
+      const key = `producto/${Date.now()}_${uuid()}_${this.imagenFile.name}`;
       this.imageService.uploadImage(this.BUCKET, key, this.imagenFile)
         .subscribe({
           next: url => {
