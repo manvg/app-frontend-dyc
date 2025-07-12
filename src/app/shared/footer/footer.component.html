@@ -3,8 +3,14 @@
     <ng-container *ngIf="!isAuthenticated">
       <div class="footer__contacto">
         <strong>Contacto</strong>
-        <div>📞 +56 9 1234 5678</div>
-        <div>✉️ email</div>
+        <div>
+          <span class="material-icons" aria-label="Teléfono">call</span>
+          <a href="tel:+56912345678">+56 9 1234 5678</a>
+        </div>
+        <div>
+          <span class="material-icons" aria-label="Correo">mail</span>
+          <a [href]="'mailto:' + 'contacto@dyc.cl'">{{ 'contacto@dyc.cl' }}</a>
+        </div>
       </div>
     </ng-container>
   </div>
@@ -16,7 +22,7 @@
   <div class="footer__right">
     <ng-container *ngIf="!isAuthenticated">
       <button class="btn-link" (click)="onLogin()">
-        <span class="material-icons">login</span> Iniciar sesión
+        <span class="material-icons" aria-hidden="true">login</span> Iniciar sesión
       </button>
     </ng-container>
   </div>

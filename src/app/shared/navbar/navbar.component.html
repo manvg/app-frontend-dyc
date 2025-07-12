@@ -1,6 +1,6 @@
-<nav class="navbar">
+<nav class="navbar" [class.navbar--open]="menuAbierto">
   <div class="navbar__container">
-    <!-- Columna IZQUIERDA: Logo (siempre visible) -->
+    <!-- Columna IZQUIERDA: Logo -->
     <div class="navbar__col navbar__col--left">
       <div class="navbar__logo">
         <img src="assets/logo_dyc.jpg" alt="Logo DYC">
@@ -9,16 +9,27 @@
       <div class="navbar__divider"></div>
     </div>
 
-    <!-- Columna CENTRAL: Menú -->
+    <button
+      class="navbar__toggle"
+      type="button"
+      aria-label="Abrir/cerrar menú"
+      (click)="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+
     <div class="navbar__col navbar__col--center">
-      <!-- ADMIN -->
-      <ul *ngIf="isPanelAdmin" class="navbar__links navbar__links--center">
+      <ul
+        *ngIf="isPanelAdmin"
+        class="navbar__links navbar__links--center"
+        (click)="closeMenu()">
         <li *ngFor="let link of linksAdmin">
           <a [routerLink]="link.route" routerLinkActive="active">{{ link.label }}</a>
         </li>
       </ul>
-      <!-- CLIENTE -->
-      <ul *ngIf="!isPanelAdmin" class="navbar__links navbar__links--center">
+      <ul
+        *ngIf="!isPanelAdmin"
+        class="navbar__links navbar__links--center"
+        (click)="closeMenu()">
         <li>
           <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">INICIO</a>
         </li>
@@ -30,7 +41,6 @@
       </ul>
     </div>
 
-    <!-- Columna DERECHA: Logout o carrito -->
     <div class="navbar__col navbar__col--right">
       <button
         *ngIf="isPanelAdmin"
@@ -45,4 +55,5 @@
         title="Ver carrito">shopping_cart</span>
     </div>
   </div>
+  <div class="navbar__overlay" *ngIf="menuAbierto" (click)="closeMenu()"></div>
 </nav>

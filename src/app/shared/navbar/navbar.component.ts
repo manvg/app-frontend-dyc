@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, HostListener } from '@angular/core';
 import { Router, NavigationEnd, RouterModule } from '@angular/router';
 import { NgIf, NgFor } from '@angular/common';
 import { filter } from 'rxjs';
@@ -15,13 +15,14 @@ export class NavbarComponent {
 
   isPanelAdmin = false;
 
-  // Links visibles en el menú admin
+  menuAbierto = false;
+
   readonly linksAdmin = [
     { label: 'Panel de Administración', route: '/panel-admin' },
     { label: 'Productos', route: '/mantenedor-productos' },
     { label: 'Tipos de Producto', route: '/mantenedor-tipo-producto' },
     { label: 'Materiales', route: '/mantenedor-materiales' },
-    { label: 'Solicitudes', route: '/visualizador-solicitudes' }    
+    { label: 'Solicitudes', route: '/visualizador-solicitudes' }
   ];
 
   private readonly rutasAdmin = [
@@ -29,7 +30,7 @@ export class NavbarComponent {
     '/mantenedor-productos',
     '/mantenedor-tipo-producto',
     '/mantenedor-materiales',
-    '/visualizador-solicitudes'    
+    '/visualizador-solicitudes'
   ];
 
   constructor(private router: Router) {
@@ -39,10 +40,27 @@ export class NavbarComponent {
         this.isPanelAdmin = this.rutasAdmin.some(ruta =>
           this.router.url.startsWith(ruta)
         );
+        this.menuAbierto = false;
       });
+  }
+
+  toggleMenu(): void {
+    this.menuAbierto = !this.menuAbierto;
+  }
+
+  closeMenu(): void {
+    this.menuAbierto = false;
   }
 
   onLogoutClick(): void {
     this.cerrarSesion.emit();
+    this.closeMenu();
+  }
+
+  @HostListener('window:resize', [])
+  onResize() {
+    if (window.innerWidth > 900 && this.menuAbierto) {
+      this.menuAbierto = false;
+    }
   }
 }

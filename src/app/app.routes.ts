@@ -12,6 +12,7 @@ import { PanelAdminComponent } from './components/panel-admin/panel-admin.compon
 import { PersonalizadaComponent } from './components/solicitudes/personalizada/personalizada.component';
 import { MantenedorTipoProductoComponent } from './components/mantenedor-tipo-producto/mantenedor-tipo-producto.component';
 import { MantenedorMaterialesComponent } from './components/mantenedor-materiales/mantenedor-materiales.component';
+import { SolicitudProductoComponent } from './components/solicitudes/solicitud-producto/solicitud-producto.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -21,6 +22,7 @@ export const routes: Routes = [
   { path: 'productos', component: ListaTiposProductoComponent },
   { path: 'productos/:idTipoProducto', component: ListaProductosComponent },
   { path: 'pedido-personalizado', component: PersonalizadaComponent},
+  { path: 'productos/:idProducto/solicitar', component: SolicitudProductoComponent },
   { path: 'login', component: LoginComponent },
   { path: 'login/callback', component: LoginCallbackComponent },
   { path: 'mantenedor-productos', component: MantenedorProductosComponent, canActivate: [authGuard] },

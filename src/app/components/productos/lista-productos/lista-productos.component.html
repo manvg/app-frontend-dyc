@@ -11,6 +11,10 @@
     <div class="producto-precio">
       <span class="precio">Precio: {{ producto.precio | currency:'CLP':'symbol':'1.0-0' }}</span>
     </div>
-    <button class="btn-principal"><span>Solicitar</span></button>
+    <button
+      class="btn-principal"
+      [routerLink]="['/productos', producto.idProducto, 'solicitar']">
+      <span>Solicitar</span>
+    </button>
   </div>
 </div>

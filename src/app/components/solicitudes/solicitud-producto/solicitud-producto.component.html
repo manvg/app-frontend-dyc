@@ -1,0 +1,99 @@
+<div class="solicitud-producto-wrapper">
+  <!-- Título principal -->
+  <h2 class="solicitud-producto-title">Solicitar producto</h2>
+
+  <!-- Detalle visual del producto solicitado -->
+  <div class="solicitud-producto-detalle" *ngIf="producto">
+    <span class="detalle-contexto">Estás solicitando:</span>
+    <div class="detalle-card">
+      <img [src]="producto.urlImagen" [alt]="producto.nombre" class="detalle-img" />
+      <div class="detalle-info">
+        <h2 class="detalle-nombre">{{ producto.nombre }}</h2>
+        <div class="detalle-descripcion">{{ producto.descripcion }}</div>
+        <div class="detalle-extra">
+          <span *ngIf="producto.medidas"><b>Medidas:</b> {{ producto.medidas }}</span>
+          <span *ngIf="producto.nombreMaterial"><b>Material:</b> {{ producto.nombreMaterial }}</span>
+        </div>
+        <div class="detalle-precio">
+          <b>Precio:</b> {{ producto.precio | currency:'CLP':'symbol':'1.0-0' }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <form class="solicitud-producto-form" [formGroup]="form" (ngSubmit)="enviarSolicitud()">
+    <div class="solicitud-producto-subtitle">Especificaciones</div>
+
+    <div class="form-group">
+      <label>
+        Nombre
+        <span class="requerido">*</span>
+      </label>
+      <input type="text" formControlName="nombre"
+        [class.campo-error]="campoInvalido('nombre')" />
+      <div *ngIf="campoInvalido('nombre')" class="mensaje-error">Este campo es requerido</div>
+    </div>
+
+    <div class="form-group">
+      <label>
+        Apellidos
+        <span class="requerido">*</span>
+      </label>
+      <input type="text" formControlName="apellidos"
+        [class.campo-error]="campoInvalido('apellidos')" />
+      <div *ngIf="campoInvalido('apellidos')" class="mensaje-error">Este campo es requerido</div>
+    </div>
+
+    <div class="form-group">
+      <label>
+        E-Mail
+        <span class="requerido">*</span>
+      </label>
+      <input type="email" formControlName="email"
+        [class.campo-error]="campoInvalido('email')" />
+      <div *ngIf="campoInvalido('email')" class="mensaje-error">
+        {{ form.get('email')?.errors?.['required'] ? 'Este campo es requerido' : '' }}
+        {{ form.get('email')?.errors?.['email'] ? 'Debe ser un email válido' : '' }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Número Telefónico</label>
+      <input type="text" formControlName="telefono" />
+    </div>
+
+    <div class="form-group">
+      <label>
+        Descripción Solicitud
+        <span class="requerido">*</span>
+      </label>
+      <textarea formControlName="descripcion" placeholder="Diseño, dimensiones, material, detalles, etc."
+        [class.campo-error]="campoInvalido('descripcion')"></textarea>
+      <div *ngIf="campoInvalido('descripcion')" class="mensaje-error">Este campo es requerido</div>
+    </div>
+
+    <div class="form-group">
+      <label>
+        Cantidad
+        <span class="requerido">*</span>
+      </label>
+      <input type="number" formControlName="cantidad" min="1"
+        [class.campo-error]="campoInvalido('cantidad')" />
+      <div *ngIf="campoInvalido('cantidad')" class="mensaje-error">
+        {{ form.get('cantidad')?.errors?.['required'] ? 'Este campo es requerido' : '' }}
+        {{ form.get('cantidad')?.errors?.['min'] ? 'Debe ser al menos 1' : '' }}
+      </div>
+    </div>
+
+    <div *ngIf="enviado" class="mensaje-exito">¡Solicitud enviada con éxito!</div>
+    <div *ngIf="errorEnvio" class="mensaje-error">{{ errorEnvio }}</div>
+
+    <div class="form-btn">
+      <button class="btn-principal" type="submit" [disabled]="enviando">
+        <span *ngIf="enviando" class="spinner"></span>
+        <span *ngIf="!enviando">Enviar solicitud</span>
+        <span *ngIf="enviando">Enviando...</span>
+      </button>
+    </div>
+  </form>
+</div>

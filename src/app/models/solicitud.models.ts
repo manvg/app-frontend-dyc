@@ -1,12 +1,13 @@
 import { TipoSolicitud } from "./tipo-solicitud.models";
 import { EstadoSolicitud } from "./estado-solicitud.models";
 import { Servicio } from "./servicio.model";
+import { SolicitudProducto } from "./solicitud-producto.model";
 
 export interface Solicitud {
-  idSolicitud: number;
+  idSolicitud?: number;
   idTipoSolicitud: number;
   idEstadoSolicitud: number;
-  idServicio?: number;
+  idServicio?: number | null;
   fechaCreacion?: string;
   nombreCliente: string;
   correoCliente: string;
@@ -16,4 +17,5 @@ export interface Solicitud {
   tipoSolicitud?: TipoSolicitud;
   estadoSolicitud?: EstadoSolicitud;
   servicio?: Servicio;
+  productos?: SolicitudProducto[];
 }

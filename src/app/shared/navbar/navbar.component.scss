@@ -5,18 +5,19 @@
   width: 100vw;
   z-index: 9999;
   background: #111;
-  box-shadow: 0 3px 18px #0003; // Sombra más moderna
+  box-shadow: 0 3px 18px #0003;
   height: 70px;
   display: flex;
   align-items: center;
+  transition: box-shadow 0.2s;
 
   &__container {
     display: flex;
     align-items: center;
     width: 100%;
-    max-width: 1300px; // Mejor centrado en pantallas notebook
+    max-width: 1300px;
     margin: 0 auto;
-    padding: 0 48px;   // Más separación en bordes
+    padding: 0 48px;
   }
 
   &__logo {
@@ -26,7 +27,7 @@
       width: 48px;
       height: 48px;
       object-fit: contain;
-      margin-right: 12px; // +espacio logo-menú
+      margin-right: 12px;
       filter: brightness(1.8);
       vertical-align: middle;
     }
@@ -34,7 +35,7 @@
       font-weight: bold;
       font-size: 1.4rem;
       color: #fff;
-      line-height: 48px; // Alinear con logo
+      line-height: 48px;
       vertical-align: middle;
       display: flex;
       align-items: center;
@@ -45,7 +46,7 @@
     width: 1px;
     height: 38px;
     background: #bbb;
-    margin: 0 32px; // +separación
+    margin: 0 32px;
   }
 
   // ===== CLIENTE: 3 columnas =====
@@ -54,17 +55,12 @@
     align-items: center;
     min-height: 70px;
   }
-  &__col--left {
-    flex: 1;
-  }
-  &__col--center {
-    flex: 2;
-    justify-content: center;
-  }
+  &__col--left { flex: 1; }
+  &__col--center { flex: 2; justify-content: center; }
   &__col--right {
     flex: 1;
     justify-content: flex-end;
-    min-width: 64px; // Para evitar solapamiento carrito
+    min-width: 64px;
   }
 
   &__links,
@@ -72,11 +68,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 36px; // Un poco más amplio
+    gap: 36px;
     list-style: none;
     margin: 0;
     padding: 0;
-    font-size: 1.08rem; // Ligero aumento
+    font-size: 1.08rem;
     width: 100%;
 
     li {
@@ -86,11 +82,10 @@
       a {
         text-decoration: none;
         color: #fff;
-        font-weight: 500; // intermedio para look elegante
+        font-weight: 500;
         letter-spacing: 0.2px;
         transition: color 0.2s, outline 0.18s;
         outline: none;
-        // Mejorar el focus para accesibilidad
         &:focus-visible {
           outline: 2px solid #ff417d;
           outline-offset: 2px;
@@ -102,14 +97,13 @@
 
   &__links--center {
     font-weight: 600;
-    gap: 44px; // Más separación menú admin
+    gap: 44px;
     width: auto;
     li a { font-weight: 600; }
   }
 
-  // Carrito a la derecha
   &__cart {
-    font-size: 2.3rem; // Más grande y elegante
+    font-size: 2.3rem;
     color: #fff;
     margin-left: auto;
     cursor: pointer;
@@ -125,7 +119,6 @@
     vertical-align: middle;
   }
 
-  // ===== ADMIN: Menú centrado + Log out derecha =====
   &__panel {
     display: flex;
     align-items: center;
@@ -146,12 +139,64 @@
       align-items: center;
     }
   }
+
+  // ===== Hamburguesa y menú mobile =====
+  &__toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 42px;
+    height: 42px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 12px;
+    z-index: 10001;
+    span {
+      display: block;
+      width: 26px;
+      height: 4px;
+      background: #fff;
+      border-radius: 2px;
+      margin: 3.5px 0;
+      transition: all 0.22s;
+    }
+  }
+
+  &__overlay {
+    display: none;
+  }
+
+  &.navbar--open {
+    // Bloquea scroll cuando el menú está abierto
+    overflow: visible;
+
+    .navbar__overlay {
+      display: block;
+      position: fixed;
+      z-index: 9998;
+      top: 60px;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #0008;
+      animation: navbarOverlayFadeIn 0.24s;
+    }
+  }
+}
+
+// Overlay animación
+@keyframes navbarOverlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 body, app-root {
   padding-top: 70px;
 }
 
+// ====================== RESPONSIVE =======================
 @media (max-width: 1300px) {
   .navbar__container { max-width: 1600px; }
 }
@@ -167,9 +212,49 @@ body, app-root {
     &__col--left, &__col--right, &__col--center { min-height: 60px; }
     &__divider { margin: 0 14px; }
     &__col--right { min-width: 44px; }
+    // Hamburguesa visible
+    &__toggle { display: flex; }
+    // Enlaces ocultan por defecto
+    &__links,
+    &__links--center {
+      position: fixed;
+      top: 60px;
+      left: 0;
+      width: 100vw;
+      flex-direction: column;
+      background: #191919;
+      gap: 0;
+      z-index: 10000;
+      padding: 0;
+      display: none;
+      box-shadow: 0 8px 32px #0004;
+      li {
+        width: 100%;
+        a {
+          width: 100%;
+          display: block;
+          padding: 18px 0;
+          text-align: center;
+          border-bottom: 1px solid #2225;
+        }
+      }
+    }
+    // Menú abierto: muestra links
+    &.navbar--open &__links,
+    &.navbar--open &__links--center {
+      display: flex;
+      animation: navbarSlideIn 0.23s;
+    }
   }
 }
 
+// Slide-in animación menú móvil
+@keyframes navbarSlideIn {
+  from { opacity: 0; transform: translateY(-15px);}
+  to { opacity: 1; transform: none;}
+}
+
+// ====== Enlace animación subrayado ======
 a {
   position: relative;
   &:after {
