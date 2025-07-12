@@ -7,7 +7,7 @@ import { ResponseModel } from '../../models/response-model.model';
   providedIn: 'root'
 })
 export class TipoProductoService {
-  private apiUrl = 'https://uwwdb8o872.execute-api.us-east-1.amazonaws.com/producto/tipo';
+  private apiUrl = 'https://xa8hsg5wk6.execute-api.us-east-1.amazonaws.com/producto/tipo';
 
   constructor(private http: HttpClient) { }
 

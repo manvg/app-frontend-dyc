@@ -6,7 +6,7 @@ import { switchMap } from 'rxjs/operators';
 export const AuthInterceptor: HttpInterceptorFn = (request, next) => {
   const oidcSecurityService = inject(OidcSecurityService);
 
-  const API_GATEWAY_URL = 'https://uwwdb8o872.execute-api.us-east-1.amazonaws.com';
+  const API_GATEWAY_URL = 'https://xa8hsg5wk6.execute-api.us-east-1.amazonaws.com';
   const needsAuth = request.url.startsWith(API_GATEWAY_URL);
 
   if (!needsAuth) {

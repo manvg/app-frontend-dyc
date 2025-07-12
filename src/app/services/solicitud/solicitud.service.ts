@@ -1,41 +1,41 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Producto } from '../../models/producto.model';
+import { Solicitud } from '../../models/solicitud.models';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProductosService {
+export class SolicitudService {
   private isProd = window.location.hostname !== 'localhost';
-  private prodUrl = 'https://xa8hsg5wk6.execute-api.us-east-1.amazonaws.com/producto';
-  private devUrl = 'https://xa8hsg5wk6.execute-api.us-east-1.amazonaws.com/producto';//'http://localhost:8080/api/productos';
+  private prodUrl = 'https://xa8hsg5wk6.execute-api.us-east-1.amazonaws.com/solicitud';
+  private devUrl = 'https://xa8hsg5wk6.execute-api.us-east-1.amazonaws.com/solicitud';//'http://localhost:8082/api/solicitudes';
 
   constructor(private http: HttpClient) {}
 
-  obtenerTodos(): Observable<Producto[]> {
+  obtenerTodos(): Observable<Solicitud[]> {
     const url = this.isProd ? `${this.prodUrl}/all` : `${this.devUrl}`;
-    return this.http.get<Producto[]>(url);
+    return this.http.get<Solicitud[]>(url);
   }
 
-  obtenerActivos(): Observable<Producto[]> {
+  obtenerActivos(): Observable<Solicitud[]> {
     const url = this.isProd ? `${this.prodUrl}/all/activo` : `${this.devUrl}/activos`;
-    return this.http.get<Producto[]>(url);
+    return this.http.get<Solicitud[]>(url);
   }
 
-  obtenerPorId(id: number): Observable<Producto> {
+  obtenerPorId(id: number): Observable<Solicitud> {
     const url = this.isProd ? `${this.prodUrl}/${id}` : `${this.devUrl}/${id}`;
-    return this.http.get<Producto>(url);
+    return this.http.get<Solicitud>(url);
   }
 
-  crear(producto: Producto): Observable<Producto> {
+  crear(solicitud: Solicitud): Observable<Solicitud> {
     const url = this.isProd ? `${this.prodUrl}` : `${this.devUrl}`;
-    return this.http.post<Producto>(url, producto);
+    return this.http.post<Solicitud>(url, solicitud);
   }
 
-  actualizar(id: number, producto: Producto): Observable<Producto> {
+  actualizar(id: number, solicitud: Solicitud): Observable<Solicitud> {
     const url = this.isProd ? `${this.prodUrl}/${id}` : `${this.devUrl}/${id}`;
-    return this.http.put<Producto>(url, producto);
+    return this.http.put<Solicitud>(url, solicitud);
   }
 
   cambiarEstado(id: number, activo: number): Observable<void> {

@@ -8,7 +8,7 @@ import { Material } from '../../models/material.model';
 })
 export class MaterialService {
 
-  private apiUrl = 'https://uwwdb8o872.execute-api.us-east-1.amazonaws.com/material'
+  private apiUrl = 'https://xa8hsg5wk6.execute-api.us-east-1.amazonaws.com/material'
 
   constructor(private http: HttpClient) { }
 

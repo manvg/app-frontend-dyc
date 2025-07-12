@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { SolicitudService } from '../../../services/solicitud/solicitud.service';
+import { Solicitud } from '../../../models/solicitud.models';
 
 @Component({
   selector: 'app-personalizada',
@@ -14,8 +16,12 @@ export class PersonalizadaComponent {
   archivoNombre: string | null = null;
   enviado = false;
   enviando = false;
+  errorEnvio: string | null = null;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private solicitudService: SolicitudService
+  ) {
     this.form = this.fb.group({
       nombre: ['', Validators.required],
       apellidos: ['', Validators.required],
@@ -47,15 +53,32 @@ export class PersonalizadaComponent {
       return;
     }
     this.enviando = true;
+    this.errorEnvio = null;
 
-    // Simulación de envío (reemplaza esto por tu servicio real)
-    setTimeout(() => {
-      this.enviado = true;
-      this.enviando = false;
-      this.form.reset({ cantidad: 1 });
-      this.archivoNombre = null;
-      setTimeout(() => this.enviado = false, 4000);
-    }, 1200);
+    const solicitud: Partial<Solicitud> = {
+      nombreCliente: this.form.value.nombre + ' ' + this.form.value.apellidos,
+      correoCliente: this.form.value.email,
+      telefonoCliente: this.form.value.telefono,
+      observaciones: this.form.value.descripcion,
+      // cantidad, archivo, etc. pueden ir en un campo personalizado según backend
+    };
+
+    // Si no envías archivos, simplemente:
+    this.solicitudService.crear(solicitud as Solicitud).subscribe({
+      next: () => {
+        this.enviado = true;
+        this.enviando = false;
+        this.form.reset({ cantidad: 1 });
+        this.archivoNombre = null;
+        setTimeout(() => this.enviado = false, 4000);
+      },
+      error: (err) => {
+        this.errorEnvio = 'Error al enviar la solicitud. Intenta nuevamente.';
+        this.enviando = false;
+      }
+    });
+
+    // Si necesitas enviar archivo, dime y te paso la versión con FormData.
   }
 
   campoInvalido(campo: string) {
