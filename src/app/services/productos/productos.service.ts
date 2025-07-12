@@ -14,7 +14,7 @@ export class ProductosService {
   constructor(private http: HttpClient) {}
 
   obtenerTodos(): Observable<Producto[]> {
-    const url = this.isProd ? `${this.prodUrl}/all` : `${this.devUrl}`;
+    const url = this.isProd ? `${this.prodUrl}/all` : `${this.devUrl}/all`;
     return this.http.get<Producto[]>(url);
   }
 

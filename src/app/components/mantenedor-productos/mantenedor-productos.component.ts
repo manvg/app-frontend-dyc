@@ -41,83 +41,86 @@ export class MantenedorProductosComponent implements OnInit {
     'tipoProducto', 'nombre', 'material', 'medidas', 'precio', 'activo', 'acciones'
   ];
 
-  private readonly productosService = inject(ProductosService);
-  private readonly dialog = inject(MatDialog);
-  private readonly snackBar = inject(MatSnackBar);
+  constructor(
+    private productosService: ProductosService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.cargarProductos();
   }
 
-  cargarProductos(): void {
-    this.productos = null;
+  cargarProductos() {
     this.productosService.obtenerTodos().subscribe({
-      next: data => this.productos = data,
-      error: err => {
+      next: list => this.productos = list,
+      error: () => {
+        this.snackBar.open('Error cargando productos', 'Cerrar', { duration: 3000, panelClass: 'snack-error' });
         this.productos = [];
-        this.snackBar.open('Error al cargar productos', 'Cerrar', { duration: 3500, panelClass: 'snack-error' });
-        console.error('Error al cargar productos', err);
       }
     });
   }
 
-  nuevoProducto(): void {
-    const dialogRef = this.dialog.open(FormularioProductoComponent, {
-      width: '600px',
-      data: {
-        idProducto: 0,
-        nombre: '',
-        descripcion: '',
-        medidas: '',
-        precio: 0,
-        urlImagen: '',
-        activo: 1,
-        idTipoProducto: null,
-        nombreTipoProducto: '',
-        idMaterial: 0,
-        nombreMaterial: ''
-      } as Producto
-    });
+  nuevoProducto() {
+    const dialogRef = this.dialog.open(FormularioProductoComponent, { /* ... */ });
 
     dialogRef.afterClosed().subscribe((result?: Producto) => {
-      if (result) {
-        this.productosService.crear(result).subscribe({
-          next: () => {
-            this.cargarProductos();
-            this.snackBar.open('Producto creado con éxito', 'Cerrar', { duration: 3000 });
-          },
-          error: err => {
-            this.snackBar.open('Error al crear producto', 'Cerrar', { duration: 3500, panelClass: 'snack-error' });
-            console.error('Error al crear producto', err);
-          }
-        });
-      }
-    });
-  }
+      if (!result) return;
 
-  editarProducto(id: number): void {
-    this.productosService.obtenerPorId(id).subscribe(producto => {
-      const dialogRef = this.dialog.open(FormularioProductoComponent, {
-        width: '600px',
-        data: producto
-      });
-
-      dialogRef.afterClosed().subscribe((result?: Producto) => {
-        if (result) {
-          this.productosService.actualizar(id, result).subscribe({
-            next: () => {
-              this.cargarProductos();
-              this.snackBar.open('Producto actualizado con éxito', 'Cerrar', { duration: 3000 });
-            },
-            error: err => {
-              this.snackBar.open('Error al actualizar producto', 'Cerrar', { duration: 3500, panelClass: 'snack-error' });
-              console.error('Error al actualizar producto', err);
-            }
+      // aquí ya tienes result.urlImagen y nombres
+      this.productosService.crear(result).subscribe({
+        next: () => {
+          this.snackBar.open('Producto creado con éxito', 'Cerrar', { duration: 3000 });
+          this.cargarProductos();
+        },
+        error: err => {
+          console.error('500 al crear producto', err);  // <<< captura el 500 aquí
+          this.snackBar.open('Error al crear producto', 'Cerrar', {
+            duration: 3500,
+            panelClass: 'snack-error'
           });
         }
       });
     });
   }
+
+  editarProducto(id: number): void {
+  this.productosService.obtenerPorId(id).subscribe(producto => {
+    const dialogRef = this.dialog.open(FormularioProductoComponent, {
+      width: '600px',
+      data: producto
+    });
+
+    dialogRef.afterClosed().subscribe((result?: Producto) => {
+      if (result) {
+        const payload = {
+          idProducto:       result.idProducto,
+          nombre:           result.nombre,
+          descripcion:      result.descripcion,
+          medidas:          result.medidas,
+          precio:           result.precio,
+          urlImagen:        result.urlImagen,
+          activo:           result.activo,
+          idTipoProducto:   result.idTipoProducto,
+          nombreTipoProducto: result.nombreTipoProducto,
+          idMaterial:       result.idMaterial,
+          nombreMaterial:   result.nombreMaterial
+        };
+
+        this.productosService.actualizar(id, payload).subscribe({
+          next: () => {
+            this.cargarProductos();
+            this.snackBar.open('Producto actualizado con éxito', 'Cerrar', { duration: 3000 });
+          },
+          error: err => {
+            this.snackBar.open('Error al actualizar producto', 'Cerrar', { duration: 3500, panelClass: 'snack-error' });
+            console.error('Error al actualizar producto', err);
+          }
+        });
+      }
+    });
+  });
+}
 
   cambiarVigenciaProducto(producto: Producto): void {
     const nuevoEstado = producto.activo === 1 ? 0 : 1;
