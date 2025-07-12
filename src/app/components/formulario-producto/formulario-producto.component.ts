@@ -11,6 +11,9 @@ import { TipoProductoService } from '../../services/tipo-producto/tipo-producto.
 import { TipoProducto } from '../../models/tipo-producto.model';
 import { Material } from '../../models/material.model';
 import { MaterialService } from '../../services/material/material.service';
+import { ImageService } from '../../services/image/image.service';
+import { v4 as uuid } from 'uuid';
+import { url } from 'inspector';
 
 @Component({
   selector: 'app-formulario-producto',
@@ -37,11 +40,14 @@ export class FormularioProductoComponent implements OnInit {
   nombreImagenSeleccionada: string | null = null;
   imagenFile: File | null = null;
 
+  private readonly BUCKET = 'bucketdyc';
+
   constructor(
     public dialogRef: MatDialogRef<FormularioProductoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Producto,
     private tipoProductoService: TipoProductoService,
-    private materialService: MaterialService
+    private materialService: MaterialService,
+    private imageService: ImageService
   ) {
     this.producto = { ...data };
   }
@@ -86,10 +92,27 @@ export class FormularioProductoComponent implements OnInit {
   }
 
   guardar(): void {
-    this.dialogRef.close({
-      ...this.producto,
-      imagenFile: this.imagenFile
-    });
+    // rellena nombres para el DTO
+    const mat = this.materiales.find(m => m.idMaterial === this.producto.idMaterial);
+    const tip = this.tiposProducto.find(t => t.idTipoProducto === this.producto.idTipoProducto);
+    this.producto.nombreMaterial     = mat?.nombre || '';
+    this.producto.nombreTipoProducto = tip?.nombre || '';
+
+    if (this.imagenFile) {
+      const key = `producto/${Date.now()}_${uuid()}_${this.imagenFile.name}`;
+      this.imageService.uploadImage(this.BUCKET, key, this.imagenFile)
+        .subscribe({
+          next: url => {
+            this.producto.urlImagen = url;
+            this.dialogRef.close(this.producto);    // <<< EDIT: cerramos con el producto completo
+          },
+          error: err => {
+            console.error('Error subiendo imagen:', err);
+          }
+        });
+    } else {
+      this.dialogRef.close(this.producto);        // <<< EDIT: cerramos aunque no haya imagen
+    }
   }
 
   cancelar(): void {

@@ -6,8 +6,6 @@ on:
   push:
     branches:
       - master
-      - develop
-
 jobs:
   build-push:
     name: 🛠️ Build & Push Docker Image
