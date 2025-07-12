@@ -21,9 +21,9 @@ export class SolicitudProductoComponent implements OnInit {
   enviando = false;
   errorEnvio: string | null = null;
 
-  idTipoSolicitud = 1;    // ejemplo: tipo personalizada
-  idEstadoSolicitud = 1;  // ejemplo: estado pendiente
-  idServicio: number | null = null; // si aplica un servicio específico
+  idTipoSolicitud = 2;//Tipo solicitud: PRODUCTO
+  idEstadoSolicitud = 1;  //Estado solicitud: RECIBIDA
+  idServicio: number | null = null;
 
   constructor(
     private fb: FormBuilder,

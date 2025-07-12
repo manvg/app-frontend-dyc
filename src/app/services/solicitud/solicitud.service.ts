@@ -7,46 +7,39 @@ import { Solicitud } from '../../models/solicitud.models';
   providedIn: 'root'
 })
 export class SolicitudService {
-  private isProd = window.location.hostname !== 'localhost';
-  private prodUrl = 'https://xa8hsg5wk6.execute-api.us-east-1.amazonaws.com/solicitud';
-  private devUrl = 'https://xa8hsg5wk6.execute-api.us-east-1.amazonaws.com/solicitud';//'http://localhost:8082/api/solicitudes';
+  private urlBase = 'https://xa8hsg5wk6.execute-api.us-east-1.amazonaws.com/solicitud';
 
   constructor(private http: HttpClient) {}
 
   obtenerTodos(): Observable<Solicitud[]> {
-    const url = this.isProd ? `${this.prodUrl}/all` : `${this.devUrl}`;
-    return this.http.get<Solicitud[]>(url);
+    return this.http.get<Solicitud[]>(`${this.urlBase}/all`);
   }
 
   obtenerActivos(): Observable<Solicitud[]> {
-    const url = this.isProd ? `${this.prodUrl}/all/activo` : `${this.devUrl}/activos`;
-    return this.http.get<Solicitud[]>(url);
+    return this.http.get<Solicitud[]>(`${this.urlBase}/all/activo`);
   }
 
   obtenerPorId(id: number): Observable<Solicitud> {
-    const url = this.isProd ? `${this.prodUrl}/${id}` : `${this.devUrl}/${id}`;
-    return this.http.get<Solicitud>(url);
+    return this.http.get<Solicitud>(`${this.urlBase}/${id}`);
   }
 
   crear(solicitud: Solicitud): Observable<Solicitud> {
-    const url = this.isProd ? `${this.prodUrl}` : `${this.devUrl}`;
-    return this.http.post<Solicitud>(url, solicitud);
+    return this.http.post<Solicitud>(`${this.urlBase}`, solicitud);
+  }
+
+  crearSolicitudServicio(formData: FormData): Observable<any> {
+    return this.http.post<any>(`${this.urlBase}`, formData);
   }
 
   actualizar(id: number, solicitud: Solicitud): Observable<Solicitud> {
-    const url = this.isProd ? `${this.prodUrl}/${id}` : `${this.devUrl}/${id}`;
-    return this.http.put<Solicitud>(url, solicitud);
+    return this.http.put<Solicitud>(`${this.urlBase}/${id}`, solicitud);
   }
 
   cambiarEstado(id: number, activo: number): Observable<void> {
-    const url = this.isProd
-      ? `${this.prodUrl}/${id}/cambiar-estado?activo=${activo}`
-      : `${this.devUrl}/${id}/cambiar-estado?activo=${activo}`;
-    return this.http.put<void>(url, {});
+    return this.http.put<void>(`${this.urlBase}/${id}/cambiar-estado?activo=${activo}`, {});
   }
 
   eliminar(id: number): Observable<void> {
-    const url = this.isProd ? `${this.prodUrl}/${id}` : `${this.devUrl}/${id}`;
-    return this.http.delete<void>(url);
+    return this.http.delete<void>(`${this.urlBase}/${id}`);
   }
 }

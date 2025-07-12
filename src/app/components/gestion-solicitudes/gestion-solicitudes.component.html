@@ -1,0 +1,74 @@
+<div class="gestion-solicitudes-wrapper">
+  <h1 class="gestion-solicitudes-title">SOLICITUDES</h1>
+
+  <!-- Barra de filtros y búsqueda -->
+  <div class="solicitudes-filtros">
+    <div class="filtro-dropdown">
+      <label for="filtro">Filtro</label>
+      <select id="filtro" [(ngModel)]="filtroSeleccionado">
+        <option value="">Todos</option>
+        <option value="id">ID</option>
+        <option value="tipo">Tipo Solicitud</option>
+        <option value="producto">Producto</option>
+      </select>
+    </div>
+    <input
+      type="text"
+      class="solicitudes-buscar"
+      [(ngModel)]="busqueda"
+      placeholder="Buscar Solicitud"
+      (input)="aplicarFiltros()"
+    />
+  </div>
+
+  <!-- Tabla de solicitudes -->
+  <div class="solicitudes-table-container">
+    <table class="solicitudes-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th (click)="ordenarPor('idSolicitud')">ID Solicitud</th>
+          <th (click)="ordenarPor('nombreCliente')">Nombre Cliente</th>
+          <th (click)="ordenarPor('estadoSolicitud')">Estado Solicitud</th>
+          <th (click)="ordenarPor('tipoSolicitud')">Tipo Solicitud</th>
+          <th (click)="ordenarPor('producto')">Producto</th>
+          <th (click)="ordenarPor('fecha')">Fecha de Solicitud</th>
+          <th>Imagen</th>
+          <th>Bitácora</th>
+          <th>Observaciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let solicitud of solicitudesFiltradas; let i = index" [class.selected]="solicitud === solicitudSeleccionada">
+          <td>
+            <input type="radio" name="solicitudSeleccionada" [checked]="solicitud === solicitudSeleccionada" (change)="seleccionarSolicitud(solicitud)" />
+          </td>
+          <td>{{ solicitud.idSolicitud }}</td>
+          <td>{{ solicitud.nombreCliente }}</td>
+          <td>{{ solicitud.estadoSolicitud }}</td>
+          <td>{{ solicitud.tipoSolicitud }}</td>
+          <td>{{ solicitud.producto || '--' }}</td>
+          <td>{{ solicitud.fecha | date: 'dd/MM/yy' }}</td>
+          <td>
+            <a href="#" (click)="verImagen(solicitud); $event.preventDefault()">
+              <span class="material-icons icon-link">search</span> Ver Imagen
+            </a>
+          </td>
+          <td>
+            <a href="#" (click)="verBitacora(solicitud); $event.preventDefault()">
+              <span class="material-icons icon-link">search</span> Ver Bitácora
+            </a>
+          </td>
+          <td>{{ solicitud.observaciones }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Botones de acción -->
+  <div class="solicitudes-acciones">
+    <button class="btn-secundario" [disabled]="!solicitudSeleccionada" (click)="editarSolicitud()">Editar</button>
+    <button class="btn-secundario" [disabled]="!solicitudSeleccionada" (click)="eliminarSolicitud()">Eliminar</button>
+    <button class="btn-secundario" [disabled]="!solicitudSeleccionada" (click)="cambiarEstado()">Cambiar Estado</button>
+  </div>
+</div>

@@ -4,13 +4,14 @@ import { Servicio } from '../../../models/servicio.model';
 import { NgIf, CurrencyPipe } from '@angular/common';
 import { SERVICIOS_MOCK } from '../lista-servicios.mock-data';
 import { Subscription } from 'rxjs';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-detalle-servicio',
   templateUrl: './detalle-servicio.component.html',
   styleUrls: ['./detalle-servicio.component.scss'],
   standalone: true,
-  imports: [NgIf, CurrencyPipe]
+  imports: [NgIf, CurrencyPipe, RouterModule]
 })
 export class DetalleServicioComponent implements OnInit, OnDestroy {
   servicio?: Servicio;

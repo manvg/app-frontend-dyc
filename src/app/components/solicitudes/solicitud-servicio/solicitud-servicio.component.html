@@ -1,0 +1,97 @@
+<div class="solicitud-servicio-wrapper">
+  <!-- Título principal -->
+  <h2 class="solicitud-servicio-title">Solicitud de servicio</h2>
+
+  <!-- Detalle visual del servicio solicitado -->
+  <div class="solicitud-servicio-detalle" *ngIf="servicio">
+    <span class="detalle-contexto">Estás solicitando:</span>
+    <div class="detalle-card">
+      <img [src]="servicio.urlImagen" [alt]="servicio.nombre" class="detalle-img" *ngIf="servicio.urlImagen" />
+      <div class="detalle-info">
+        <h2 class="detalle-nombre">{{ servicio.nombre }}</h2>
+        <div class="detalle-descripcion">{{ servicio.descripcion }}</div>
+        <div class="detalle-precio" *ngIf="servicio.precio">
+          <b>Precio:</b> {{ servicio.precio | currency:'CLP':'symbol':'1.0-0' }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <form class="solicitud-servicio-form" [formGroup]="form" (ngSubmit)="enviarSolicitud()" autocomplete="off">
+    <div class="solicitud-servicio-subtitle">Especificaciones</div>
+
+    <div class="form-group">
+      <label>
+        Nombre
+        <span class="requerido">*</span>
+      </label>
+      <input type="text" formControlName="nombre" [class.campo-error]="campoInvalido('nombre')" />
+      <div *ngIf="campoInvalido('nombre')" class="mensaje-error">Este campo es requerido</div>
+    </div>
+
+    <div class="form-group">
+      <label>
+        Apellidos
+        <span class="requerido">*</span>
+      </label>
+      <input type="text" formControlName="apellidos" [class.campo-error]="campoInvalido('apellidos')" />
+      <div *ngIf="campoInvalido('apellidos')" class="mensaje-error">Este campo es requerido</div>
+    </div>
+
+    <div class="form-group">
+      <label>
+        E-Mail
+        <span class="requerido">*</span>
+      </label>
+      <input type="email" formControlName="email" [class.campo-error]="campoInvalido('email')" />
+      <div *ngIf="campoInvalido('email')" class="mensaje-error">
+        {{ form.get('email')?.errors?.['required'] ? 'Este campo es requerido' : '' }}
+        {{ form.get('email')?.errors?.['email'] ? 'Debe ser un email válido' : '' }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Número Telefónico</label>
+      <input type="text" formControlName="telefono" />
+    </div>
+
+    <div class="form-group">
+      <label>
+        Descripción Solicitud
+        <span class="requerido">*</span>
+      </label>
+      <textarea
+        formControlName="descripcion"
+        placeholder='Requerimientos: ej. "corte en mdf de 5mm, medidas 30x50cm, patrón simple, cantidad de elementos"'
+        [class.campo-error]="campoInvalido('descripcion')"></textarea>
+      <div *ngIf="campoInvalido('descripcion')" class="mensaje-error">Este campo es requerido</div>
+    </div>
+
+    <div class="form-group">
+      <label>Archivo referencia</label>
+      <div class="archivo-upload">
+        <input type="file" id="archivo" (change)="onArchivoChange($event)" accept="image/*,.pdf" />
+        <button type="button" class="archivo-btn" (click)="seleccionarArchivo()">
+          <span *ngIf="!archivoNombre">(Subir Archivo)</span>
+          <span *ngIf="archivoNombre" class="archivo-nombre">{{ archivoNombre }}</span>
+          <span class="material-icons icono">add_circle</span>
+        </button>
+      </div>
+      <div *ngIf="archivoPreview" class="archivo-preview">
+        <img *ngIf="archivoEsImagen" [src]="archivoPreview" [alt]="archivoNombre" />
+        <span *ngIf="!archivoEsImagen"><b>Archivo listo para enviar.</b></span>
+      </div>
+    </div>
+
+    <div *ngIf="enviado" class="mensaje-exito">¡Solicitud enviada con éxito!</div>
+    <div *ngIf="errorEnvio" class="mensaje-error">{{ errorEnvio }}</div>
+
+    <div class="form-btn">
+      <button class="btn-principal" type="submit" [disabled]="enviando">
+        <span *ngIf="enviando" class="spinner"></span>
+        <span *ngIf="!enviando">Enviar solicitud</span>
+        <span *ngIf="enviando">Enviando...</span>
+      </button>
+    </div>
+  </form>
+</div>

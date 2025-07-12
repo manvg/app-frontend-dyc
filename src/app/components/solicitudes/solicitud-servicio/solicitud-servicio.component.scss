@@ -1,0 +1,268 @@
+.solicitud-servicio-wrapper {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 42px 30px 56px 30px;
+  background: #fff;
+  border-radius: 22px;
+  box-shadow: 0 6px 32px #0001;
+  min-height: 70vh;
+
+  .solicitud-servicio-title {
+    text-align: center;
+    font-size: 2.4rem;
+    font-weight: bold;
+    margin-bottom: 38px;
+    margin-top: 0;
+    letter-spacing: 0.5px;
+    color: #222;
+  }
+
+  .solicitud-servicio-detalle {
+    margin-bottom: 26px;
+
+    .detalle-contexto {
+      color: #446bf4;
+      font-size: 1.06rem;
+      font-weight: 500;
+      display: block;
+      margin-bottom: 7px;
+      margin-left: 7px;
+    }
+    .detalle-card {
+      display: flex;
+      background: #fafbfc;
+      border-radius: 18px;
+      box-shadow: 0 1px 12px #0001;
+      padding: 18px 22px;
+      gap: 18px;
+      align-items: center;
+      margin-bottom: 3px;
+    }
+    .detalle-img {
+      width: 80px; height: 80px;
+      border-radius: 10px;
+      object-fit: cover;
+      background: #eee;
+      border: 1px solid #ececec;
+      box-shadow: 0 2px 7px #0001;
+    }
+    .detalle-info {
+      flex: 1;
+      .detalle-nombre {
+        font-size: 1.22rem;
+        font-weight: bold;
+        margin: 0 0 2px 0;
+      }
+      .detalle-descripcion {
+        font-size: 1.01rem;
+        margin-bottom: 3px;
+      }
+      .detalle-precio {
+        font-weight: bold;
+        color: #111;
+        margin-top: 5px;
+      }
+      .detalle-extra {
+        font-size: 1.01rem;
+        color: #353535;
+        margin-bottom: 0px;
+        b { font-weight: 600; }
+        span:not(:last-child) { margin-right: 22px; }
+      }
+    }
+  }
+
+  .solicitud-servicio-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+
+    .solicitud-servicio-subtitle {
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #222;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      position: relative;
+
+      label {
+        font-weight: 600;
+        color: #272727;
+        margin-bottom: 2px;
+        .requerido {
+          color: #d32f2f;
+          font-size: 0.95em;
+          margin-left: 8px;
+          font-weight: 400;
+          letter-spacing: 0.02em;
+        }
+      }
+
+      input[type="text"],
+      input[type="email"],
+      input[type="tel"],
+      textarea {
+        border: 1.4px solid #d1d1d1;
+        border-radius: 7px;
+        padding: 10px 12px;
+        font-size: 1.03rem;
+        outline: none;
+        background: #fff;
+        transition: border 0.22s, background 0.17s, box-shadow 0.19s;
+        &:focus {
+          border-color: #4857bb;
+          box-shadow: 0 0 0 2px #4857bb22;
+          background: #f5f8ff;
+        }
+      }
+
+      .campo-error {
+        border-color: #e53935 !important;
+        background: #fff5f5;
+      }
+
+      .mensaje-error {
+        color: #e53935;
+        font-size: 0.97rem;
+        margin-top: 3px;
+        margin-bottom: 3px;
+        font-weight: 500;
+        min-height: 16px;
+      }
+
+      .archivo-upload {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+
+        input[type="file"] { display: none; }
+
+        .archivo-btn {
+          display: flex;
+          align-items: center;
+          background: #e6e6e6;
+          border: none;
+          border-radius: 8px;
+          padding: 7px 14px;
+          font-size: 1rem;
+          cursor: pointer;
+          transition: background 0.18s, color 0.13s;
+          &:hover { background: #d1d1d1; color: #4857bb; }
+          .icono {
+            font-size: 1.2rem;
+            margin-left: 7px;
+            font-weight: bold;
+            color: #4a4a4a;
+          }
+        }
+
+        .archivo-nombre {
+          font-size: 0.98rem;
+          color: #3a3a3a;
+          margin-left: 5px;
+          max-width: 180px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+      .archivo-preview {
+        margin-top: 5px;
+        img {
+          max-width: 110px;
+          max-height: 110px;
+          border-radius: 6px;
+          border: 1px solid #ccc;
+          background: #fafafa;
+          box-shadow: 0 1px 5px #0001;
+        }
+      }
+    }
+
+    .mensaje-exito {
+      background: #e7ffd9;
+      color: #29752f;
+      padding: 11px 0;
+      border-radius: 9px;
+      font-weight: 600;
+      margin-bottom: 14px;
+      text-align: center;
+      font-size: 1.08rem;
+    }
+
+    .form-btn {
+      display: flex;
+      justify-content: center;
+      margin-top: 36px;
+
+      .btn-principal {
+        background: #191919;
+        color: #fff;
+        font-size: 1.16rem;
+        font-weight: bold;
+        border-radius: 14px;
+        padding: 15px 44px;
+        border: none;
+        cursor: pointer;
+        transition: background 0.18s, transform 0.13s;
+        min-width: 200px;
+        box-shadow: 0 2px 12px #0001;
+        &:hover:enabled {
+          background: #292929;
+          transform: translateY(-1px) scale(1.02);
+        }
+        &:disabled {
+          background: #bbb;
+          cursor: not-allowed;
+          opacity: 0.74;
+        }
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+    }
+  }
+}
+
+// Spinner para loading en botón
+.spinner {
+  border: 2px solid #e0e0e0;
+  border-top: 2px solid #4857bb;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  margin-right: 9px;
+  animation: spin 0.9s linear infinite;
+  vertical-align: middle;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+// Responsive
+@media (max-width: 900px) {
+  .solicitud-servicio-wrapper {
+    max-width: 99vw;
+    padding: 14px 4vw 28px 4vw;
+    border-radius: 0;
+    box-shadow: none;
+    min-height: unset;
+
+    .solicitud-servicio-title { font-size: 1.55rem; margin-top: 8px; }
+    .solicitud-servicio-detalle .detalle-card { padding: 12px 8px; gap: 10px; }
+    .form-btn .btn-principal { min-width: 120px; padding: 11px 16px; font-size: 1rem; }
+  }
+}
+@media (max-width: 480px) {
+  .solicitud-servicio-wrapper {
+    padding: 7px 1vw 13px 1vw;
+    .solicitud-servicio-title { font-size: 1.25rem; }
+    .detalle-card { flex-direction: column; align-items: flex-start; }
+    .detalle-img { max-width: 64px; max-height: 64px; }
+  }
+}

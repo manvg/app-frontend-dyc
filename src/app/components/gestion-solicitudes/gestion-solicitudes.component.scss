@@ -1,0 +1,151 @@
+.gestion-solicitudes-wrapper {
+  max-width: 1100px;
+  margin: 38px auto 0 auto;
+  background: #fff;
+  padding: 38px 20px 38px 20px;
+  border-radius: 20px;
+  box-shadow: 0 6px 32px #0001;
+  min-height: 70vh;
+}
+
+.gestion-solicitudes-title {
+  text-align: center;
+  font-size: 2.3rem;
+  font-weight: bold;
+  margin-bottom: 30px;
+  letter-spacing: 0.5px;
+  color: #222;
+}
+
+.solicitudes-filtros {
+  display: flex;
+  align-items: flex-end;
+  gap: 18px;
+  margin-bottom: 18px;
+
+  .filtro-dropdown {
+    display: flex;
+    flex-direction: column;
+    label {
+      font-size: 1.02rem;
+      margin-bottom: 2px;
+      font-weight: 500;
+      color: #444;
+    }
+    select {
+      border: 1.3px solid #d1d1d1;
+      border-radius: 7px;
+      padding: 5px 9px;
+      font-size: 1.05rem;
+      outline: none;
+      background: #fff;
+      transition: border 0.22s, box-shadow 0.19s;
+      &:focus {
+        border-color: #4857bb;
+        box-shadow: 0 0 0 2px #4857bb22;
+      }
+    }
+  }
+  .solicitudes-buscar {
+    flex: 1;
+    border: 1.3px solid #d1d1d1;
+    border-radius: 7px;
+    padding: 8px 14px;
+    font-size: 1.07rem;
+    outline: none;
+    background: #fff;
+    transition: border 0.22s, box-shadow 0.19s;
+    &:focus {
+      border-color: #4857bb;
+      box-shadow: 0 0 0 2px #4857bb22;
+    }
+  }
+}
+
+.solicitudes-table-container {
+  overflow-x: auto;
+}
+
+.solicitudes-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+  thead {
+    th {
+      font-weight: 700;
+      background: #f5f6fa;
+      padding: 11px 8px;
+      border-bottom: 2.5px solid #ddd;
+      cursor: pointer;
+      text-align: left;
+      font-size: 1.04rem;
+      user-select: none;
+      &:first-child { cursor: default; }
+    }
+  }
+  tbody {
+    tr {
+      background: #fff;
+      transition: background 0.16s;
+      &.selected { background: #e2edff; }
+      &:nth-child(even) { background: #f8fafd; }
+      td {
+        padding: 10px 8px;
+        border-bottom: 1.2px solid #ececec;
+        font-size: 1.01rem;
+        vertical-align: middle;
+        .material-icons.icon-link {
+          font-size: 1.15rem;
+          color: #4857bb;
+          margin-right: 2px;
+          vertical-align: middle;
+        }
+        a {
+          color: #4857bb;
+          text-decoration: underline;
+          cursor: pointer;
+          &:hover { color: #2a3790; }
+        }
+      }
+    }
+  }
+}
+
+.solicitudes-acciones {
+  display: flex;
+  gap: 22px;
+  justify-content: flex-end;
+  margin-top: 16px;
+
+  .btn-secundario {
+    background: #fff;
+    color: #232323;
+    font-size: 1.06rem;
+    font-weight: 600;
+    border-radius: 11px;
+    padding: 12px 32px;
+    border: 1.7px solid #4857bb;
+    cursor: pointer;
+    transition: background 0.14s, color 0.14s;
+    box-shadow: 0 1px 7px #0001;
+    &:hover:enabled {
+      background: #4857bb;
+      color: #fff;
+    }
+    &:disabled {
+      color: #bbb;
+      border-color: #ccc;
+      background: #f7f7f7;
+      cursor: not-allowed;
+      opacity: 0.8;
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .gestion-solicitudes-wrapper { max-width: 99vw; padding: 8px 0 18px 0; border-radius: 0; box-shadow: none; }
+  .gestion-solicitudes-title { font-size: 1.2rem; margin-bottom: 16px; }
+  .solicitudes-filtros { flex-direction: column; gap: 10px; }
+  .solicitudes-table th, .solicitudes-table td { font-size: 0.94rem; padding: 6px 5px; }
+  .solicitudes-acciones .btn-secundario { font-size: 0.92rem; padding: 8px 12px; }
+}

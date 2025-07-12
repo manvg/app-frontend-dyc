@@ -1,8 +1,6 @@
 <div class="detalle-servicio-wrapper" *ngIf="servicio as s">
-  <!-- Título centrado arriba -->
   <h1 class="detalle-servicio__titulo">{{ s.nombre }}</h1>
 
-  <!-- Card principal con imagen e info -->
   <div class="detalle-servicio__main">
     <div class="detalle-servicio__img">
       <img [src]="s.urlImagen" [alt]="s.nombre" />
@@ -13,7 +11,12 @@
         <span class="detalle-servicio__precio">
           Precio por minuto: <b>{{ s.precio | currency:'CLP':'symbol':'1.0-0' }}</b>
         </span>
-        <span class="btn-principal">Solicitar este servicio</span>
+        <button
+          class="btn-principal"
+          [routerLink]="['/servicios', s.idServicio, 'solicitar']"
+          type="button">
+          Solicitar este servicio
+        </button>
       </div>
     </div>
   </div>
