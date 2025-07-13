@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DatePipe } from '@angular/common';
-import { NgFor } from '@angular/common';
+import { DatePipe, NgFor } from '@angular/common';
+import { SolicitudService } from '../../../services/solicitud/solicitud.service';
+import { Solicitud } from '../../../models/solicitud.models';
 
 interface SolicitudTabla {
   idSolicitud: number;
@@ -9,7 +10,7 @@ interface SolicitudTabla {
   estadoSolicitud: string;
   tipoSolicitud: string;
   producto?: string;
-  fecha: Date;
+  fechaCreacion: Date;
   observaciones?: string;
 }
 
@@ -27,43 +28,44 @@ export class GestionSolicitudesComponent implements OnInit {
 
   filtroSeleccionado: string = '';
   busqueda: string = '';
+  loading = false;
+  error?: string;
+
+  constructor(private solicitudService: SolicitudService) {}
 
   ngOnInit(): void {
     this.cargarSolicitudes();
-    this.aplicarFiltros();
   }
 
   cargarSolicitudes() {
-    this.solicitudes = [
-      {
-        idSolicitud: 1,
-        nombreCliente: 'Pedro Picapiedra Pérez',
-        estadoSolicitud: 'Recibida (R)',
-        tipoSolicitud: 'Catálogo',
-        producto: 'Galvano',
-        fecha: new Date('2025-07-01'),
-        observaciones: '---'
+    this.loading = true;
+    this.error = undefined;
+
+    this.solicitudService.obtenerTodos().subscribe({
+      next: (data: Solicitud[]) => {
+        this.solicitudes = data.map(this.toSolicitudTabla);
+        this.solicitudesFiltradas = [...this.solicitudes];
+        this.loading = false;
       },
-      {
-        idSolicitud: 2,
-        nombreCliente: 'Mardco Botton Splatoon',
-        estadoSolicitud: 'En Proceso (P)',
-        tipoSolicitud: 'Catálogo',
-        producto: 'Medalla',
-        fecha: new Date('2025-07-02'),
-        observaciones: 'Prioridad Alta'
-      },
-      {
-        idSolicitud: 3,
-        nombreCliente: 'Mariah Maclachlan Garage',
-        estadoSolicitud: 'Finalizada (F)',
-        tipoSolicitud: 'Personalizada',
-        producto: undefined,
-        fecha: new Date('2025-07-04'),
-        observaciones: 'Personalización especial'
+      error: () => {
+        this.error = 'Error al cargar las solicitudes';
+        this.loading = false;
       }
-    ];
-    this.solicitudesFiltradas = [...this.solicitudes];
+    });
+  }
+
+  private toSolicitudTabla(s: Solicitud): SolicitudTabla {
+    return {
+      idSolicitud: s.idSolicitud ?? 0,
+      nombreCliente: s.nombreCliente,
+      estadoSolicitud: s.estadoSolicitud?.nombreEstado ?? '',
+      tipoSolicitud: s.tipoSolicitud?.nombreSolicitud ?? '',
+      producto: s.productos && s.productos.length > 0
+        ? s.productos.map(p => p.nombreProducto ?? '').join(', ')
+        : '',
+      fechaCreacion: s.fechaCreacion ? new Date(s.fechaCreacion) : new Date(),
+      observaciones: s.observaciones ?? ''
+    };
   }
 
   aplicarFiltros() {
@@ -111,14 +113,23 @@ export class GestionSolicitudesComponent implements OnInit {
   eliminarSolicitud() {
     if (!this.solicitudSeleccionada) return;
     if (confirm(`¿Eliminar solicitud #${this.solicitudSeleccionada.idSolicitud}?`)) {
-      this.solicitudes = this.solicitudes.filter(s => s !== this.solicitudSeleccionada);
-      this.aplicarFiltros();
-      this.solicitudSeleccionada = undefined;
+      this.solicitudService.eliminar(this.solicitudSeleccionada.idSolicitud).subscribe({
+        next: () => {
+          this.cargarSolicitudes();
+          this.solicitudSeleccionada = undefined;
+        },
+        error: () => {
+          this.error = 'Error al eliminar la solicitud';
+        }
+      });
     }
   }
 
   cambiarEstado() {
     if (!this.solicitudSeleccionada) return;
-    alert(`Cambiar estado de solicitud #${this.solicitudSeleccionada.idSolicitud}`);
+    this.solicitudService.cambiarEstado(this.solicitudSeleccionada.idSolicitud, 0).subscribe({
+      next: () => this.cargarSolicitudes(),
+      error: () => this.error = 'Error al cambiar el estado'
+    });
   }
 }

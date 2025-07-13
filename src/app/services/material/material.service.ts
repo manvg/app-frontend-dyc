@@ -2,49 +2,45 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Material } from '../../models/material.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MaterialService {
 
-  private apiUrl = 'https://xa8hsg5wk6.execute-api.us-east-1.amazonaws.com/material'
+  private api = environment.materiales.api;
+  private endpoints = environment.materiales.endpoints;
 
   constructor(private http: HttpClient) { }
 
-  //get all
-  obtenerTodos(): Observable<Material[]>{
-    return this.http.get<Material[]>(this.apiUrl);
+  obtenerTodos(): Observable<Material[]> {
+    return this.http.get<Material[]>(`${this.api}${this.endpoints.obtenerTodos}`);
   }
 
-  //get by id
   obtenerPorId(id: number): Observable<Material> {
-    return this.http.get<Material>(`${this.apiUrl}/${id}`);
+    return this.http.get<Material>(`${this.api}${this.endpoints.obtenerTodos}/${id}`);
   }
 
-  //post
   crear(material: Material): Observable<Material> {
-    return this.http.post<Material>(this.apiUrl, material);
+    return this.http.post<Material>(`${this.api}${this.endpoints.obtenerTodos}`, material);
   }
 
-  //put
   actualizar(id: number, material: Material): Observable<Material> {
-    return this.http.put<Material>(`${this.apiUrl}/${id}`, material);
+    return this.http.put<Material>(`${this.api}${this.endpoints.obtenerTodos}/${id}`, material);
   }
 
-  //cambiar estado
-  cambiarEstado(id:number, activo:number): Observable<void> {
+  cambiarEstado(id: number, activo: number): Observable<void> {
     const params = new HttpParams().set('activo', activo.toString());
     return this.http.put<void>(
-      `${this.apiUrl}/${id}/cambiar-estado`,
+      `${this.api}${this.endpoints.obtenerTodos}/${id}/cambiar-estado`,
       null,
       { params }
     );
   }
 
-  //delete
   eliminar(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.api}${this.endpoints.obtenerTodos}/${id}`);
   }
 
 }

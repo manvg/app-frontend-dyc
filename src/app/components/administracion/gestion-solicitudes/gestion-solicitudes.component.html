@@ -32,7 +32,7 @@
           <th (click)="ordenarPor('estadoSolicitud')">Estado Solicitud</th>
           <th (click)="ordenarPor('tipoSolicitud')">Tipo Solicitud</th>
           <th (click)="ordenarPor('producto')">Producto</th>
-          <th (click)="ordenarPor('fecha')">Fecha de Solicitud</th>
+          <th (click)="ordenarPor('fechaCreacion')">Fecha de Solicitud</th>
           <th>Imagen</th>
           <th>Bitácora</th>
           <th>Observaciones</th>
@@ -48,7 +48,7 @@
           <td>{{ solicitud.estadoSolicitud }}</td>
           <td>{{ solicitud.tipoSolicitud }}</td>
           <td>{{ solicitud.producto || '--' }}</td>
-          <td>{{ solicitud.fecha | date: 'dd/MM/yy' }}</td>
+          <td>{{ solicitud.fechaCreacion | date: 'dd/MM/yy' }}</td>
           <td>
             <a href="#" (click)="verImagen(solicitud); $event.preventDefault()">
               <span class="material-icons icon-link">search</span> Ver Imagen

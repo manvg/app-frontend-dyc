@@ -1,13 +1,14 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ImageService {
 
-  private base = "https://xa8hsg5wk6.execute-api.us-east-1.amazonaws.com/s3";
+  private base = environment.imagenes.api;
 
   constructor(private http: HttpClient) { }
 
@@ -18,9 +19,9 @@ export class ImageService {
     form.append('file', file, file.name);
 
     return this.http
-      .post( url, form, {
+      .post(url, form, {
         params,
-        responseType: 'text'    // <<< EDIT: espera texto plano
+        responseType: 'text'
       })
       .pipe(map(url => url));
   }

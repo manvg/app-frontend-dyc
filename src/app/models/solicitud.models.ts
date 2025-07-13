@@ -2,6 +2,7 @@ import { TipoSolicitud } from "./tipo-solicitud.models";
 import { EstadoSolicitud } from "./estado-solicitud.models";
 import { Servicio } from "./servicio.model";
 import { SolicitudProducto } from "./solicitud-producto.model";
+import { SolicitudImagen } from "./solicitud-imagen.model"; // <-- Nuevo import
 
 export interface Solicitud {
   idSolicitud?: number;
@@ -18,4 +19,5 @@ export interface Solicitud {
   estadoSolicitud?: EstadoSolicitud;
   servicio?: Servicio;
   productos?: SolicitudProducto[];
+  imagenes?: SolicitudImagen[];
 }
