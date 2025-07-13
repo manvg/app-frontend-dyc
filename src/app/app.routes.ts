@@ -15,6 +15,7 @@ import { MantenedorMaterialesComponent } from './components/administracion/mante
 import { SolicitudProductoComponent } from './components/public/solicitudes/solicitud-producto/solicitud-producto.component';
 import { SolicitudServicioComponent } from './components/public/solicitudes/solicitud-servicio/solicitud-servicio.component';
 import { GestionSolicitudesComponent } from './components/administracion/gestion-solicitudes/gestion-solicitudes.component';
+import { DetalleProductoComponent } from './components/public/producto/detalle-producto/detalle-producto.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -26,6 +27,7 @@ export const routes: Routes = [
   { path: 'pedido-personalizado', component: PersonalizadaComponent},
   { path: 'productos/:idProducto/solicitar', component: SolicitudProductoComponent },
   { path: 'servicios/:idServicio/solicitar', component: SolicitudServicioComponent },
+  { path: 'detalle-producto/:idProducto', component: DetalleProductoComponent },
   { path: 'login', component: LoginComponent },
   { path: 'login/callback', component: LoginCallbackComponent },
   { path: 'mantenedor-productos', component: MantenedorProductosComponent, canActivate: [authGuard] },

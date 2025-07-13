@@ -1,4 +1,4 @@
-.producto-destacado {
+a.producto-destacado, .producto-destacado {
   background: #fff;
   border-radius: 14px;
   box-shadow: 0 2px 12px #0001;
@@ -15,11 +15,15 @@
   opacity: 0;
   transform: translateY(16px);
   animation: fadeInUp 0.6s ease forwards;
+  text-decoration: none !important;
+  color: inherit;
 
   &:hover, &:focus {
     box-shadow: 0 8px 32px #2228;
     background: #f3faff;
     transform: translateY(-4px) scale(1.015);
+    text-decoration: none;
+    outline: none;
   }
 
   // Cambia el botón al pasar el mouse sobre la card
@@ -31,15 +35,25 @@
     text-decoration: none;
   }
 
-  img {
-    width: 220px;
-    height: 140px;
-    object-fit: cover;
-    border-radius: 9px;
-    margin: 0 auto 20px auto;
-    box-shadow: 0 2px 10px #0001;
-    background: #eaeaea;
-    display: block;
+  .producto-destacado__img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 150px;
+    margin-bottom: 20px;
+
+    img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 50%;     // Hace la imagen circular
+      background: #f4f4f4;
+      box-shadow: 0 2px 10px #0001;
+      border: 3px solid #f5f5f5;
+      display: block;
+      margin: 0 auto;
+    }
   }
 
   .producto-destacado__contenido {
@@ -87,23 +101,21 @@
     text-align: center;
     text-decoration: none !important;
     box-sizing: border-box;
-
-    // Quita el hover individual, el efecto ahora depende del hover de la card
-    // &:hover, &:focus { ... }
+    outline: none;
+    // El hover/focus depende de la card padre
   }
 }
 
 @media (max-width: 900px) {
-  .producto-destacado {
+  a.producto-destacado, .producto-destacado {
     max-width: 96vw;
     min-width: 180px;
     padding: 18px 6px 18px 6px;
     align-items: flex-start;
 
-    img {
-      width: 98vw;
-      max-width: 220px;
-      height: 120px;
+    .producto-destacado__img img {
+      width: 100px;
+      height: 100px;
     }
     h3, p {
       text-align: left;
@@ -117,15 +129,31 @@
   }
 }
 
+@media (max-width: 600px) {
+  a.producto-destacado, .producto-destacado {
+    padding: 12px 2vw 12px 2vw;
+    .producto-destacado__img img {
+      width: 70px;
+      height: 70px;
+    }
+    h3 { font-size: 1rem; }
+    p { font-size: 0.97rem; min-height: 28px; }
+  }
+}
+
 @keyframes fadeInUp {
   to {
     opacity: 1;
     transform: none;
   }
 }
+a.producto-destacado:nth-child(1),
 .producto-destacado:nth-child(1) { animation-delay: 0.05s; }
+a.producto-destacado:nth-child(2),
 .producto-destacado:nth-child(2) { animation-delay: 0.10s; }
+a.producto-destacado:nth-child(3),
 .producto-destacado:nth-child(3) { animation-delay: 0.15s; }
+a.producto-destacado:nth-child(4),
 .producto-destacado:nth-child(4) { animation-delay: 0.20s; }
 .btn-principal:active {
   transform: scale(0.98);

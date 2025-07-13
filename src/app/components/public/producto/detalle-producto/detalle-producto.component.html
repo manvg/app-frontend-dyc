@@ -1,0 +1,23 @@
+<div class="detalle-producto-wrapper" *ngIf="producto as p">
+  <h1 class="detalle-producto__titulo">{{ p.nombre }}</h1>
+
+  <div class="detalle-producto__main">
+    <div class="detalle-producto__img">
+      <img [src]="p.urlImagen" [alt]="p.nombre" />
+    </div>
+    <div class="detalle-producto__info">
+      <p class="detalle-producto__descripcion">{{ p.descripcion }}</p>
+      <div class="detalle-producto__precio-boton">
+        <span class="detalle-producto__precio">
+          Precio: <b>{{ p.precio | currency:'CLP':'symbol':'1.0-0' }}</b>
+        </span>
+        <button
+          class="btn-principal"
+          [routerLink]="['/productos', p.idProducto, 'solicitar']"
+          type="button">
+          Solicitar este producto
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

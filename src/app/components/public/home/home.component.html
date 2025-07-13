@@ -11,6 +11,7 @@
   <div class="productos-destacados">
     <ng-container *ngFor="let producto of productos">
       <app-producto-destacado
+        [idProducto]="producto.idProducto"
         [titulo]="producto.nombre"
         [descripcion]="producto.descripcion"
         [imagen]="producto.urlImagen">

@@ -1,9 +1,14 @@
-<div class="producto-destacado">
-  <img [src]="imagen" [alt]="descripcion ? titulo + ' - ' + descripcion : 'Imagen de ' + titulo">
+<a class="producto-destacado"
+   [routerLink]="['/detalle-producto', idProducto]"
+   [ngClass]="{'reverse': orientacion === 'derecha'}">
+
+  <div class="producto-destacado__img">
+    <img [src]="imagen" [alt]="descripcion ? titulo + ' - ' + descripcion : 'Imagen de ' + titulo">
+  </div>
   <div class="producto-destacado__contenido">
     <h3>{{titulo}}</h3>
     <p>{{descripcion}}</p>
   </div>
 
   <span class="btn-principal">Ver producto</span>
-</div>
+</a>
