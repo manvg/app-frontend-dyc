@@ -7,9 +7,10 @@ import { Solicitud } from '../../../models/solicitud.models';
 interface SolicitudTabla {
   idSolicitud: number;
   nombreCliente: string;
-  estadoSolicitud: string;
-  tipoSolicitud: string;
-  producto?: string;
+  nombreEstadoSolicitud?: string;
+  nombreTipoSolicitud?: string;
+  nombreServicio?: string | null;
+  productos?: string;
   fechaCreacion: Date;
   observaciones?: string;
 }
@@ -21,6 +22,7 @@ interface SolicitudTabla {
   standalone: true,
   imports: [FormsModule, DatePipe, NgFor]
 })
+
 export class GestionSolicitudesComponent implements OnInit {
   solicitudes: SolicitudTabla[] = [];
   solicitudesFiltradas: SolicitudTabla[] = [];
@@ -58,13 +60,14 @@ export class GestionSolicitudesComponent implements OnInit {
     return {
       idSolicitud: s.idSolicitud ?? 0,
       nombreCliente: s.nombreCliente,
-      estadoSolicitud: s.estadoSolicitud?.nombreEstado ?? '',
-      tipoSolicitud: s.tipoSolicitud?.nombreSolicitud ?? '',
-      producto: s.productos && s.productos.length > 0
+      nombreEstadoSolicitud: s.nombreEstadoSolicitud ?? '--',
+      nombreTipoSolicitud: s.nombreTipoSolicitud ?? '--',
+      nombreServicio: s.nombreServicio ?? '--',
+      productos: s.productos && s.productos.length > 0
         ? s.productos.map(p => p.nombreProducto ?? '').join(', ')
-        : '',
+        : '--',
       fechaCreacion: s.fechaCreacion ? new Date(s.fechaCreacion) : new Date(),
-      observaciones: s.observaciones ?? ''
+      observaciones: s.observaciones ?? '--'
     };
   }
 
@@ -76,9 +79,10 @@ export class GestionSolicitudesComponent implements OnInit {
       datos = datos.filter(s =>
         String(s.idSolicitud).includes(texto) ||
         s.nombreCliente.toLowerCase().includes(texto) ||
-        s.estadoSolicitud.toLowerCase().includes(texto) ||
-        s.tipoSolicitud.toLowerCase().includes(texto) ||
-        (s.producto?.toLowerCase().includes(texto) ?? false) ||
+        (s.nombreEstadoSolicitud?.toLowerCase().includes(texto) ?? false) ||
+        (s.nombreTipoSolicitud?.toLowerCase().includes(texto) ?? false) ||
+        (s.nombreServicio?.toLowerCase().includes(texto) ?? false) ||
+        (s.productos?.toLowerCase().includes(texto) ?? false) ||
         (s.observaciones?.toLowerCase().includes(texto) ?? false)
       );
     }

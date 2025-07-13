@@ -27,14 +27,15 @@
       <thead>
         <tr>
           <th></th>
-          <th (click)="ordenarPor('idSolicitud')">ID Solicitud</th>
-          <th (click)="ordenarPor('nombreCliente')">Nombre Cliente</th>
-          <th (click)="ordenarPor('estadoSolicitud')">Estado Solicitud</th>
-          <th (click)="ordenarPor('tipoSolicitud')">Tipo Solicitud</th>
-          <th (click)="ordenarPor('producto')">Producto</th>
-          <th (click)="ordenarPor('fechaCreacion')">Fecha de Solicitud</th>
-          <th>Imagen</th>
-          <th>Bitácora</th>
+          <th (click)="ordenarPor('idSolicitud')">N° Solicitud</th>
+          <th (click)="ordenarPor('nombreCliente')">Cliente</th>
+          <th (click)="ordenarPor('nombreEstadoSolicitud')">Estado</th>
+          <th (click)="ordenarPor('nombreTipoSolicitud')">Tipo Solicitud</th>
+          <th (click)="ordenarPor('nombreServicio')">Servicio</th>
+          <th (click)="ordenarPor('productos')">Productos</th>
+          <th (click)="ordenarPor('fechaCreacion')">Fecha</th>
+          <!-- <th>Imagen</th>
+          <th>Bitácora</th> -->
           <th>Observaciones</th>
         </tr>
       </thead>
@@ -45,11 +46,12 @@
           </td>
           <td>{{ solicitud.idSolicitud }}</td>
           <td>{{ solicitud.nombreCliente }}</td>
-          <td>{{ solicitud.estadoSolicitud }}</td>
-          <td>{{ solicitud.tipoSolicitud }}</td>
-          <td>{{ solicitud.producto || '--' }}</td>
+          <td>{{ solicitud.nombreEstadoSolicitud || '--' }}</td>
+          <td>{{ solicitud.nombreTipoSolicitud || '--' }}</td>
+          <td>{{ solicitud.nombreServicio || '--' }}</td>
+          <td>{{ solicitud.productos }}</td>
           <td>{{ solicitud.fechaCreacion | date: 'dd/MM/yy' }}</td>
-          <td>
+          <!-- <td>
             <a href="#" (click)="verImagen(solicitud); $event.preventDefault()">
               <span class="material-icons icon-link">search</span> Ver Imagen
             </a>
@@ -58,8 +60,8 @@
             <a href="#" (click)="verBitacora(solicitud); $event.preventDefault()">
               <span class="material-icons icon-link">search</span> Ver Bitácora
             </a>
-          </td>
-          <td>{{ solicitud.observaciones }}</td>
+          </td> -->
+          <td>{{ solicitud.observaciones || '--' }}</td>
         </tr>
       </tbody>
     </table>
