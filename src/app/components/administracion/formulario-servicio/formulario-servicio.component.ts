@@ -10,8 +10,8 @@ import { Servicio } from '../../../models/servicio.model';
 import { ServicioService } from '../../../services/servicio/servicio.service';
 import { ImageService } from '../../../services/image/image.service';
 import { firstValueFrom } from 'rxjs';
-import { environment } from '../../../../environments/environment.prod';
-// import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment';
+import { ResponseModel } from '../../../models/response-model.model';
 
 @Component({
   selector: 'app-formulario-servicio',
@@ -78,42 +78,47 @@ export class FormularioServicioComponent implements OnInit {
     }
   }
 
-  // async guardar(): Promise<void> {
-  //   if (this.loading) return;
-  //   this.loading = true;
-  //   this.mensajeError = null;
+  async guardar(): Promise<void> {
+    if (this.loading) return;
+    this.loading = true;
+    this.mensajeError = null;
 
-  //   try {
-  //     if (this.imagenFile) {
-  //       const key = `${environment.imagenes.directorios.servicio}${this.imagenFile.name}`;
-  //       const url = await firstValueFrom(
-  //         this.imageService.uploadImage(key, this.imagenFile)
-  //       );
-  //       this.servicio.urlImagen = url;
-  //     }
+    try {
+      if (this.imagenFile) {
+        const key = `${environment.imagenes.directorios.servicio}${this.imagenFile.name}`;
+        const urlImagen = await firstValueFrom(
+          this.imageService.uploadImage(key, this.imagenFile)
+        );
+        this.servicio.urlImagen = urlImagen;
+      }
 
-  //     let resultado: Servicio;
-  //     if (this.servicio.idServicio) {
-  //       resultado = await firstValueFrom(
-  //         this.servicioService.actualizar(this.servicio.idServicio, this.servicio)
-  //       );
-  //     } else {
-  //       resultado = await firstValueFrom(
-  //         this.servicioService.crear(this.servicio)
-  //       );
-  //     }
+      let servicioResult: Servicio;
+      let mensaje = '';
+      if (this.servicio.idServicio) {
+        servicioResult = await firstValueFrom(
+          this.servicioService.actualizar(this.servicio.idServicio, this.servicio)
+        );
+        mensaje = 'Servicio actualizado exitosamente';
+      } else {
+        servicioResult = await firstValueFrom(
+          this.servicioService.crear(this.servicio)
+        );
+        mensaje = 'Servicio creado exitosamente';
+      }
 
-  //     this.dialogRef.close(resultado);
-  //   } catch (error: any) {
-  //     console.error('Error guardando servicio:', error);
-  //     this.mensajeError = error?.error?.message || 'Ocurrió un error al guardar el servicio';
-  //   } finally {
-  //     this.loading = false;
-  //   }
-  // }
+      const response: ResponseModel = {
+        status: true,
+        message: mensaje,
+      };
 
-  guardar(): void {
-    this.dialogRef.close(this.servicio);
+      this.dialogRef.close(response);
+
+    } catch (error: any) {
+      this.mensajeError = error?.error?.message || 'Ocurrió un error al guardar el servicio';
+      console.error('Error guardando servicio:', error);
+    } finally {
+      this.loading = false;
+    }
   }
 
   cancelar(): void {

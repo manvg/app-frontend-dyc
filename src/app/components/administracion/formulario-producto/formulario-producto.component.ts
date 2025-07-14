@@ -17,7 +17,6 @@ import { firstValueFrom } from 'rxjs';
 import { v4 as uuid } from 'uuid';
 import { url } from 'inspector';
 import { environment } from '../../../../environments/environment';
-//import { environment } from '../../../../environments/environment.prod';
 
 @Component({
   selector: 'app-formulario-producto',

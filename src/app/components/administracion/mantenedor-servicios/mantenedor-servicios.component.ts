@@ -14,6 +14,7 @@ import { Servicio } from '../../../models/servicio.model';
 import { ServicioService } from '../../../services/servicio/servicio.service';
 import { FormularioServicioComponent } from '../formulario-servicio/formulario-servicio.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { ResponseModel } from '../../../models/response-model.model';
 
 @Component({
   selector: 'app-mantenedor-servicios',
@@ -59,9 +60,9 @@ export class MantenedorServiciosComponent implements OnInit {
   }
 
   nuevoServicio(): void {
-      const dialogRef = this.dialog.open(FormularioServicioComponent, {
-        width: '480px',
-        data: {
+    const dialogRef = this.dialog.open(FormularioServicioComponent, {
+      width: '480px',
+      data: {
         idServicio: 0,
         nombre: '',
         descripcion: '',
@@ -69,74 +70,64 @@ export class MantenedorServiciosComponent implements OnInit {
         urlImagen: '',
         activo: 1
       } as Servicio
+    });
+
+    dialogRef.afterClosed().subscribe((response?: ResponseModel) => {
+      if (!response) return;
+      if (response.status) {
+        this.cargarServicios();
+        this.snackBar.open(response.message || 'Servicio creado', 'Cerrar', { duration: 3000 });
+      } else {
+        this.snackBar.open(response.message || 'Error al crear servicio', 'Cerrar', {
+          duration: 3500,
+          panelClass: 'snack-error'
+        });
+      }
+    });
+  }
+
+  editarServicio(id: number): void {
+    this.servicioService.obtenerPorId(id).subscribe(servicio => {
+      const dialogRef = this.dialog.open(FormularioServicioComponent, {
+        width: '480px',
+        data: servicio
       });
-  
-      dialogRef.afterClosed().subscribe((result?: Servicio) => {
-        if (result) {
-          this.servicioService.crear(result).subscribe({
-            next: () => {
-              this.cargarServicios();
-              this.snackBar.open('Material creado', 'Cerrar', { duration: 3000 });
-            },
-            error: err => {
-              console.error('Error creando material', err);
-              this.snackBar.open('Error al crear material', 'Cerrar', {
-                duration: 3500,
-                panelClass: 'snack-error'
-              });
-            }
+      dialogRef.afterClosed().subscribe((response?: ResponseModel) => {
+        if (!response) return;
+        if (response.status) {
+          this.cargarServicios();
+          this.snackBar.open(response.message || 'Servicio actualizado', 'Cerrar', { duration: 3000 });
+        } else {
+          this.snackBar.open(response.message || 'Error al actualizar servicio', 'Cerrar', {
+            duration: 3500,
+            panelClass: 'snack-error'
           });
         }
       });
-    }
-
-  editarServicio(id: number): void {
-      this.servicioService.obtenerPorId(id).subscribe(servicio => {
-        const dialogRef = this.dialog.open(FormularioServicioComponent, {
-          width: '480px',
-          data: servicio
-        });
-        dialogRef.afterClosed().subscribe((result?: Servicio) => {
-          if (result)  {
-            this.servicioService.actualizar(id, result).subscribe({
-              next: () => {
-                this.cargarServicios();
-                this.snackBar.open('Servicio Actualizado', 'Cerrar', {duration: 3000});
-              },
-              error: err => {
-                console.error('Error actualizando servicio', err);
-                this.snackBar.open('Error al actualizar servicio', 'Cerrar', {
-                  duration: 3500,
-                  panelClass: 'snack-error'
-                });
-              }
-            });
-          }
-        });
-      });
-    }
+    });
+  }
 
   cambiarVigenciaServicio(serv: Servicio): void {
-    const id = serv.idServicio!;  // <-- aserción no-null
+    const id = serv.idServicio!;
     const activo = serv.activo === 1 ? 0 : 1;
-    const acción = activo === 1 ? 'activar' : 'desactivar';
+    const accion = activo === 1 ? 'activar' : 'desactivar';
 
     this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
       data: {
         titulo: 'Confirmación',
-        mensaje: `¿Seguro de ${acción} este servicio?`
+        mensaje: `¿Seguro de ${accion} este servicio?`
       }
     }).afterClosed().subscribe((ok?: boolean) => {
       if (!ok) return;
       this.servicioService.cambiarEstado(id, activo).subscribe({
         next: () => {
-          this.snackBar.open(`Servicio ${acción}`, 'Cerrar', { duration: 3000 });
+          this.snackBar.open(`Servicio ${accion}`, 'Cerrar', { duration: 3000 });
           this.cargarServicios();
         },
         error: err => {
-          console.error(`Error al ${acción} servicio`, err);
-          this.snackBar.open(`Error al ${acción} servicio`, 'Cerrar', { duration: 3500, panelClass: 'snack-error' });
+          console.error(`Error al ${accion} servicio`, err);
+          this.snackBar.open(`Error al ${accion} servicio`, 'Cerrar', { duration: 3500, panelClass: 'snack-error' });
         }
       });
     });
