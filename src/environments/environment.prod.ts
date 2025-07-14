@@ -88,5 +88,18 @@ export const environment = {
     }
   },
 
-  nombreBucket: 'bucketdyc'
+  nombreBucket: 'bucketdyc',
+
+  servicios: {
+    api: 'https://xa8hsg5wk6.execute-api.us-east-1.amazonaws.com',
+    endpoints: {
+      obtenerTodos: '/servicio/all',
+      obtenerActivos: '/servicio/activos',
+      obtenerPorId: '/servicio/',          // +id
+      crear: '/servicio',
+      actualizar: '/servicio/',            // +id
+      cambiarEstado: '/servicio/',         // +id + '/cambiar-estado?activo={valor}'
+      eliminar: '/servicio/'               // +id
+    }
+  }
 };
