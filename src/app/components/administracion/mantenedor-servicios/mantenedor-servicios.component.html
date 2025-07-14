@@ -1,0 +1,65 @@
+<div class="contenedor-servicios">
+  <mat-toolbar color="primary">
+    Mantenedor de Servicios
+    <span class="espaciador"></span>
+    <button mat-raised-button color="accent" (click)="nuevoServicio()">+ Nuevo Servicio</button>
+  </mat-toolbar>
+
+  <ng-container *ngIf="servicios !== null; else loading">
+    <ng-container *ngIf="servicios.length > 0; else noServicios">
+      <mat-card>
+        <mat-table [dataSource]="servicios" class="mat-elevation-z2">
+          <!-- Nombre -->
+          <ng-container matColumnDef="nombre">
+            <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+            <mat-cell *matCellDef="let serv"> {{ serv.nombre }} </mat-cell>
+          </ng-container>
+          <!-- Precio -->
+          <ng-container matColumnDef="precio">
+            <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
+            <mat-cell *matCellDef="let serv"> {{ serv.precio | currency:'$' }} </mat-cell>
+          </ng-container>
+          <!-- Activo -->
+          <ng-container matColumnDef="activo">
+            <mat-header-cell *matHeaderCellDef> Activo </mat-header-cell>
+            <mat-cell *matCellDef="let serv"> {{ serv.activo === 1 ? 'Sí' : 'No' }} </mat-cell>
+          </ng-container>
+          <!-- Acciones -->
+          <ng-container matColumnDef="acciones">
+            <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+            <mat-cell *matCellDef="let serv">
+              <button mat-icon-button color="primary" (click)="editarServicio(serv.idServicio)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button
+                      [color]="serv.activo === 1 ? 'warn' : 'primary'"
+                      (click)="cambiarVigenciaServicio(serv)"
+                      matTooltip="{{ serv.activo === 1 ? 'Desactivar' : 'Activar' }}">
+                <mat-icon>{{ serv.activo === 1 ? 'block' : 'check_circle' }}</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="eliminarServicio(serv.idServicio)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="columnas"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: columnas; trackBy: trackById"></mat-row>
+        </mat-table>
+      </mat-card>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #loading>
+    <mat-card style="display:flex;align-items:center;justify-content:center;padding:32px">
+      <mat-spinner diameter="40"></mat-spinner>
+      <span style="margin-left:16px">Cargando servicios...</span>
+    </mat-card>
+  </ng-template>
+
+  <ng-template #noServicios>
+    <mat-card>
+      <p>No hay servicios registrados.</p>
+    </mat-card>
+  </ng-template>
+</div>

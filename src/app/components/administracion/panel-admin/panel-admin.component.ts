@@ -43,4 +43,8 @@ export class PanelAdminComponent implements OnInit {
   irAGestionSolicitudes() {
     this.router.navigate(['/gestion-solicitudes']);
   }
+
+  irAMantenedorServicios() {
+    this.router.navigate(['/mantenedor-servicios']);
+  }
 }

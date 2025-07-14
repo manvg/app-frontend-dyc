@@ -16,6 +16,8 @@ import { SolicitudProductoComponent } from './components/public/solicitudes/soli
 import { SolicitudServicioComponent } from './components/public/solicitudes/solicitud-servicio/solicitud-servicio.component';
 import { GestionSolicitudesComponent } from './components/administracion/gestion-solicitudes/gestion-solicitudes.component';
 import { DetalleProductoComponent } from './components/public/producto/detalle-producto/detalle-producto.component';
+import { MantenedorServiciosComponent } from './components/administracion/mantenedor-servicios/mantenedor-servicios.component';
+import { FormularioServicioComponent } from './components/administracion/formulario-servicio/formulario-servicio.component';
 import { DetalleSolicitudComponent } from './components/administracion/detalle-solicitud/detalle-solicitud.component';
 
 export const routes: Routes = [
@@ -36,6 +38,8 @@ export const routes: Routes = [
   { path: 'panel-admin', component: PanelAdminComponent, canActivate: [authGuard] },
   { path: 'mantenedor-materiales', component: MantenedorMaterialesComponent, canActivate: [authGuard] },
   { path: 'gestion-solicitudes', component: GestionSolicitudesComponent, canActivate: [authGuard] },
+  { path: 'mantenedor-servicios', component: MantenedorServiciosComponent, canActivate: [authGuard] },
+  { path: 'formulario-servicio', component: FormularioServicioComponent, canActivate: [authGuard] },
   { path: 'solicitudes/:id', component: DetalleSolicitudComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: '' }
 ];

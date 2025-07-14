@@ -89,5 +89,18 @@ export const environment = {
     }
   },
 
-  nombreBucket: 'bucketdyc'
+  nombreBucket: 'bucketdyc',
+
+  servicios: {
+    api: 'http://localhost:8080',
+    endpoints: {
+      obtenerTodos: '/api/servicios',
+      obtenerActivos: '/api/servicios/activos',
+      obtenerPorId: '/api/servicios/',          // +id
+      crear: '/api/servicios',
+      actualizar: '/api/servicios/',            // +id
+      cambiarEstado: '/api/servicios/',         // +id + '/cambiar-estado?activo={valor}'
+      eliminar: '/api/servicios/'               // +id
+    }
+  }
 };
