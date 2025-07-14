@@ -5,6 +5,7 @@ import { Servicio } from '../../../../models/servicio.model';
 import { SolicitudService } from '../../../../services/solicitud/solicitud.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { ServicioService } from '../../../../services/servicio/servicio.service';
+import { Solicitud } from '../../../../models/solicitud.models';
 
 @Component({
   selector: 'app-solicitud-servicio',
@@ -19,11 +20,9 @@ export class SolicitudServicioComponent implements OnInit {
   enviado = false;
   enviando = false;
   errorEnvio: string | null = null;
-
-  archivoNombre: string | null = null;
-  archivoPreview: string | null = null;
-  archivoEsImagen = false;
-  archivo: File | null = null;
+  idTipoSolicitud = 1;//Tipo solicitud: SERVICIO
+  idEstadoSolicitud = 1;  //Estado solicitud: RECIBIDA
+  idServicio: number | null = null;
 
   private fb = inject(FormBuilder);
   private solicitudService = inject(SolicitudService);
@@ -36,8 +35,7 @@ export class SolicitudServicioComponent implements OnInit {
       apellidos: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       telefono: [''],
-      descripcion: ['', Validators.required],
-      archivo: [null]
+      descripcion: ['', Validators.required]
     });
   }
 
@@ -63,15 +61,18 @@ export class SolicitudServicioComponent implements OnInit {
     this.enviando = true;
     this.errorEnvio = null;
 
-    const formData = new FormData();
-    formData.append('nombre', this.form.value.nombre);
-    formData.append('apellidos', this.form.value.apellidos);
-    formData.append('email', this.form.value.email);
-    formData.append('telefono', this.form.value.telefono ?? '');
-    formData.append('descripcion', this.form.value.descripcion);
-    formData.append('idServicio', this.servicio?.idServicio?.toString() ?? '');
+    // Construir objeto de tipo Solicitud
+    const solicitud: Solicitud = {
+      idTipoSolicitud: this.idTipoSolicitud,
+      idEstadoSolicitud: this.idEstadoSolicitud,
+      idServicio: this.idServicio,
+      nombreCliente: this.form.value.nombre + ' ' + this.form.value.apellidos,
+      correoCliente: this.form.value.email,
+      telefonoCliente: this.form.value.telefono,
+      observaciones: this.form.value.descripcion,
+    };
 
-    this.solicitudService.crearSolicitudServicio(formData).subscribe({
+    this.solicitudService.crear(solicitud).subscribe({
       next: () => {
         this.enviado = true;
         this.enviando = false;
