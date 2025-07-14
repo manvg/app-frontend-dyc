@@ -13,10 +13,7 @@ import { EstadoSolicitud } from '../../../models/estado-solicitud.models';
   standalone: true,
   templateUrl: './detalle-solicitud.component.html',
   styleUrls: ['./detalle-solicitud.component.scss'],
-  imports: [
-    CommonModule,
-    FormsModule
-  ]
+  imports: [CommonModule, FormsModule]
 })
 export class DetalleSolicitudComponent implements OnInit {
   solicitud: Solicitud | null = null;
@@ -30,6 +27,9 @@ export class DetalleSolicitudComponent implements OnInit {
   agregandoBitacora = false;
   nuevoEstadoBitacora: number | null = null;
   nuevaDescripcionBitacora: string = '';
+
+  mensajeExito?: string;
+  mensajeError?: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -95,11 +95,11 @@ export class DetalleSolicitudComponent implements OnInit {
           this.cargarBitacora(this.solicitud!.idSolicitud!);
           this.comentario = '';
           this.loading = false;
-          // Aquí puedes agregar showSuccess('Estado actualizado con éxito')
+          this.showExito('Estado actualizado con éxito');
         },
         error: () => {
           this.loading = false;
-          // Aquí puedes agregar showError('No se pudo actualizar el estado')
+          this.showError('Error al actualizar el estado');
         }
       });
   }
@@ -111,7 +111,7 @@ export class DetalleSolicitudComponent implements OnInit {
       typeof this.nuevoEstadoBitacora !== 'number' ||
       this.nuevaDescripcionBitacora.trim() === ''
     ) {
-      // Aquí puedes agregar showError('Completa todos los campos')
+      this.showError('Completa todos los campos para agregar bitácora');
       return;
     }
 
@@ -133,16 +133,32 @@ export class DetalleSolicitudComponent implements OnInit {
         this.nuevaDescripcionBitacora = '';
         this.agregandoBitacora = false;
         this.loading = false;
-        // Aquí puedes agregar showSuccess('Bitácora agregada correctamente')
+        this.showExito('Bitácora agregada correctamente');
       },
       error: () => {
         this.loading = false;
-        // Aquí puedes agregar showError('No se pudo agregar la bitácora')
+        this.showError('Error al agregar la bitácora');
       }
     });
   }
 
   volver() {
-    this.router.navigate(['/solicitudes']);
+    this.router.navigate(['/gestion-solicitudes']);
+  }
+
+  showExito(mensaje: string) {
+    this.mensajeExito = mensaje;
+    setTimeout(() => this.mensajeExito = undefined, 2500);
+  }
+  showError(mensaje: string) {
+    this.mensajeError = mensaje;
+    setTimeout(() => this.mensajeError = undefined, 3500);
+  }
+
+  // --- NUEVO: Getter para productos asociados ---
+  get productosAsociados(): string[] {
+    return Array.isArray(this.solicitud?.productos)
+      ? this.solicitud!.productos.map(p => p.nombreProducto || '').filter(n => n)
+      : [];
   }
 }

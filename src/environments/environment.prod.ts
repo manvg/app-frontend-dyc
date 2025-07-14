@@ -19,11 +19,9 @@ export const environment = {
     api: 'https://xa8hsg5wk6.execute-api.us-east-1.amazonaws.com',
     endpoints: {
       obtenerTodos: '/solicitud/all',
-      obtenerActivos: '/solicitud/all/activo',
       obtenerPorId: '/solicitud/',
       crear: '/solicitud',
       actualizar: '/solicitud/',
-      cambiarEstado: '/solicitud/',
       eliminar: '/solicitud/',
       obtenerEstados: '/solicitud/estados'
     }

@@ -5,6 +5,7 @@
   background: #fafbfc;
   border-radius: 16px;
   box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  position: relative;
 
   .btn-volver {
     margin-bottom: 20px;
@@ -21,21 +22,43 @@
     }
   }
 
-  h2, h3 {
+  .detalle-solicitud-title {
+    font-size: 2rem;
+    font-weight: 800;
     margin-top: 0;
-    color: #252525;
-    font-weight: 700;
+    margin-bottom: 26px;
+    text-align: left;
+    letter-spacing: 0.5px;
   }
 
-  .info-principal {
+  // Nuevo layout: dos columnas
+  .detalle-solicitud-datos {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px 24px;
+    gap: 18px 36px;
     margin-bottom: 18px;
 
-    div {
+    .col {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
       font-size: 1.08rem;
+      div {
+        line-height: 1.3;
+      }
     }
+    @media (max-width: 700px) {
+      grid-template-columns: 1fr;
+      gap: 8px 0;
+    }
+  }
+
+  h3 {
+    margin-top: 18px;
+    margin-bottom: 12px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #222;
   }
 
   .gestion-estado {
@@ -49,24 +72,53 @@
       border-radius: 6px;
       padding: 5px 10px;
       font-size: 1rem;
+      background: #fff;
     }
 
     button {
       background: #2462ff;
       color: #fff;
       border: none;
-      border-radius: 6px;
-      padding: 6px 18px;
-      font-weight: 600;
+      border-radius: 7px;
+      padding: 7px 22px;
+      font-weight: 700;
       cursor: pointer;
-      transition: background .18s;
+      transition: background .18s, box-shadow .18s;
+      box-shadow: 0 2px 8px #2462ff33;
       &:hover {
         background: #1941b1;
+        box-shadow: 0 4px 16px #2462ff44;
       }
       &:disabled {
         background: #aaa;
+        color: #eee;
         cursor: not-allowed;
+        box-shadow: none;
       }
+    }
+  }
+
+  .btn-agregar-bitacora {
+    margin: 10px 0 16px 0;
+    background: #2ab98e;
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    padding: 7px 22px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .17s;
+    box-shadow: 0 2px 8px #2ab98e33;
+    &:hover {
+      background: #1e7c5b;
+      box-shadow: 0 4px 14px #2ab98e44;
+    }
+    &:disabled {
+      background: #c7c7c7;
+      color: #fff;
+      cursor: not-allowed;
+      box-shadow: none;
     }
   }
 
@@ -81,6 +133,7 @@
       border-radius: 6px;
       padding: 5px 10px;
       font-size: 1rem;
+      background: #fff;
     }
 
     button {
@@ -89,7 +142,7 @@
       border: none;
       border-radius: 6px;
       padding: 6px 16px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       transition: background .18s;
       &:hover {
@@ -106,9 +159,10 @@
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 10px #0001;
+    overflow: hidden;
 
     th, td {
-      padding: 9px 8px;
+      padding: 10px 9px;
       border-bottom: 1px solid #ececec;
       text-align: left;
     }
@@ -116,6 +170,15 @@
     th {
       background: #f2f6fa;
       font-weight: bold;
+    }
+
+    tr {
+      &:nth-child(even) {
+        background: #f9fafb;
+      }
+      &:hover {
+        background: #e9f1ff;
+      }
     }
     tr:last-child td {
       border-bottom: none;
@@ -151,10 +214,49 @@
   }
 }
 
+.alert-exito {
+  background: #e8faee;
+  border: 1.5px solid #3be48c;
+  color: #18814d;
+  border-radius: 7px;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+  font-weight: 700;
+  text-align: center;
+  animation: fadeInScale .2s;
+}
+.alert-error {
+  background: #fff2f1;
+  border: 1.5px solid #ff6767;
+  color: #c22a1a;
+  border-radius: 7px;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+  font-weight: 700;
+  text-align: center;
+  animation: fadeInScale .2s;
+}
+
+.volver-right {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+
+  .btn-volver {
+    margin-bottom: 0;
+  }
+}
+
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(.94);}
+  to   { opacity: 1; transform: scale(1);}
+}
+
+
 @media (max-width: 700px) {
   .detalle-solicitud-wrapper {
     padding: 12px 4px;
-    .info-principal {
+    .detalle-solicitud-datos {
       grid-template-columns: 1fr;
       gap: 8px 0;
     }

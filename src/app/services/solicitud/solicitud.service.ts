@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { Solicitud } from '../../models/solicitud.models';
 import { EstadoSolicitud } from '../../models/estado-solicitud.models';
 import { environment } from '../../../environments/environment';
-//import { environment } from '../../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
@@ -17,10 +16,6 @@ export class SolicitudService {
 
   obtenerTodos(): Observable<Solicitud[]> {
     return this.http.get<Solicitud[]>(`${this.api}${this.endpoints.obtenerTodos}`);
-  }
-
-  obtenerActivos(): Observable<Solicitud[]> {
-    return this.http.get<Solicitud[]>(`${this.api}${this.endpoints.obtenerActivos}`);
   }
 
   obtenerPorId(id: number): Observable<Solicitud> {
@@ -37,10 +32,6 @@ export class SolicitudService {
 
   actualizar(id: number, solicitud: Solicitud): Observable<Solicitud> {
     return this.http.put<Solicitud>(`${this.api}${this.endpoints.actualizar}${id}`, solicitud);
-  }
-
-  cambiarEstado(id: number, activo: number): Observable<void> {
-    return this.http.put<void>(`${this.api}${this.endpoints.cambiarEstado}${id}/cambiar-estado?activo=${activo}`,{});
   }
 
   eliminar(id: number): Observable<void> {

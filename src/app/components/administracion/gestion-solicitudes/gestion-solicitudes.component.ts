@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { DatePipe, NgFor } from '@angular/common';
 import { SolicitudService } from '../../../services/solicitud/solicitud.service';
 import { Solicitud } from '../../../models/solicitud.models';
+import { Router } from '@angular/router';
 
 interface SolicitudTabla {
   idSolicitud: number;
@@ -22,7 +23,6 @@ interface SolicitudTabla {
   standalone: true,
   imports: [FormsModule, DatePipe, NgFor]
 })
-
 export class GestionSolicitudesComponent implements OnInit {
   solicitudes: SolicitudTabla[] = [];
   solicitudesFiltradas: SolicitudTabla[] = [];
@@ -33,7 +33,10 @@ export class GestionSolicitudesComponent implements OnInit {
   loading = false;
   error?: string;
 
-  constructor(private solicitudService: SolicitudService) {}
+  constructor(
+    private solicitudService: SolicitudService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.cargarSolicitudes();
@@ -101,6 +104,10 @@ export class GestionSolicitudesComponent implements OnInit {
     this.solicitudSeleccionada = solicitud;
   }
 
+  verDetalle(solicitud: SolicitudTabla) {
+    this.router.navigate(['/solicitudes', solicitud.idSolicitud]);
+  }
+
   verImagen(solicitud: SolicitudTabla) {
     alert(`Mostrando imagen de la solicitud #${solicitud.idSolicitud}`);
   }
@@ -127,13 +134,5 @@ export class GestionSolicitudesComponent implements OnInit {
         }
       });
     }
-  }
-
-  cambiarEstado() {
-    if (!this.solicitudSeleccionada) return;
-    this.solicitudService.cambiarEstado(this.solicitudSeleccionada.idSolicitud, 0).subscribe({
-      next: () => this.cargarSolicitudes(),
-      error: () => this.error = 'Error al cambiar el estado'
-    });
   }
 }

@@ -26,7 +26,7 @@
     <table class="solicitudes-table">
       <thead>
         <tr>
-          <th></th>
+          <!-- <th>Detalle</th> -->
           <th (click)="ordenarPor('idSolicitud')">N° Solicitud</th>
           <th (click)="ordenarPor('nombreCliente')">Cliente</th>
           <th (click)="ordenarPor('nombreEstadoSolicitud')">Estado</th>
@@ -34,16 +34,11 @@
           <th (click)="ordenarPor('nombreServicio')">Servicio</th>
           <th (click)="ordenarPor('productos')">Productos</th>
           <th (click)="ordenarPor('fechaCreacion')">Fecha</th>
-          <!-- <th>Imagen</th>
-          <th>Bitácora</th> -->
-          <th>Observaciones</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let solicitud of solicitudesFiltradas; let i = index" [class.selected]="solicitud === solicitudSeleccionada">
-          <td>
-            <input type="radio" name="solicitudSeleccionada" [checked]="solicitud === solicitudSeleccionada" (change)="seleccionarSolicitud(solicitud)" />
-          </td>
           <td>{{ solicitud.idSolicitud }}</td>
           <td>{{ solicitud.nombreCliente }}</td>
           <td>{{ solicitud.nombreEstadoSolicitud || '--' }}</td>
@@ -51,26 +46,21 @@
           <td>{{ solicitud.nombreServicio || '--' }}</td>
           <td>{{ solicitud.productos }}</td>
           <td>{{ solicitud.fechaCreacion | date: 'dd/MM/yy' }}</td>
-          <!-- <td>
-            <a href="#" (click)="verImagen(solicitud); $event.preventDefault()">
-              <span class="material-icons icon-link">search</span> Ver Imagen
-            </a>
-          </td>
+          <!-- <td>{{ solicitud.observaciones || '--' }}</td> -->
           <td>
-            <a href="#" (click)="verBitacora(solicitud); $event.preventDefault()">
-              <span class="material-icons icon-link">search</span> Ver Bitácora
-            </a>
-          </td> -->
-          <td>{{ solicitud.observaciones || '--' }}</td>
+            <button class="btn-detalle" (click)="verDetalle(solicitud)">
+              Ver Detalle
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- Botones de acción -->
-  <div class="solicitudes-acciones">
+  <!-- Botones de acción (si quieres mantenerlos globales para la fila seleccionada) -->
+  <!-- <div class="solicitudes-acciones">
     <button class="btn-secundario" [disabled]="!solicitudSeleccionada" (click)="editarSolicitud()">Editar</button>
     <button class="btn-secundario" [disabled]="!solicitudSeleccionada" (click)="eliminarSolicitud()">Eliminar</button>
     <button class="btn-secundario" [disabled]="!solicitudSeleccionada" (click)="cambiarEstado()">Cambiar Estado</button>
-  </div>
+  </div> -->
 </div>

@@ -6,8 +6,7 @@ import { Solicitud } from '../../../../models/solicitud.models';
 import { SolicitudImagen } from '../../../../models/solicitud-imagen.model';
 import { ImageService } from '../../../../services/image/image.service';
 import { firstValueFrom } from 'rxjs';
-//import { environment } from '../../../../../environments/environment';
-import { environment } from '../../../../../environments/environment.prod';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-personalizada',

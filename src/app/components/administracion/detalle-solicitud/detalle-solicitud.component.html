@@ -1,28 +1,46 @@
 <div class="detalle-solicitud-wrapper">
+  <div *ngIf="mensajeExito" class="alert-exito">{{ mensajeExito }}</div>
+  <div *ngIf="mensajeError" class="alert-error">{{ mensajeError }}</div>
 
-  <button class="btn-volver" (click)="volver()">← Volver</button>
-  <h2>Detalle de Solicitud</h2>
-
-  <div class="info-principal">
-    <div><b>Cliente:</b> {{ solicitud?.nombreCliente }}</div>
-    <div><b>Correo:</b> {{ solicitud?.correoCliente }}</div>
-    <div><b>Teléfono:</b> {{ solicitud?.telefonoCliente }}</div>
-    <div><b>Fecha creación:</b> {{ solicitud?.fechaCreacion | date:'short' }}</div>
-    <div><b>Tipo:</b> {{ solicitud?.nombreTipoSolicitud }}</div>
-    <div><b>Estado:</b> {{ solicitud?.nombreEstadoSolicitud }}</div>
-    <div><b>Observaciones:</b> {{ solicitud?.observaciones }}</div>
-
-    <!-- Mostrar campos dinámicos según tipo -->
-    <ng-container [ngSwitch]="solicitud?.nombreTipoSolicitud">
-      <div *ngSwitchCase="'PRODUCTO'"><b>Productos:</b> <!-- Lista productos --></div>
-      <div *ngSwitchCase="'SERVICIO'"><b>Servicios:</b> <!-- Lista servicios --></div>
-      <div *ngSwitchCase="'PERSONALIZADA'"><b>Detalle personalizado:</b> <!-- Info especial --></div>
-    </ng-container>
+  <div class="volver-right">
+    <button class="btn-volver" (click)="volver()">← Volver</button>
   </div>
+  <h2 class="detalle-solicitud-title">Detalle de Solicitud</h2>
+
+  <div class="detalle-solicitud-datos">
+    <div class="col">
+      <div><b>Cliente:</b> {{ solicitud?.nombreCliente }}</div>
+      <div><b>Teléfono:</b> {{ solicitud?.telefonoCliente }}</div>
+      <div><b>Tipo:</b> {{ solicitud?.nombreTipoSolicitud }}</div>
+      <div><b>Observaciones:</b> {{ solicitud?.observaciones }}</div>
+    </div>
+    <div class="col">
+      <div><b>Correo:</b> {{ solicitud?.correoCliente }}</div>
+      <div><b>Fecha creación:</b> {{ solicitud?.fechaCreacion | date:'short' }}</div>
+      <div><b>Estado:</b> {{ solicitud?.nombreEstadoSolicitud }}</div>
+      <div><b>Servicios:</b> {{ solicitud?.nombreServicio || '--' }}</div>
+    </div>
+  </div>
+
+  <!-- MOSTRAR PRODUCTOS ASOCIADOS SI EXISTEN -->
+  <ng-container [ngSwitch]="solicitud?.nombreTipoSolicitud">
+    <div *ngSwitchCase="'PRODUCTO'">
+      <b>Productos:</b>
+      <ng-container *ngIf="productosAsociados.length; else sinProductos">
+        <ul class="lista-productos">
+          <li *ngFor="let p of productosAsociados">{{ p }}</li>
+        </ul>
+      </ng-container>
+      <ng-template #sinProductos>
+        <span>--</span>
+      </ng-template>
+    </div>
+    <div *ngSwitchCase="'SERVICIO'"><b>Servicios:</b> <!-- Lista servicios --></div>
+    <div *ngSwitchCase="'PERSONALIZADA'"><b>Detalle personalizado:</b> <!-- Info especial --></div>
+  </ng-container>
 
   <hr>
 
-  <!-- Bloque de gestión de estado -->
   <h3>Cambiar Estado</h3>
   <div class="gestion-estado">
     <select [(ngModel)]="estadoNuevo" [disabled]="!solicitud">
@@ -33,21 +51,19 @@
     <input [(ngModel)]="comentario" type="text" maxlength="500" placeholder="Comentario para la bitácora (obligatorio)" [disabled]="!solicitud">
     <button
       (click)="actualizarEstado()"
-      [disabled]="loading || !comentario.trim() || !estadoNuevo || !solicitud || estadoNuevo === solicitud.idEstadoSolicitud">
+      [disabled]="loading || !comentario.trim() || !estadoNuevo || !solicitud || estadoNuevo === solicitud?.idEstadoSolicitud">
       Cambiar Estado
     </button>
   </div>
 
   <hr>
 
-  <!-- Bitácora de movimientos -->
   <h3>Bitácora de Solicitud</h3>
 
-  <button (click)="agregandoBitacora = !agregandoBitacora" [disabled]="!solicitud">
+  <button class="btn-agregar-bitacora" (click)="agregandoBitacora = !agregandoBitacora" [disabled]="!solicitud">
     {{ agregandoBitacora ? 'Cancelar' : 'Agregar Bitácora' }}
   </button>
 
-  <!-- Formulario inline de bitácora -->
   <div *ngIf="agregandoBitacora" class="form-bitacora">
     <select [(ngModel)]="nuevoEstadoBitacora" [disabled]="!solicitud">
       <option [ngValue]="null" disabled selected>Selecciona estado</option>
@@ -87,7 +103,6 @@
   </div>
 </div>
 
-<!-- Mensaje si aún no se ha cargado la solicitud -->
 <div *ngIf="!solicitud && !loading">
   <p>Cargando datos de la solicitud...</p>
 </div>

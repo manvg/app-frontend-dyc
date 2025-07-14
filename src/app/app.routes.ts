@@ -16,6 +16,7 @@ import { SolicitudProductoComponent } from './components/public/solicitudes/soli
 import { SolicitudServicioComponent } from './components/public/solicitudes/solicitud-servicio/solicitud-servicio.component';
 import { GestionSolicitudesComponent } from './components/administracion/gestion-solicitudes/gestion-solicitudes.component';
 import { DetalleProductoComponent } from './components/public/producto/detalle-producto/detalle-producto.component';
+import { DetalleSolicitudComponent } from './components/administracion/detalle-solicitud/detalle-solicitud.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -35,6 +36,7 @@ export const routes: Routes = [
   { path: 'panel-admin', component: PanelAdminComponent, canActivate: [authGuard] },
   { path: 'mantenedor-materiales', component: MantenedorMaterialesComponent, canActivate: [authGuard] },
   { path: 'gestion-solicitudes', component: GestionSolicitudesComponent, canActivate: [authGuard] },
+  { path: 'solicitudes/:id', component: DetalleSolicitudComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: '' }
 ];
 
