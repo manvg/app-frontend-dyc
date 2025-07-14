@@ -6,7 +6,7 @@ export const environment = {
     api: 'https://xa8hsg5wk6.execute-api.us-east-1.amazonaws.com',
     endpoints: {
       obtenerTodos: '/producto/all',
-      obtenerActivos: '/producto/activos',
+      obtenerActivos: '/producto/all/activo',
       obtenerPorId: '/producto/',
       crear: '/producto',
       actualizar: '/producto/',
@@ -18,21 +18,37 @@ export const environment = {
   solicitudes: {
     api: 'https://xa8hsg5wk6.execute-api.us-east-1.amazonaws.com',
     endpoints: {
-      obtenerTodos: '/solicitud/all'
+      obtenerTodos: '/solicitud/all',
+      obtenerActivos: '/solicitud/all/activo',
+      obtenerPorId: '/solicitud/',
+      crear: '/solicitud',
+      actualizar: '/solicitud/',
+      cambiarEstado: '/solicitud/',
+      eliminar: '/solicitud/'
     }
   },
 
   tipoProductos: {
     api: 'https://xa8hsg5wk6.execute-api.us-east-1.amazonaws.com',
     endpoints: {
-      obtenerTodos: '/producto/tipo/all'
+      obtenerTodos: '/producto/tipo/all',
+      obtenerPorId: '/producto/tipo/',
+      crear: '/producto/tipo',
+      actualizar: '/producto/tipo/',
+      cambiarEstado: '/producto/tipo/',
+      eliminar: '/producto/tipo/'
     }
   },
 
   materiales: {
     api: 'https://xa8hsg5wk6.execute-api.us-east-1.amazonaws.com',
     endpoints: {
-      obtenerTodos: '/material'
+      obtenerTodos: '/material',
+      obtenerPorId: '/material/',
+      crear: '/material',
+      actualizar: '/material/',
+      cambiarEstado: '/material/',
+      eliminar: '/material/'
     }
   },
 
@@ -44,7 +60,15 @@ export const environment = {
   },
 
   imagenes: {
-    api: 'https://xa8hsg5wk6.execute-api.us-east-1.amazonaws.com/s3'
+    api: 'https://xa8hsg5wk6.execute-api.us-east-1.amazonaws.com/s3',
+    endpoints: {
+      obtenerTodos: '/bucketdyc/object',
+      obtenerStreamPorKey: '/bucketdyc/object/stream?key=',
+      obtenerPorKey: '/bucketdyc/object?key=',
+      crear: '/bucketdyc/object?key=',
+      mover: '/bucketdyc/move?sourceKey={source}&destKey={dest}',
+      eliminar: '/bucketdyc/object?key='
+    }
   },
 
   nombreBucket: 'bucketdyc'

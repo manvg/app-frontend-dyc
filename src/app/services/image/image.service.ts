@@ -13,7 +13,7 @@ export class ImageService {
   constructor(private http: HttpClient) { }
 
   uploadImage(bucketName: string, key: string, file: File): Observable<string> {
-    const url    = `${this.base}/${bucketName}/object`;
+    const url    = environment.imagenes.endpoints.crear;
     const params = new HttpParams().set('key', key);
     const form   = new FormData();
     form.append('file', file, file.name);

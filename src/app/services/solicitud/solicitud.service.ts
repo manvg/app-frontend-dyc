@@ -18,32 +18,29 @@ export class SolicitudService {
   }
 
   obtenerActivos(): Observable<Solicitud[]> {
-    return this.http.get<Solicitud[]>(`${this.api}${this.endpoints.obtenerTodos}/activos`);
+    return this.http.get<Solicitud[]>(`${this.api}${this.endpoints.obtenerActivos}`);
   }
 
   obtenerPorId(id: number): Observable<Solicitud> {
-    return this.http.get<Solicitud>(`${this.api}${this.endpoints.obtenerTodos}/${id}`);
+    return this.http.get<Solicitud>(`${this.api}${this.endpoints.obtenerPorId}${id}`);
   }
 
   crear(solicitud: Solicitud): Observable<Solicitud> {
-    return this.http.post<Solicitud>(`${this.api}${this.endpoints.obtenerTodos}`, solicitud);
+    return this.http.post<Solicitud>(`${this.api}${this.endpoints.crear}`, solicitud);
   }
 
   crearSolicitudServicio(formData: FormData): Observable<any> {
-    return this.http.post<any>(`${this.api}${this.endpoints.obtenerTodos}`, formData);
+    return this.http.post<any>(`${this.api}${this.endpoints.crear}`, formData);
   }
 
   actualizar(id: number, solicitud: Solicitud): Observable<Solicitud> {
-    return this.http.put<Solicitud>(`${this.api}${this.endpoints.obtenerTodos}/${id}`, solicitud);
+    return this.http.put<Solicitud>(`${this.api}${this.endpoints.actualizar}${id}`, solicitud);
   }
 
   cambiarEstado(id: number, activo: number): Observable<void> {
-    return this.http.put<void>(
-      `${this.api}${this.endpoints.obtenerTodos}/${id}/cambiar-estado?activo=${activo}`, {}
-    );
-  }
+    return this.http.put<void>(`${this.api}${this.endpoints.cambiarEstado}${id}/cambiar-estado?activo=${activo}`,{});}
 
   eliminar(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.api}${this.endpoints.obtenerTodos}/${id}`);
+    return this.http.delete<void>(`${this.api}${this.endpoints.eliminar}${id}`);
   }
 }

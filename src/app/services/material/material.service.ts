@@ -19,28 +19,24 @@ export class MaterialService {
   }
 
   obtenerPorId(id: number): Observable<Material> {
-    return this.http.get<Material>(`${this.api}${this.endpoints.obtenerTodos}/${id}`);
+    return this.http.get<Material>(`${this.api}${this.endpoints.obtenerPorId}${id}`);
   }
 
   crear(material: Material): Observable<Material> {
-    return this.http.post<Material>(`${this.api}${this.endpoints.obtenerTodos}`, material);
+    return this.http.post<Material>(`${this.api}${this.endpoints.crear}`, material);
   }
 
   actualizar(id: number, material: Material): Observable<Material> {
-    return this.http.put<Material>(`${this.api}${this.endpoints.obtenerTodos}/${id}`, material);
+    return this.http.put<Material>(`${this.api}${this.endpoints.actualizar}${id}`, material);
   }
 
   cambiarEstado(id: number, activo: number): Observable<void> {
     const params = new HttpParams().set('activo', activo.toString());
-    return this.http.put<void>(
-      `${this.api}${this.endpoints.obtenerTodos}/${id}/cambiar-estado`,
-      null,
-      { params }
-    );
+    return this.http.put<void>(`${this.api}${this.endpoints.cambiarEstado}${id}/cambiar-estado`,null,{ params });
   }
 
   eliminar(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.api}${this.endpoints.obtenerTodos}/${id}`);
+    return this.http.delete<void>(`${this.api}${this.endpoints.eliminar}${id}`);
   }
 
 }

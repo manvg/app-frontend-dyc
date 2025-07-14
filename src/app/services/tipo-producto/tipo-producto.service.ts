@@ -19,27 +19,27 @@ export class TipoProductoService {
   }
 
   obtenerPorId(id: number): Observable<TipoProducto> {
-    return this.http.get<TipoProducto>(`${this.api}${this.endpoints.obtenerTodos}/${id}`);
+    return this.http.get<TipoProducto>(`${this.api}${this.endpoints.obtenerPorId}${id}`);
   }
 
   crear(dto: TipoProducto): Observable<ResponseModel> {
-    return this.http.post<ResponseModel>(`${this.api}${this.endpoints.obtenerTodos}`, dto);
+    return this.http.post<ResponseModel>(`${this.api}${this.endpoints.crear}`, dto);
   }
 
   actualizar(id: number, dto: TipoProducto): Observable<ResponseModel> {
-    return this.http.put<ResponseModel>(`${this.api}${this.endpoints.obtenerTodos}/${id}`, dto);
+    return this.http.put<ResponseModel>(`${this.api}${this.endpoints.actualizar}${id}`, dto);
   }
 
   cambiarEstado(id: number, activo: number): Observable<ResponseModel> {
     const params = new HttpParams().set('activo', activo.toString());
     return this.http.put<ResponseModel>(
-      `${this.api}${this.endpoints.obtenerTodos}/${id}/cambiar-estado`,
+      `${this.api}${this.endpoints.cambiarEstado}${id}/cambiar-estado`,
       null,
       { params }
     );
   }
 
   eliminar(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.api}${this.endpoints.obtenerTodos}/${id}`);
+    return this.http.delete<void>(`${this.api}${this.endpoints.eliminar}${id}`);
   }
 }
