@@ -22,6 +22,7 @@ export class NavbarComponent {
     { label: 'Productos', route: '/mantenedor-productos' },
     { label: 'Tipos de Producto', route: '/mantenedor-tipo-producto' },
     { label: 'Materiales', route: '/mantenedor-materiales' },
+    { label: 'Servicios', route: '/mantenedor-servicios'},
     { label: 'Solicitudes', route: '/gestion-solicitudes' }
   ];
 
@@ -30,7 +31,8 @@ export class NavbarComponent {
     '/mantenedor-productos',
     '/mantenedor-tipo-producto',
     '/mantenedor-materiales',
-    '/gestion-solicitudes'
+    '/gestion-solicitudes',
+    '/mantenedor-servicios'
   ];
 
   constructor(private router: Router) {
