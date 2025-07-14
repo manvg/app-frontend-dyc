@@ -6,6 +6,8 @@ import { Solicitud } from '../../../../models/solicitud.models';
 import { SolicitudImagen } from '../../../../models/solicitud-imagen.model';
 import { ImageService } from '../../../../services/image/image.service';
 import { firstValueFrom } from 'rxjs';
+//import { environment } from '../../../../../environments/environment';
+import { environment } from '../../../../../environments/environment.prod';
 
 @Component({
   selector: 'app-personalizada',
@@ -73,10 +75,9 @@ export class PersonalizadaComponent {
       //---------- Imágenes ----------//
       let imagenes: SolicitudImagen[] = [];
       if (this.archivoSeleccionado) {
-        const bucketName = 'bucketdyc';
-        const key = `${this.archivoSeleccionado.name}`;//`personalizada_${Date.now()}_${this.archivoSeleccionado.name}`;
+        const key = `${environment.imagenes.directorios.solicitud}${this.archivoSeleccionado.name}`;
         const urlImagen = await firstValueFrom(
-          this.imageService.uploadImage(bucketName, key, this.archivoSeleccionado)
+          this.imageService.uploadImage(key, this.archivoSeleccionado)
         );
 
         const imagen: SolicitudImagen = {
@@ -121,13 +122,13 @@ export class PersonalizadaComponent {
           setTimeout(() => this.enviado = false, 4000);
         },
         error: (err) => {
-          this.errorEnvio = 'Error al enviar la solicitud. Intenta nuevamente.';
+          this.errorEnvio = 'Error al enviar la solicitud. Intenta nuevamente.'
           this.enviando = false;
         }
       });
 
     } catch (err) {
-      this.errorEnvio = 'Error al subir el archivo. Intenta nuevamente.';
+      this.errorEnvio = 'Error al subir el archivo. Intenta nuevamente.' + err;
       this.enviando = false;
     }
   }

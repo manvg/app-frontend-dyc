@@ -19,7 +19,7 @@
       <mat-select [(ngModel)]="producto.idMaterial" name="idMaterial" required>
         <mat-option *ngFor="let mat of materiales" [value]="mat.idMaterial">
           {{ mat.nombre }}
-        </mat-option> 
+        </mat-option>
       </mat-select>
     </mat-form-field>
 
@@ -75,7 +75,9 @@
     </div>
   </form>
 </mat-dialog-content>
-
+<div *ngIf="mensajeError" class="error-message">
+  {{ mensajeError }}
+</div>
 <mat-dialog-actions align="end">
   <button mat-button (click)="cancelar()">Cancelar</button>
   <button mat-raised-button color="primary" (click)="guardar()">Guardar</button>

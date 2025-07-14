@@ -1,10 +1,6 @@
 <section class="personalizada-wrapper">
   <h2 class="personalizada-title">SOLICITUD PERSONALIZADA</h2>
   <form [formGroup]="form" class="personalizada-form" (ngSubmit)="enviarSolicitud()">
-
-    <!-- Mensaje de éxito -->
-    <div *ngIf="enviado" class="mensaje-exito">¡Solicitud enviada correctamente! Te contactaremos pronto.</div>
-
     <h3 class="personalizada-subtitle">Especificaciones</h3>
 
     <div class="form-group">
@@ -45,7 +41,9 @@
       <input type="number" id="cantidad" formControlName="cantidad" min="1" [ngClass]="{'campo-error': campoInvalido('cantidad')}" />
       <div class="mensaje-error" *ngIf="cantidadErrors?.['min']">La cantidad debe ser al menos 1.</div>
     </div>
-
+    <!-- Mensaje de éxito -->
+    <div *ngIf="enviado" class="mensaje-exito">¡Solicitud enviada correctamente! Te contactaremos pronto.</div>
+    <div *ngIf="errorEnvio" class="mensaje-error">{{ errorEnvio }}</div>
     <div class="form-btn">
       <button class="btn-principal" type="submit" [disabled]="form.invalid || enviando">
         <ng-container *ngIf="!enviando">Enviar solicitud</ng-container>

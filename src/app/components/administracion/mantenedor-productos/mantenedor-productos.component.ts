@@ -64,63 +64,30 @@ export class MantenedorProductosComponent implements OnInit {
   nuevoProducto() {
     const dialogRef = this.dialog.open(FormularioProductoComponent, { /* ... */ });
 
-    dialogRef.afterClosed().subscribe((result?: Producto) => {
-      if (!result) return;
+    dialogRef.afterClosed().subscribe((productoCreado?: Producto) => {
+      if (!productoCreado) return;
 
-      // aquí ya tienes result.urlImagen y nombres
-      this.productosService.crear(result).subscribe({
-        next: () => {
-          this.snackBar.open('Producto creado con éxito', 'Cerrar', { duration: 3000 });
+      this.snackBar.open('Producto creado con éxito', 'Cerrar', { duration: 3000 });
+      this.cargarProductos();
+    });
+  }
+
+
+  editarProducto(id: number): void {
+    this.productosService.obtenerPorId(id).subscribe(producto => {
+      const dialogRef = this.dialog.open(FormularioProductoComponent, {
+        width: '600px',
+        data: producto
+      });
+
+      dialogRef.afterClosed().subscribe((result?: Producto) => {
+        if (result) {
           this.cargarProductos();
-        },
-        error: err => {
-          console.error('500 al crear producto', err);  // <<< captura el 500 aquí
-          this.snackBar.open('Error al crear producto', 'Cerrar', {
-            duration: 3500,
-            panelClass: 'snack-error'
-          });
+          this.snackBar.open('Producto actualizado con éxito', 'Cerrar', { duration: 3000 });
         }
       });
     });
   }
-
-  editarProducto(id: number): void {
-  this.productosService.obtenerPorId(id).subscribe(producto => {
-    const dialogRef = this.dialog.open(FormularioProductoComponent, {
-      width: '600px',
-      data: producto
-    });
-
-    dialogRef.afterClosed().subscribe((result?: Producto) => {
-      if (result) {
-        const payload = {
-          idProducto:       result.idProducto,
-          nombre:           result.nombre,
-          descripcion:      result.descripcion,
-          medidas:          result.medidas,
-          precio:           result.precio,
-          urlImagen:        result.urlImagen,
-          activo:           result.activo,
-          idTipoProducto:   result.idTipoProducto,
-          nombreTipoProducto: result.nombreTipoProducto,
-          idMaterial:       result.idMaterial,
-          nombreMaterial:   result.nombreMaterial
-        };
-
-        this.productosService.actualizar(id, payload).subscribe({
-          next: () => {
-            this.cargarProductos();
-            this.snackBar.open('Producto actualizado con éxito', 'Cerrar', { duration: 3000 });
-          },
-          error: err => {
-            this.snackBar.open('Error al actualizar producto', 'Cerrar', { duration: 3500, panelClass: 'snack-error' });
-            console.error('Error al actualizar producto', err);
-          }
-        });
-      }
-    });
-  });
-}
 
   cambiarVigenciaProducto(producto: Producto): void {
     const nuevoEstado = producto.activo === 1 ? 0 : 1;

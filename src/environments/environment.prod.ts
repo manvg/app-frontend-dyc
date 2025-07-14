@@ -63,11 +63,17 @@ export const environment = {
     api: 'https://xa8hsg5wk6.execute-api.us-east-1.amazonaws.com/s3',
     endpoints: {
       obtenerTodos: '/bucketdyc/object',
-      obtenerStreamPorKey: '/bucketdyc/object/stream?key=',
-      obtenerPorKey: '/bucketdyc/object?key=',
-      crear: '/bucketdyc/object?key=',
+      obtenerStreamPorKey: '/bucketdyc/object/stream',
+      obtenerPorKey: '/bucketdyc/object',
+      crear: '/bucketdyc/object',
       mover: '/bucketdyc/move?sourceKey={source}&destKey={dest}',
-      eliminar: '/bucketdyc/object?key='
+      eliminar: '/bucketdyc/object'
+    },
+    directorios: {
+      producto: 'producto/',
+      servicio: 'servicio/',
+      solicitud: 'solicitud/',
+      tipoproducto: 'tipoproducto/',
     }
   },
 

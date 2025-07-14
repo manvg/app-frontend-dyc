@@ -340,3 +340,24 @@ main {
 /*
 ----- FIN ESTILOS DE MANTENEDORES -----
 */
+
+.error-message {
+  color: #fff;
+  background-color: #f44336;
+  border: 1px solid #b71c1c;
+  border-radius: 4px;
+  padding: 12px;
+  margin-top: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  box-shadow: 0 2px 6px rgba(244,67,54,0.10);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.error-message::before {
+  content: '⚠️';
+  font-size: 18px;
+  margin-right: 6px;
+}

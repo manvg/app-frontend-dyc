@@ -12,8 +12,12 @@ import { TipoProducto } from '../../../models/tipo-producto.model';
 import { Material } from '../../../models/material.model';
 import { MaterialService } from '../../../services/material/material.service';
 import { ImageService } from '../../../services/image/image.service';
+import { ProductosService } from '../../../services/productos/productos.service';
+import { firstValueFrom } from 'rxjs';
 import { v4 as uuid } from 'uuid';
 import { url } from 'inspector';
+//import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment.prod';
 
 @Component({
   selector: 'app-formulario-producto',
@@ -35,19 +39,20 @@ export class FormularioProductoComponent implements OnInit {
   producto: Producto;
   tiposProducto: TipoProducto[] = [];
   materiales: Material[] = [];
-
   imagenPreview: string | null = null;
   nombreImagenSeleccionada: string | null = null;
   imagenFile: File | null = null;
-
-  private readonly BUCKET = 'bucketdyc';
+  mensajeError: string | null = null;
+  readonly LIMITE_MB = 3;
+  loading = false;
 
   constructor(
     public dialogRef: MatDialogRef<FormularioProductoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Producto,
     private tipoProductoService: TipoProductoService,
     private materialService: MaterialService,
-    private imageService: ImageService
+    private imageService: ImageService,
+    private productoService: ProductosService
   ) {
     this.producto = { ...data };
   }
@@ -55,6 +60,9 @@ export class FormularioProductoComponent implements OnInit {
   ngOnInit(): void {
     this.cargarTiposProducto();
     this.cargarMateriales();
+    if (this.producto?.urlImagen) {
+      this.imagenPreview = this.producto.urlImagen;
+    }
   }
 
   cargarTiposProducto(): void {
@@ -78,40 +86,68 @@ export class FormularioProductoComponent implements OnInit {
 
   onImagenSeleccionada(event: Event): void {
     const input = event.target as HTMLInputElement;
-    if (input?.files && input.files[0]) {
-      const file = input.files[0];
-      this.nombreImagenSeleccionada = file.name;
-      this.imagenFile = file;
+    if (input.files && input.files.length > 0) {
+      const archivo = input.files[0];
+      const tamanoMB = archivo.size / (1024 * 1024);
+
+      if (tamanoMB > this.LIMITE_MB) {
+        this.mensajeError = `La imagen supera el límite permitido de ${this.LIMITE_MB} MB.`;
+        this.imagenFile = null;
+        this.imagenPreview = null;
+        this.nombreImagenSeleccionada = '';
+        return;
+      }
+
+      this.imagenFile = archivo;
+      this.nombreImagenSeleccionada = archivo.name;
 
       const reader = new FileReader();
-      reader.onload = () => {
-        this.imagenPreview = reader.result as string;
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        this.imagenPreview = e.target?.result as string;
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(archivo);
+      this.mensajeError = null;
     }
   }
 
-  guardar(): void {
-    // rellena nombres para el DTO
+  async guardar(): Promise<void> {
+    if (this.loading) return; // Previene dobles clics rápidos
+
+    this.loading = true;
+    this.mensajeError = null;
+
     const mat = this.materiales.find(m => m.idMaterial === this.producto.idMaterial);
     const tip = this.tiposProducto.find(t => t.idTipoProducto === this.producto.idTipoProducto);
     this.producto.nombreMaterial     = mat?.nombre || '';
     this.producto.nombreTipoProducto = tip?.nombre || '';
 
-    if (this.imagenFile) {
-      const key = `producto/${Date.now()}_${uuid()}_${this.imagenFile.name}`;
-      this.imageService.uploadImage(this.BUCKET, key, this.imagenFile)
-        .subscribe({
-          next: url => {
-            this.producto.urlImagen = url;
-            this.dialogRef.close(this.producto);    // <<< EDIT: cerramos con el producto completo
-          },
-          error: err => {
-            console.error('Error subiendo imagen:', err);
-          }
-        });
-    } else {
-      this.dialogRef.close(this.producto);        // <<< EDIT: cerramos aunque no haya imagen
+    try {
+      if (this.imagenFile) {
+        const key = `${environment.imagenes.directorios.producto}${this.imagenFile.name}`;
+        const urlImagen = await firstValueFrom(
+          this.imageService.uploadImage(key, this.imagenFile)
+        );
+        this.producto.urlImagen = urlImagen;
+      }
+
+      let resultado: Producto;
+      if (this.producto.idProducto) { // Editar
+        resultado = await firstValueFrom(
+          this.productoService.actualizar(this.producto.idProducto, this.producto)
+        );
+      } else { // Crear
+        resultado = await firstValueFrom(
+          this.productoService.crear(this.producto)
+        );
+      }
+
+      this.dialogRef.close(resultado);
+
+    } catch (error: any) {
+      console.error('Error en el guardado:', error);
+      this.mensajeError = error?.error?.message || 'Ocurrió un error al guardar el producto';
+    } finally {
+      this.loading = false;
     }
   }
 

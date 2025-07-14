@@ -3,7 +3,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TipoProducto } from '../../models/tipo-producto.model';
 import { ResponseModel } from '../../models/response-model.model';
-import { environment } from '../../../environments/environment';
+//import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
