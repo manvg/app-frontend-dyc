@@ -67,22 +67,6 @@
       <div *ngIf="campoInvalido('descripcion')" class="mensaje-error">Este campo es requerido</div>
     </div>
 
-    <div class="form-group">
-      <label>Archivo referencia</label>
-      <div class="archivo-upload">
-        <input type="file" id="archivo" (change)="onArchivoChange($event)" accept="image/*,.pdf" />
-        <button type="button" class="archivo-btn" (click)="seleccionarArchivo()">
-          <span *ngIf="!archivoNombre">(Subir Archivo)</span>
-          <span *ngIf="archivoNombre" class="archivo-nombre">{{ archivoNombre }}</span>
-          <span class="material-icons icono">add_circle</span>
-        </button>
-      </div>
-      <div *ngIf="archivoPreview" class="archivo-preview">
-        <img *ngIf="archivoEsImagen" [src]="archivoPreview" [alt]="archivoNombre" />
-        <span *ngIf="!archivoEsImagen"><b>Archivo listo para enviar.</b></span>
-      </div>
-    </div>
-
     <div *ngIf="enviado" class="mensaje-exito">¡Solicitud enviada con éxito!</div>
     <div *ngIf="errorEnvio" class="mensaje-error">{{ errorEnvio }}</div>
 

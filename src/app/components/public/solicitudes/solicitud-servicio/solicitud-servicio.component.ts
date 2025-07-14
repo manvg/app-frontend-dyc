@@ -1,10 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Servicio } from '../../../../models/servicio.model';
 import { SolicitudService } from '../../../../services/solicitud/solicitud.service';
-import { ActivatedRoute } from '@angular/router';
-import { SERVICIOS_MOCK } from '../../servicios/lista-servicios.mock-data';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ServicioService } from '../../../../services/servicio/servicio.service';
 
 @Component({
   selector: 'app-solicitud-servicio',
@@ -25,11 +25,12 @@ export class SolicitudServicioComponent implements OnInit {
   archivoEsImagen = false;
   archivo: File | null = null;
 
-  constructor(
-    private fb: FormBuilder,
-    private solicitudService: SolicitudService,
-    private route: ActivatedRoute
-  ) {
+  private fb = inject(FormBuilder);
+  private solicitudService = inject(SolicitudService);
+  private route = inject(ActivatedRoute);
+  private servicioService = inject(ServicioService);
+
+  constructor() {
     this.form = this.fb.group({
       nombre: ['', Validators.required],
       apellidos: ['', Validators.required],
@@ -42,35 +43,15 @@ export class SolicitudServicioComponent implements OnInit {
 
   ngOnInit() {
     if (!this.servicio) {
-      this.route.paramMap.subscribe(params => {
+      this.route.paramMap.subscribe((params: ParamMap) => {
         const id = Number(params.get('idServicio'));
-        this.servicio = SERVICIOS_MOCK.find(s => s.idServicio === id);
+        if (id) {
+          this.servicioService.obtenerPorId(id).subscribe({
+            next: s => this.servicio = s,
+            error: () => this.errorEnvio = 'No se pudo cargar el servicio'
+          });
+        }
       });
-    }
-  }
-
-  seleccionarArchivo() {
-    const input = document.getElementById('archivo') as HTMLInputElement;
-    input?.click();
-  }
-
-  onArchivoChange(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (input?.files && input.files.length > 0) {
-      const file = input.files[0];
-      this.archivoNombre = file.name;
-      this.archivo = file;
-      this.form.patchValue({ archivo: file });
-
-      const ext = file.name.split('.').pop()?.toLowerCase() ?? '';
-      this.archivoEsImagen = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(ext);
-      if (this.archivoEsImagen) {
-        const reader = new FileReader();
-        reader.onload = () => this.archivoPreview = reader.result as string;
-        reader.readAsDataURL(file);
-      } else {
-        this.archivoPreview = null;
-      }
     }
   }
 
@@ -89,17 +70,12 @@ export class SolicitudServicioComponent implements OnInit {
     formData.append('telefono', this.form.value.telefono ?? '');
     formData.append('descripcion', this.form.value.descripcion);
     formData.append('idServicio', this.servicio?.idServicio?.toString() ?? '');
-    if (this.archivo) {
-      formData.append('archivo', this.archivo);
-    }
 
     this.solicitudService.crearSolicitudServicio(formData).subscribe({
       next: () => {
         this.enviado = true;
         this.enviando = false;
         this.form.reset();
-        this.archivoNombre = null;
-        this.archivoPreview = null;
         setTimeout(() => this.enviado = false, 4000);
       },
       error: () => {

@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Servicio } from '../../../../models/servicio.model';
 import { NgIf, CurrencyPipe } from '@angular/common';
-import { SERVICIOS_MOCK } from '../lista-servicios.mock-data';
 import { Subscription } from 'rxjs';
+import { ServicioService } from '../../../../services/servicio/servicio.service'; // Asegúrate de la ruta
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -15,18 +15,37 @@ import { RouterModule } from '@angular/router';
 })
 export class DetalleServicioComponent implements OnInit, OnDestroy {
   servicio?: Servicio;
+  loading = false;
+  error?: string;
   private paramSub?: Subscription;
+  private servicioSub?: Subscription;
 
-  constructor(private route: ActivatedRoute) {}
+  private route = inject(ActivatedRoute);
+  private servicioService = inject(ServicioService);
 
   ngOnInit(): void {
     this.paramSub = this.route.paramMap.subscribe((params: ParamMap) => {
       const id = Number(params.get('idServicio'));
-      this.servicio = SERVICIOS_MOCK.find(s => s.idServicio === id);
+      if (!isNaN(id)) {
+        this.loading = true;
+        this.servicioSub = this.servicioService.obtenerPorId(id).subscribe({
+          next: (servicio) => {
+            this.servicio = servicio;
+            this.loading = false;
+          },
+          error: (err) => {
+            this.error = 'No se pudo cargar el servicio';
+            this.loading = false;
+          }
+        });
+      } else {
+        this.error = 'ID no válido';
+      }
     });
   }
 
   ngOnDestroy(): void {
     this.paramSub?.unsubscribe();
+    this.servicioSub?.unsubscribe();
   }
 }
