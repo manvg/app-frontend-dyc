@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Solicitud } from '../../models/solicitud.models';
-//import { environment } from '../../../environments/environment';
-import { environment } from '../../../environments/environment.prod';
+import { EstadoSolicitud } from '../../models/estado-solicitud.models';
+import { environment } from '../../../environments/environment';
+//import { environment } from '../../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
@@ -39,9 +40,14 @@ export class SolicitudService {
   }
 
   cambiarEstado(id: number, activo: number): Observable<void> {
-    return this.http.put<void>(`${this.api}${this.endpoints.cambiarEstado}${id}/cambiar-estado?activo=${activo}`,{});}
+    return this.http.put<void>(`${this.api}${this.endpoints.cambiarEstado}${id}/cambiar-estado?activo=${activo}`,{});
+  }
 
   eliminar(id: number): Observable<void> {
     return this.http.delete<void>(`${this.api}${this.endpoints.eliminar}${id}`);
+  }
+
+  obtenerEstados(): Observable<EstadoSolicitud[]> {
+    return this.http.get<EstadoSolicitud[]>(`${this.api}${this.endpoints.obtenerEstados}`);
   }
 }

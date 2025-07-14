@@ -16,8 +16,8 @@ import { ProductosService } from '../../../services/productos/productos.service'
 import { firstValueFrom } from 'rxjs';
 import { v4 as uuid } from 'uuid';
 import { url } from 'inspector';
-//import { environment } from '../../../../environments/environment';
-import { environment } from '../../../../environments/environment.prod';
+import { environment } from '../../../../environments/environment';
+//import { environment } from '../../../../environments/environment.prod';
 
 @Component({
   selector: 'app-formulario-producto',

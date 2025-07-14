@@ -24,7 +24,8 @@ export const environment = {
       crear: '/api/solicitudes',
       actualizar: '/api/solicitudes/',          // +id
       cambiarEstado: '/api/solicitudes/',       // +id + '/cambiar-estado?activo={valor}'
-      eliminar: '/api/solicitudes/'             // +id
+      eliminar: '/api/solicitudes/',             // +id
+      obtenerEstados: '/api/solicitudes/estados'
     }
   },
 
@@ -68,6 +69,23 @@ export const environment = {
       crear: '/bucketdyc/object?key=',
       mover: '/bucketdyc/move?sourceKey={source}&destKey={dest}',
       eliminar: '/bucketdyc/object?key='
+    },
+    directorios: {
+      producto: 'producto/',
+      servicio: 'servicio/',
+      solicitud: 'solicitud/',
+      tipoproducto: 'tipoproducto/'
+    }
+  },
+
+  bitacoras: {
+    api: 'http://localhost:8081',
+    endpoints: {
+      obtenerTodos: '/api/solicitudes/bitacora/',
+      obtenerPorId: '/api/solicitudes/bitacora/',// +id
+      crear: '/api/solicitudes/bitacora',
+      actualizar: '/api/solicitudes/bitacora/',// +id
+      eliminar: '/api/solicitudes/bitacora/'// +id
     }
   },
 

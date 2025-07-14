@@ -24,7 +24,8 @@ export const environment = {
       crear: '/solicitud',
       actualizar: '/solicitud/',
       cambiarEstado: '/solicitud/',
-      eliminar: '/solicitud/'
+      eliminar: '/solicitud/',
+      obtenerEstados: '/solicitud/estados'
     }
   },
 
@@ -74,6 +75,16 @@ export const environment = {
       servicio: 'servicio/',
       solicitud: 'solicitud/',
       tipoproducto: 'tipoproducto/',
+    }
+  },
+  bitacoras: {
+    api: 'https://xa8hsg5wk6.execute-api.us-east-1.amazonaws.com/',
+    endpoints: {
+      obtenerTodos: '/bitacora/solicitud/',
+      obtenerPorId: '/bitacora/',
+      crear: '/bitacora',
+      actualizar: '/bitacora/',
+      eliminar: '/bitacora/'
     }
   },
 
