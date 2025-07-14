@@ -7,7 +7,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { TipoProducto } from '../../../models/tipo-producto.model';
-
+import { firstValueFrom } from 'rxjs';
+import { ImageService } from '../../../services/image/image.service';
+import { TipoProductoService } from '../../../services/tipo-producto/tipo-producto.service';
+import { ResponseModel } from '../../../models/response-model.model';
 @Component({
   selector: 'app-formulario-tipo-producto',
   standalone: true,
@@ -29,10 +32,15 @@ export class FormularioTipoProductoComponent implements OnInit {
   imagenPreview: string | null = null;
   nombreImagenSeleccionada: string | null = null;
   imagenFile: File | null = null;
+  loading = false;
+  mensajeError: string | null = null;
+
 
   constructor(
     public dialogRef: MatDialogRef<FormularioTipoProductoComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: TipoProducto
+    @Inject(MAT_DIALOG_DATA) public data: TipoProducto,
+    private tipoProductoService: TipoProductoService,
+    private imageService: ImageService
   ) {
     this.tipoProducto = { ...data };
     if (this.tipoProducto.urlImagen) {
@@ -62,12 +70,45 @@ export class FormularioTipoProductoComponent implements OnInit {
     }
   }
 
-  guardar(): void {
-    this.dialogRef.close({
-      ...this.tipoProducto,
-      imagenFile: this.imagenFile
-    });
+  async guardar(): Promise<void> {
+    if (this.loading) return;
+    this.loading = true;
+    this.mensajeError = null;
+
+    try {
+      if (this.imagenFile) {
+        const key = `tipoproducto/${this.imagenFile.name}`;
+        const urlImagen = await firstValueFrom(
+          this.imageService.uploadImage(key, this.imagenFile)
+        );
+        this.tipoProducto.urlImagen = urlImagen;
+      }
+
+      let response: ResponseModel;
+      if (this.tipoProducto.idTipoProducto && this.tipoProducto.idTipoProducto > 0) {
+        response = await firstValueFrom(
+          this.tipoProductoService.actualizar(this.tipoProducto.idTipoProducto, this.tipoProducto)
+        );
+      } else {
+        response = await firstValueFrom(
+          this.tipoProductoService.crear(this.tipoProducto)
+        );
+      }
+
+      if (response.status) {
+        this.dialogRef.close(response);
+      } else {
+        this.mensajeError = response.message || 'No se pudo guardar el tipo de producto';
+      }
+
+    } catch (error: any) {
+      this.mensajeError = error?.error?.message || 'Ocurrió un error al guardar el tipo de producto';
+      console.error('Error:', error);
+    } finally {
+      this.loading = false;
+    }
   }
+
 
   cancelar(): void {
     this.dialogRef.close(null);

@@ -14,6 +14,7 @@ import { FormularioTipoProductoComponent } from '../formulario-tipo-producto/for
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ResponseModel } from '../../../models/response-model.model';
 
 @Component({
   selector: 'app-mantenedor-tipo-producto',
@@ -70,17 +71,17 @@ export class MantenedorTipoProductoComponent implements OnInit {
       } as TipoProducto
     });
 
-    dialogRef.afterClosed().subscribe((result?: TipoProducto) => {
-      if (result) {
-        this.tiposProductoService.crear(result).subscribe({
-          next: () => {
-            this.cargarTiposProducto();
-            this.snackBar.open('Tipo de producto creado', 'Cerrar', { duration: 3000 });
-          },
-          error: err => {
-            this.snackBar.open('Error al crear tipo de producto', 'Cerrar', { duration: 3500, panelClass: 'snack-error' });
-            console.error('Error al crear tipo de producto', err);
-          }
+    dialogRef.afterClosed().subscribe((response?: ResponseModel) => {
+      console.log('Response del formulario:', response); // Debug, puedes quitarlo luego
+      if (!response) return;
+
+      if (response.status) {
+        this.cargarTiposProducto();
+        this.snackBar.open(response.message || 'Tipo de producto creado', 'Cerrar', { duration: 3000 });
+      } else {
+        this.snackBar.open(response.message || 'Error al crear tipo de producto', 'Cerrar', {
+          duration: 3500,
+          panelClass: 'snack-error'
         });
       }
     });
@@ -93,22 +94,23 @@ export class MantenedorTipoProductoComponent implements OnInit {
         data: tipo
       });
 
-      dialogRef.afterClosed().subscribe((result?: TipoProducto) => {
-        if (result) {
-          this.tiposProductoService.actualizar(id, result).subscribe({
-            next: () => {
-              this.cargarTiposProducto();
-              this.snackBar.open('Tipo de producto actualizado', 'Cerrar', { duration: 3000 });
-            },
-            error: err => {
-              this.snackBar.open('Error al actualizar tipo de producto', 'Cerrar', { duration: 3500, panelClass: 'snack-error' });
-              console.error('Error al actualizar tipo de producto', err);
-            }
+      dialogRef.afterClosed().subscribe((response?: ResponseModel) => {
+        console.log('Response del formulario (edición):', response); // Útil para debug
+        if (!response) return;
+
+        if (response.status) {
+          this.cargarTiposProducto();
+          this.snackBar.open(response.message || 'Tipo de producto actualizado', 'Cerrar', { duration: 3000 });
+        } else {
+          this.snackBar.open(response.message || 'Error al actualizar tipo de producto', 'Cerrar', {
+            duration: 3500,
+            panelClass: 'snack-error'
           });
         }
       });
     });
   }
+
 
   cambiarVigenciaTipoProducto(tipo: TipoProducto): void {
     const nuevoEstado = tipo.activo === 1 ? 0 : 1;
