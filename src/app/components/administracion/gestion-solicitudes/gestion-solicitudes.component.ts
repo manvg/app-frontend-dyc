@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DatePipe, NgFor } from '@angular/common';
+import { DatePipe, NgFor, NgIf } from '@angular/common';
 import { SolicitudService } from '../../../services/solicitud/solicitud.service';
 import { Solicitud } from '../../../models/solicitud.models';
 import { Router } from '@angular/router';
@@ -21,17 +21,19 @@ interface SolicitudTabla {
   templateUrl: './gestion-solicitudes.component.html',
   styleUrls: ['./gestion-solicitudes.component.scss'],
   standalone: true,
-  imports: [FormsModule, DatePipe, NgFor]
+  imports: [FormsModule, DatePipe, NgFor, NgIf]
 })
 export class GestionSolicitudesComponent implements OnInit {
   solicitudes: SolicitudTabla[] = [];
   solicitudesFiltradas: SolicitudTabla[] = [];
   solicitudSeleccionada?: SolicitudTabla;
-
   filtroSeleccionado: string = '';
   busqueda: string = '';
   loading = false;
   error?: string;
+  paginaActual = 1;
+  tamanoPagina = 10;
+  totalPaginas = 1;
 
   constructor(
     private solicitudService: SolicitudService,
@@ -48,8 +50,11 @@ export class GestionSolicitudesComponent implements OnInit {
 
     this.solicitudService.obtenerTodos().subscribe({
       next: (data: Solicitud[]) => {
-        this.solicitudes = data.map(this.toSolicitudTabla);
-        this.solicitudesFiltradas = [...this.solicitudes];
+        this.solicitudes = data
+          .map(this.toSolicitudTabla)
+          .sort((a, b) => b.idSolicitud - a.idSolicitud);
+
+        this.aplicarFiltros();
         this.loading = false;
       },
       error: () => {
@@ -76,21 +81,44 @@ export class GestionSolicitudesComponent implements OnInit {
 
   aplicarFiltros() {
     let datos = [...this.solicitudes];
+    const texto = this.removeAccents(this.busqueda.trim());
 
-    if (this.busqueda) {
-      const texto = this.busqueda.trim().toLowerCase();
+    if (this.filtroSeleccionado && texto) {
+      switch (this.filtroSeleccionado) {
+        case 'id':
+          datos = datos.filter(s => String(s.idSolicitud).includes(texto));
+          break;
+        case 'tipo':
+          datos = datos.filter(s =>
+            this.removeAccents(s.nombreTipoSolicitud ?? '').includes(texto)
+          );
+          break;
+        case 'producto':
+          datos = datos.filter(s =>
+            this.removeAccents(s.productos ?? '').includes(texto)
+          );
+          break;
+        default:
+          break;
+      }
+    } else if (texto) {
       datos = datos.filter(s =>
         String(s.idSolicitud).includes(texto) ||
-        s.nombreCliente.toLowerCase().includes(texto) ||
-        (s.nombreEstadoSolicitud?.toLowerCase().includes(texto) ?? false) ||
-        (s.nombreTipoSolicitud?.toLowerCase().includes(texto) ?? false) ||
-        (s.nombreServicio?.toLowerCase().includes(texto) ?? false) ||
-        (s.productos?.toLowerCase().includes(texto) ?? false) ||
-        (s.observaciones?.toLowerCase().includes(texto) ?? false)
+        this.removeAccents(s.nombreCliente).includes(texto) ||
+        this.removeAccents(s.nombreEstadoSolicitud ?? '').includes(texto) ||
+        this.removeAccents(s.nombreTipoSolicitud ?? '').includes(texto) ||
+        this.removeAccents(s.nombreServicio ?? '').includes(texto) ||
+        this.removeAccents(s.productos ?? '').includes(texto) ||
+        this.removeAccents(s.observaciones ?? '').includes(texto)
       );
     }
+
     this.solicitudesFiltradas = datos;
+    this.paginaActual = 1;
+    this.actualizarTotalPaginas();
   }
+
+
 
   ordenarPor(campo: keyof SolicitudTabla) {
     this.solicitudesFiltradas.sort((a, b) => {
@@ -135,4 +163,25 @@ export class GestionSolicitudesComponent implements OnInit {
       });
     }
   }
+
+  get solicitudesPaginadas() {
+    if (!this.solicitudesFiltradas) return [];
+    const inicio = (this.paginaActual - 1) * this.tamanoPagina;
+    return this.solicitudesFiltradas.slice(inicio, inicio + this.tamanoPagina);
+  }
+
+  actualizarTotalPaginas() {
+    this.totalPaginas = Math.ceil((this.solicitudesFiltradas?.length || 0) / this.tamanoPagina) || 1;
+    if (this.paginaActual > this.totalPaginas) this.paginaActual = this.totalPaginas;
+  }
+
+  irPagina(pagina: number) {
+    if (pagina < 1 || pagina > this.totalPaginas) return;
+    this.paginaActual = pagina;
+  }
+
+  removeAccents(text: string): string {
+    return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  }
+
 }

@@ -1,11 +1,10 @@
 <div class="gestion-solicitudes-wrapper">
   <h1 class="gestion-solicitudes-title">SOLICITUDES</h1>
 
-  <!-- Barra de filtros y búsqueda -->
   <div class="solicitudes-filtros">
     <div class="filtro-dropdown">
       <label for="filtro">Filtro</label>
-      <select id="filtro" [(ngModel)]="filtroSeleccionado">
+      <select id="filtro" [(ngModel)]="filtroSeleccionado" (change)="aplicarFiltros()">
         <option value="">Todos</option>
         <option value="id">ID</option>
         <option value="tipo">Tipo Solicitud</option>
@@ -18,49 +17,54 @@
       [(ngModel)]="busqueda"
       placeholder="Buscar Solicitud"
       (input)="aplicarFiltros()"
+      aria-label="Buscar Solicitud"
     />
   </div>
 
-  <!-- Tabla de solicitudes -->
-  <div class="solicitudes-table-container">
-    <table class="solicitudes-table">
-      <thead>
-        <tr>
-          <!-- <th>Detalle</th> -->
-          <th (click)="ordenarPor('idSolicitud')">N° Solicitud</th>
-          <th (click)="ordenarPor('nombreCliente')">Cliente</th>
-          <th (click)="ordenarPor('nombreEstadoSolicitud')">Estado</th>
-          <th (click)="ordenarPor('nombreTipoSolicitud')">Tipo Solicitud</th>
-          <th (click)="ordenarPor('nombreServicio')">Servicio</th>
-          <th (click)="ordenarPor('productos')">Productos</th>
-          <th (click)="ordenarPor('fechaCreacion')">Fecha</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let solicitud of solicitudesFiltradas; let i = index" [class.selected]="solicitud === solicitudSeleccionada">
-          <td>{{ solicitud.idSolicitud }}</td>
-          <td>{{ solicitud.nombreCliente }}</td>
-          <td>{{ solicitud.nombreEstadoSolicitud || '--' }}</td>
-          <td>{{ solicitud.nombreTipoSolicitud || '--' }}</td>
-          <td>{{ solicitud.nombreServicio || '--' }}</td>
-          <td>{{ solicitud.productos }}</td>
-          <td>{{ solicitud.fechaCreacion | date: 'dd/MM/yy' }}</td>
-          <!-- <td>{{ solicitud.observaciones || '--' }}</td> -->
-          <td>
-            <button class="btn-detalle" (click)="verDetalle(solicitud)">
-              Ver Detalle
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <div class="solicitudes-table-panel">
+    <div class="solicitudes-table-container">
+      <table class="solicitudes-table">
+        <thead>
+          <tr>
+            <th (click)="ordenarPor('idSolicitud')">N° Solicitud</th>
+            <th (click)="ordenarPor('nombreCliente')">Cliente</th>
+            <th (click)="ordenarPor('nombreEstadoSolicitud')">Estado</th>
+            <th (click)="ordenarPor('nombreTipoSolicitud')">Tipo Solicitud</th>
+            <th (click)="ordenarPor('nombreServicio')">Servicio</th>
+            <th (click)="ordenarPor('productos')">Productos</th>
+            <th (click)="ordenarPor('fechaCreacion')">Fecha</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let solicitud of solicitudesPaginadas; let i = index" [class.selected]="solicitud === solicitudSeleccionada">
+            <td>{{ solicitud.idSolicitud }}</td>
+            <td>{{ solicitud.nombreCliente }}</td>
+            <td>{{ solicitud.nombreEstadoSolicitud || '--' }}</td>
+            <td>{{ solicitud.nombreTipoSolicitud || '--' }}</td>
+            <td>{{ solicitud.nombreServicio || '--' }}</td>
+            <td>{{ solicitud.productos }}</td>
+            <td>{{ solicitud.fechaCreacion | date: 'dd/MM/yy' }}</td>
+            <td>
+              <button class="btn-detalle" (click)="verDetalle(solicitud)">
+                Ver Detalle
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-  <!-- Botones de acción (si quieres mantenerlos globales para la fila seleccionada) -->
-  <!-- <div class="solicitudes-acciones">
-    <button class="btn-secundario" [disabled]="!solicitudSeleccionada" (click)="editarSolicitud()">Editar</button>
-    <button class="btn-secundario" [disabled]="!solicitudSeleccionada" (click)="eliminarSolicitud()">Eliminar</button>
-    <button class="btn-secundario" [disabled]="!solicitudSeleccionada" (click)="cambiarEstado()">Cambiar Estado</button>
-  </div> -->
+    <div class="paginacion-wrapper" *ngIf="totalPaginas > 1">
+      <button (click)="irPagina(paginaActual - 1)" [disabled]="paginaActual === 1">Anterior</button>
+      <ng-container *ngFor="let page of [].constructor(totalPaginas); let p = index">
+        <button
+          [class.active]="paginaActual === (p+1)"
+          (click)="irPagina(p+1)">
+          {{ p + 1 }}
+        </button>
+      </ng-container>
+      <button (click)="irPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas">Siguiente</button>
+    </div>
+  </div>
 </div>

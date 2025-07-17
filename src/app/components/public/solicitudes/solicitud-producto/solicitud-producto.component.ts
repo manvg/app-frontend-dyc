@@ -6,6 +6,7 @@ import { SolicitudService } from '../../../../services/solicitud/solicitud.servi
 import { Producto } from '../../../../models/producto.model';
 import { Solicitud } from '../../../../models/solicitud.models';
 import { ProductosService } from '../../../../services/productos/productos.service';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 @Component({
   selector: 'app-solicitud-producto',
@@ -20,16 +21,17 @@ export class SolicitudProductoComponent implements OnInit {
   enviado = false;
   enviando = false;
   errorEnvio: string | null = null;
-
   idTipoSolicitud = 2;//Tipo solicitud: PRODUCTO
   idEstadoSolicitud = 1;  //Estado solicitud: RECIBIDA
   idServicio: number | null = null;
+  usuarioActual: string = '';
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private productosService: ProductosService,
-    private solicitudService: SolicitudService
+    private solicitudService: SolicitudService,
+    private oidcSecurityService: OidcSecurityService
   ) {
     this.form = this.fb.group({
       nombre: ['', Validators.required],
@@ -49,6 +51,9 @@ export class SolicitudProductoComponent implements OnInit {
         error: () => {
           this.errorEnvio = 'No se pudo cargar la información del producto.';
         }
+      });
+      this.oidcSecurityService.userData$.subscribe(userData => {
+        this.usuarioActual = userData?.userData?.email || userData?.userData?.name || 'usuario_no_identificado';
       });
     } else {
       this.errorEnvio = 'Producto no válido en la URL.';
@@ -71,6 +76,7 @@ export class SolicitudProductoComponent implements OnInit {
       correoCliente: this.form.value.email,
       telefonoCliente: this.form.value.telefono,
       observaciones: this.form.value.descripcion,
+      usuarioCreacion: this.usuarioActual,
       productos: [
         {
           idProducto: this.producto.idProducto,

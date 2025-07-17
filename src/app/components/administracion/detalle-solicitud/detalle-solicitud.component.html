@@ -1,87 +1,112 @@
 <div class="detalle-solicitud-wrapper">
-  <div *ngIf="mensajeExito" class="alert-exito">{{ mensajeExito }}</div>
-  <div *ngIf="mensajeError" class="alert-error">{{ mensajeError }}</div>
-
-  <div class="volver-right">
-    <button class="btn-volver" (click)="volver()">← Volver</button>
-  </div>
-  <h2 class="detalle-solicitud-title">Detalle de Solicitud</h2>
-
-  <div class="detalle-solicitud-datos">
-    <div class="col">
-      <div><b>Cliente:</b> {{ solicitud?.nombreCliente }}</div>
-      <div><b>Teléfono:</b> {{ solicitud?.telefonoCliente }}</div>
-      <div><b>Tipo:</b> {{ solicitud?.nombreTipoSolicitud }}</div>
-      <div><b>Observaciones:</b> {{ solicitud?.observaciones }}</div>
+  <div class="card card-detalle-solicitud">
+    <div class="volver-right">
+      <button class="btn-volver" (click)="volver()">← Volver</button>
     </div>
-    <div class="col">
-      <div><b>Correo:</b> {{ solicitud?.correoCliente }}</div>
-      <div><b>Fecha creación:</b> {{ solicitud?.fechaCreacion | date:'short' }}</div>
-      <div><b>Estado:</b> {{ solicitud?.nombreEstadoSolicitud }}</div>
-      <div><b>Servicios:</b> {{ solicitud?.nombreServicio || '--' }}</div>
+    <h2 class="detalle-solicitud-title">Detalle de Solicitud</h2>
+    <div class="detalle-solicitud-datos">
+      <div class="col">
+        <div><b>Cliente:</b> {{ solicitud?.nombreCliente }}</div>
+        <div><b>Teléfono:</b> {{ solicitud?.telefonoCliente }}</div>
+        <div><b>Tipo:</b> {{ solicitud?.nombreTipoSolicitud }}</div>
+        <div><b>Observaciones:</b> {{ solicitud?.observaciones }}</div>
+      </div>
+      <div class="col">
+        <div><b>Correo:</b> {{ solicitud?.correoCliente }}</div>
+        <div><b>Fecha creación:</b> {{ solicitud?.fechaCreacion | date:'short' }}</div>
+        <div><b>Estado:</b> {{ solicitud?.nombreEstadoSolicitud }}</div>
+      </div>
+    </div>
+</div>
+<!-- Detalle producto -->
+<div *ngIf="esTipoProducto(solicitud?.nombreTipoSolicitud)" class="card card-detalle-producto">
+  <h3>Detalle del producto solicitado</h3>
+  <div *ngIf="detallesProductos.length > 0; else sinProductos">
+    <div class="card-producto" *ngFor="let prod of detallesProductos">
+      <div class="card-producto__img-wrapper" *ngIf="prod.urlImagen">
+        <img [src]="prod.urlImagen" class="img-prod" alt="Imagen del producto"/>
+      </div>
+      <div class="prod-info">
+        <div><b>Nombre:</b> {{ prod.nombre }}</div>
+        <div *ngIf="prod.descripcion"><b>Descripción:</b> {{ prod.descripcion }}</div>
+        <div *ngIf="prod.nombreMaterial"><b>Material:</b> {{ prod.nombreMaterial }}</div>
+        <div *ngIf="prod.medidas"><b>Medidas:</b> {{ prod.medidas }}</div>
+        <div *ngIf="prod.precio != null"><b>Precio:</b> {{ prod.precio | currency:'$' }}</div>
+        <div><b>Cantidad:</b> {{ prod.cantidad }}</div>
+      </div>
     </div>
   </div>
+  <ng-template #sinProductos>
+    <span>No hay productos asociados a esta solicitud.</span>
+  </ng-template>
+</div>
 
-  <!-- MOSTRAR PRODUCTOS ASOCIADOS SI EXISTEN -->
-  <ng-container [ngSwitch]="solicitud?.nombreTipoSolicitud">
-    <div *ngSwitchCase="'PRODUCTO'">
-      <b>Productos:</b>
-      <ng-container *ngIf="productosAsociados.length; else sinProductos">
-        <ul class="lista-productos">
-          <li *ngFor="let p of productosAsociados">{{ p }}</li>
-        </ul>
-      </ng-container>
-      <ng-template #sinProductos>
-        <span>--</span>
-      </ng-template>
+<!-- Detalle servicio -->
+<div *ngIf="esTipoServicio(solicitud?.nombreTipoSolicitud)" class="card card-detalle-servicio">
+  <h3>Servicio Solicitado</h3>
+  <div *ngIf="solicitud?.idServicio; else sinServicio">
+    <div class="servicio-info">
+      <div><b>Servicio:</b> {{ solicitud?.nombreServicio }}</div>
+      <div *ngIf="solicitud?.servicio?.descripcion"><b>Descripción:</b> {{ solicitud?.servicio?.descripcion }}</div>
+      <div *ngIf="solicitud?.servicio?.precio"><b>Medidas:</b> {{ solicitud?.servicio?.precio }}</div>
+      <div *ngIf="solicitud?.servicio?.urlImagen"><b>Medidas:</b> {{ solicitud?.servicio?.urlImagen }}</div>
     </div>
-    <div *ngSwitchCase="'SERVICIO'"><b>Servicios:</b> <!-- Lista servicios --></div>
-    <div *ngSwitchCase="'PERSONALIZADA'"><b>Detalle personalizado:</b> <!-- Info especial --></div>
-  </ng-container>
-
-  <hr>
-
-  <h3>Cambiar Estado</h3>
-  <div class="gestion-estado">
-    <select [(ngModel)]="estadoNuevo" [disabled]="!solicitud">
-      <option *ngFor="let estado of estados" [value]="estado.idEstadoSolicitud">
-        {{ estado.nombreEstado }}
-      </option>
-    </select>
-    <input [(ngModel)]="comentario" type="text" maxlength="500" placeholder="Comentario para la bitácora (obligatorio)" [disabled]="!solicitud">
-    <button
-      (click)="actualizarEstado()"
-      [disabled]="loading || !comentario.trim() || !estadoNuevo || !solicitud || estadoNuevo === solicitud?.idEstadoSolicitud">
-      Cambiar Estado
-    </button>
   </div>
+  <ng-template #sinServicio>
+    <span>No hay detalle de servicio en esta solicitud.</span>
+  </ng-template>
+</div>
 
-  <hr>
+<!-- Detalle solicitud personalizada -->
+<div *ngIf="esTipoPersonalizada(solicitud?.nombreTipoSolicitud)" class="card card-detalle-personalizada">
+  <h3>Pedido Personalizado</h3>
+  <div *ngIf="solicitud?.imagenes && solicitud?.imagenes?.length">
+    <div class="imagenes-personalizadas">
+      <div class="img-personalizada" *ngFor="let img of solicitud?.imagenes">
+        <img [src]="img.urlImagen" alt="Imagen personalizada">
+        <div class="desc-img">{{ img.descripcion }}</div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!solicitud?.imagenes || solicitud?.imagenes?.length === 0">
+    <span>No se adjuntó imagen personalizada.</span>
+  </div>
+</div>
 
+<!-- Bitácora -->
+<div class="card card-bitacora">
   <h3>Bitácora de Solicitud</h3>
-
   <button class="btn-agregar-bitacora" (click)="agregandoBitacora = !agregandoBitacora" [disabled]="!solicitud">
     {{ agregandoBitacora ? 'Cancelar' : 'Agregar Bitácora' }}
   </button>
-
   <div *ngIf="agregandoBitacora" class="form-bitacora">
+    <div *ngIf="mensajeError" class="alert-error-bitacora">
+      {{ mensajeError }}
+    </div>
     <select [(ngModel)]="nuevoEstadoBitacora" [disabled]="!solicitud">
       <option [ngValue]="null" disabled selected>Selecciona estado</option>
       <option *ngFor="let estado of estados" [value]="estado.idEstadoSolicitud">
         {{ estado.nombreEstado }}
       </option>
     </select>
-    <input [(ngModel)]="nuevaDescripcionBitacora" type="text" maxlength="500" placeholder="Descripción (obligatorio)" [disabled]="!solicitud">
-    <button (click)="agregarBitacora()" [disabled]="!solicitud">Guardar Bitácora</button>
+    <textarea
+      [(ngModel)]="nuevaDescripcionBitacora"
+      maxlength="500"
+      placeholder="Descripción (obligatorio)"
+      [disabled]="!solicitud"
+      class="input-descripcion-bitacora"
+      rows="2"
+      style="min-width: 320px; width: 350px; max-width: 100%; resize: vertical;"
+      ></textarea>
+      <button type="button" (click)="agregarBitacora()" [disabled]="!solicitud">Guardar Bitácora</button>
   </div>
-
   <table class="tabla-bitacora">
     <thead>
       <tr>
         <th>Fecha</th>
         <th>Estado</th>
         <th>Descripción</th>
-        <th>Usuario</th>
+        <th>Usuario creación</th>
       </tr>
     </thead>
     <tbody>
@@ -96,13 +121,5 @@
       </tr>
     </tbody>
   </table>
-
-  <div *ngIf="loading" class="loading-overlay">
-    <div class="spinner"></div>
-    <span>Cargando...</span>
-  </div>
 </div>
-
-<div *ngIf="!solicitud && !loading">
-  <p>Cargando datos de la solicitud...</p>
 </div>

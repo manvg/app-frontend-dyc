@@ -12,12 +12,12 @@ export interface Solicitud {
   nombreEstadoSolicitud?: string;
   idServicio?: number | null;
   nombreServicio?: string | null;
-
   fechaCreacion?: string;
   nombreCliente: string;
   correoCliente: string;
   telefonoCliente?: string;
   observaciones?: string;
+  usuarioCreacion?: String;
 
   productos?: SolicitudProducto[];
   imagenes?: SolicitudImagen[];

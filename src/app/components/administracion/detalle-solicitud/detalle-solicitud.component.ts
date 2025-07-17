@@ -6,7 +6,11 @@ import { Solicitud } from '../../../models/solicitud.models';
 import { SolicitudService } from '../../../services/solicitud/solicitud.service';
 import { SolicitudBitacora } from '../../../models/solicitud-bitacora';
 import { SolicitudBitacoraService } from '../../../services/bitacora/solicitud-bitacora.service';
+import { SolicitudImagen } from '../../../models/solicitud-imagen.model';
 import { EstadoSolicitud } from '../../../models/estado-solicitud.models';
+import { ProductosService } from '../../../services/productos/productos.service';
+import { Producto } from '../../../models/producto.model';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 @Component({
   selector: 'app-detalle-solicitud',
@@ -19,40 +23,51 @@ export class DetalleSolicitudComponent implements OnInit {
   solicitud: Solicitud | null = null;
   bitacoras: SolicitudBitacora[] = [];
   estados: EstadoSolicitud[] = [];
-
-  estadoNuevo: number | null = null;
-  comentario: string = '';
-  loading = false;
-
+  detallesProductos: Producto[] = [];
+  solicitudImagen: SolicitudImagen | null = null;
   agregandoBitacora = false;
   nuevoEstadoBitacora: number | null = null;
   nuevaDescripcionBitacora: string = '';
-
+  loading = false;
   mensajeExito?: string;
   mensajeError?: string;
+  usuarioActual: string = '';
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private solicitudService: SolicitudService,
-    private bitacoraService: SolicitudBitacoraService
+    private bitacoraService: SolicitudBitacoraService,
+    private productoService: ProductosService,
+    private oidcSecurityService: OidcSecurityService
   ) {}
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (id) {
-      this.cargarDetalle(id);
-      this.cargarBitacora(id);
-      this.cargarEstados();
+      this.loading = true;
+      this.solicitudService.obtenerPorId(id).subscribe({
+        next: (resp) => {
+          this.solicitud = resp;
+          this.loading = false;
+          this.cargarDetallesProductos();
+          this.cargarBitacora(id);
+          this.cargarEstados();
+          this.oidcSecurityService.userData$.subscribe(userData => {
+            this.usuarioActual = userData?.userData?.email || userData?.userData?.name || 'usuario_no_identificado';
+          });
+        },
+        error: () => { this.loading = false; }
+      });
     }
   }
+
 
   cargarDetalle(id: number) {
     this.loading = true;
     this.solicitudService.obtenerPorId(id).subscribe({
       next: (resp) => {
         this.solicitud = resp;
-        this.estadoNuevo = resp.idEstadoSolicitud;
         this.loading = false;
       },
       error: () => { this.loading = false; }
@@ -71,46 +86,36 @@ export class DetalleSolicitudComponent implements OnInit {
     });
   }
 
-  actualizarEstado() {
-    if (
-      !this.solicitud ||
-      typeof this.solicitud.idSolicitud !== 'number' ||
-      typeof this.estadoNuevo !== 'number' ||
-      this.comentario.trim() === '' ||
-      this.estadoNuevo === this.solicitud.idEstadoSolicitud
-    ) {
-      return;
-    }
-
-    this.loading = true;
-    const solicitudActualizada: Solicitud = {
-      ...this.solicitud,
-      idEstadoSolicitud: this.estadoNuevo
-    };
-
-    this.solicitudService.actualizar(this.solicitud.idSolicitud, solicitudActualizada)
-      .subscribe({
-        next: () => {
-          this.cargarDetalle(this.solicitud!.idSolicitud!);
-          this.cargarBitacora(this.solicitud!.idSolicitud!);
-          this.comentario = '';
-          this.loading = false;
-          this.showExito('Estado actualizado con éxito');
-        },
-        error: () => {
-          this.loading = false;
-          this.showError('Error al actualizar el estado');
+  cargarDetallesProductos() {
+    this.detallesProductos = [];
+    if (this.solicitud && Array.isArray(this.solicitud.productos) && this.solicitud.productos.length > 0)
+    {
+      this.solicitud.productos.forEach(prod => {
+        if (prod.idProducto) {
+          this.productoService.obtenerPorId(prod.idProducto).subscribe({
+            next: (detalle) => {
+              const productoSolicitud = this.solicitud!.productos!.find(p => p.idProducto === prod.idProducto);
+              this.detallesProductos.push({
+                ...detalle,
+                cantidad: productoSolicitud ? productoSolicitud.cantidad : 0
+              });
+            }
+          });
         }
       });
+    }
   }
 
   agregarBitacora() {
-    if (
-      !this.solicitud ||
-      typeof this.solicitud.idSolicitud !== 'number' ||
-      typeof this.nuevoEstadoBitacora !== 'number' ||
-      this.nuevaDescripcionBitacora.trim() === ''
-    ) {
+    if(!this.solicitud){
+      return;
+
+    }
+    if  (typeof this.solicitud.idSolicitud !== 'number'){
+      return;
+    }
+    if (!this.solicitud || typeof this.solicitud.idSolicitud !== 'number' || typeof this.nuevoEstadoBitacora !== 'number' || this.nuevaDescripcionBitacora.trim() === '')
+    {
       this.showError('Completa todos los campos para agregar bitácora');
       return;
     }
@@ -122,12 +127,13 @@ export class DetalleSolicitudComponent implements OnInit {
       nombreEstado: '',
       descripcion: this.nuevaDescripcionBitacora,
       fechaCreacion: '',
-      usuarioCreacion: 'usuario_actual'
+      usuarioCreacion: this.usuarioActual
     };
 
     this.loading = true;
     this.bitacoraService.crear(nuevaBitacora).subscribe({
       next: () => {
+        this.cargarDetalle(this.solicitud!.idSolicitud!);
         this.cargarBitacora(this.solicitud!.idSolicitud!);
         this.nuevoEstadoBitacora = null;
         this.nuevaDescripcionBitacora = '';
@@ -155,10 +161,22 @@ export class DetalleSolicitudComponent implements OnInit {
     setTimeout(() => this.mensajeError = undefined, 3500);
   }
 
-  // --- NUEVO: Getter para productos asociados ---
   get productosAsociados(): string[] {
     return Array.isArray(this.solicitud?.productos)
       ? this.solicitud!.productos.map(p => p.nombreProducto || '').filter(n => n)
       : [];
   }
+
+  esTipoProducto(tipo?: string | null): boolean {
+    return tipo === 'Producto' || tipo === 'Catálogo';
+  }
+
+  esTipoServicio(tipo?: string | null): boolean {
+    return tipo === 'Servicio';
+  }
+
+  esTipoPersonalizada(tipo?: string | null): boolean {
+    return tipo === 'Personalizada';
+  }
+
 }

@@ -10,4 +10,5 @@ export interface Producto {
   activo: number;
   idTipoProducto: number | null;
   nombreTipoProducto?: string;
+  cantidad: number | null;
 }
