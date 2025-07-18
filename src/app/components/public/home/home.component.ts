@@ -5,7 +5,7 @@ import { ProductoDestacadoComponent } from './producto-destacado/producto-destac
 import { PedidoPersonalizadoComponent } from './pedido-personalizado/pedido-personalizado.component';
 import { Servicio } from '../../../models/servicio.model';
 import { Producto } from '../../../models/producto.model';
-import { ServicioService } from '../../../services/servicio/servicio.service'; // Ajusta ruta si es necesario
+import { ServicioService } from '../../../services/servicio/servicio.service';
 import { ProductosService } from '../../../services/productos/productos.service';
 
 type Orientacion = 'izquierda' | 'derecha';
