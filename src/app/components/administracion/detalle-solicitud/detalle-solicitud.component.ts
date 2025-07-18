@@ -107,14 +107,7 @@ export class DetalleSolicitudComponent implements OnInit {
   }
 
   agregarBitacora() {
-    if(!this.solicitud){
-      return;
-
-    }
-    if  (typeof this.solicitud.idSolicitud !== 'number'){
-      return;
-    }
-    if (!this.solicitud || typeof this.solicitud.idSolicitud !== 'number' || typeof this.nuevoEstadoBitacora !== 'number' || this.nuevaDescripcionBitacora.trim() === '')
+    if (!this.solicitud || typeof this.solicitud.idSolicitud !== 'number' || this.nuevoEstadoBitacora === null || this.nuevaDescripcionBitacora.trim() === '')
     {
       this.showError('Completa todos los campos para agregar bitácora');
       return;
@@ -123,7 +116,7 @@ export class DetalleSolicitudComponent implements OnInit {
     const nuevaBitacora: SolicitudBitacora = {
       idSolicitudBitacora: 0,
       idSolicitud: this.solicitud.idSolicitud,
-      idEstadoSolicitud: this.nuevoEstadoBitacora,
+      idEstadoSolicitud: this.nuevoEstadoBitacora!,
       nombreEstado: '',
       descripcion: this.nuevaDescripcionBitacora,
       fechaCreacion: '',
