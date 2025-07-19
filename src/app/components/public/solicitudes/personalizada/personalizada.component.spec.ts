@@ -88,7 +88,6 @@ describe('PersonalizadaComponent', () => {
       descripcionArchivo: 'Imagen de ejemplo'
     });
 
-    // Agrega este log para ver el estado del form en la consola de Karma
     console.log('¿Form válido?', component.form.valid);
 
     const file = new File(['contenido'], 'archivo.jpg', { type: 'image/jpeg' });
@@ -101,14 +100,11 @@ describe('PersonalizadaComponent', () => {
 
     component.enviarSolicitud();
 
-    // Avanza el flujo asíncrono
     tick();
 
-    // Ahora sí, tras tick(), debería haberse llamado crear
     expect(imageServiceSpy.uploadImage).toHaveBeenCalled();
     expect(solicitudServiceSpy.crear).toHaveBeenCalled();
 
-    // Simula respuesta exitosa para limpiar "enviando"
     crearSubject.next({} as Solicitud);
     crearSubject.complete();
     tick();
