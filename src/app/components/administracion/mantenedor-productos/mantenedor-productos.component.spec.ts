@@ -1,42 +1,41 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { MantenedorProductosComponent } from './mantenedor-productos.component';
 import { ProductosService } from '../../../services/productos/productos.service';
-import { of } from 'rxjs';
-import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { of, throwError } from 'rxjs';
 import { Producto } from '../../../models/producto.model';
-import { CommonModule } from '@angular/common';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { FormularioProductoComponent } from '../formulario-producto/formulario-producto.component';
 
 describe('MantenedorProductosComponent', () => {
   let component: MantenedorProductosComponent;
   let fixture: ComponentFixture<MantenedorProductosComponent>;
   let mockProductosService: jasmine.SpyObj<ProductosService>;
-  let mockRouter: jasmine.SpyObj<Router>;
+  let mockDialog: jasmine.SpyObj<MatDialog>;
+  let mockSnackBar: jasmine.SpyObj<MatSnackBar>;
 
-  const productosMock: Producto[] = [
-    {
-      idProducto: 1,
-      nombre: 'Producto 1',
-      descripcion: 'Desc',
-      material: 'Madera',
-      medidas: '10x10',
-      precio: 5000,
-      urlImagen: '',
-      activo: 1,
-      idTipoProducto: 1
-    }
+  const mockProductos: Producto[] = [
+    { idProducto: 1, nombre: 'Producto 1', descripcion: '', idMaterial: 1, nombreMaterial: '', medidas: '', precio: 1000, urlImagen: '', activo: 1, idTipoProducto: 1, nombreTipoProducto: 'Tipo A', cantidad: 10 },
+    { idProducto: 2, nombre: 'Producto 2', descripcion: '', idMaterial: 1, nombreMaterial: '', medidas: '', precio: 2000, urlImagen: '', activo: 1, idTipoProducto: 2, nombreTipoProducto: 'Tipo B', cantidad: 5 },
   ];
 
   beforeEach(async () => {
-    mockProductosService = jasmine.createSpyObj('ProductosService', [
-      'obtenerTodos', 'desactivar', 'eliminar'
+    mockProductosService = jasmine.createSpyObj<ProductosService>('ProductosService', [
+      'obtenerTodos',
+      'obtenerPorId',
+      'cambiarEstado',
+      'eliminar'
     ]);
-    mockRouter = jasmine.createSpyObj('Router', ['navigate']);
+    mockDialog = jasmine.createSpyObj<MatDialog>('MatDialog', ['open']);
+    mockSnackBar = jasmine.createSpyObj<MatSnackBar>('MatSnackBar', ['open']);
 
     await TestBed.configureTestingModule({
-      imports: [MantenedorProductosComponent, CommonModule],
+      imports: [MantenedorProductosComponent],
       providers: [
         { provide: ProductosService, useValue: mockProductosService },
-        { provide: Router, useValue: mockRouter }
+        { provide: MatDialog, useValue: mockDialog },
+        { provide: MatSnackBar, useValue: mockSnackBar }
       ]
     }).compileComponents();
 
@@ -44,42 +43,59 @@ describe('MantenedorProductosComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('debe crear el componente correctamente', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('debe cargar productos al inicializar', () => {
-    mockProductosService.obtenerTodos.and.returnValue(of(productosMock));
+  it('debe cargar productos correctamente', () => {
+    mockProductosService.obtenerTodos.and.returnValue(of(mockProductos));
     fixture.detectChanges();
 
-    expect(component.productos.length).toBe(1);
-    expect(component.productos[0].nombre).toBe('Producto 1');
-    expect(mockProductosService.obtenerTodos).toHaveBeenCalled();
+    expect(component.productos?.length).toBe(2);
   });
 
-  it('debe redirigir al formulario de nuevo producto', () => {
-    component.nuevoProducto();
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/productos/nuevo']);
+  it('debe manejar error al cargar productos', () => {
+    mockProductosService.obtenerTodos.and.returnValue(throwError(() => new Error('Error de red')));
+    fixture.detectChanges();
+
+    expect(component.productos).toEqual([]);
+    expect(mockSnackBar.open).toHaveBeenCalledWith('Error cargando productos', 'Cerrar', { duration: 3000, panelClass: 'snack-error' });
   });
 
-  it('debe redirigir al formulario de edición de producto', () => {
-    component.editarProducto(99);
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/productos/editar', 99]);
-  });
+  it('debe cambiar vigencia del producto', fakeAsync(() => {
+    const producto = { ...mockProductos[0] };
+    const dialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['afterClosed']);
+    dialogRefSpy.afterClosed.and.returnValue(of(true));
+    mockDialog.open.and.returnValue(dialogRefSpy);
+    mockProductosService.cambiarEstado.and.returnValue(of(undefined));
+    mockProductosService.obtenerTodos.and.returnValue(of(mockProductos));
 
-  // it('debe desactivar un producto', () => {
-  //   spyOn(window, 'confirm').and.returnValue(true);
-  //   mockProductosService.desactivar.and.returnValue(of());
+    component.cambiarVigenciaProducto(producto);
+    tick();
 
-  //   component.desactivarProducto(1);
-  //   expect(mockProductosService.desactivar).toHaveBeenCalledWith(1);
-  // });
+    expect(mockProductosService.cambiarEstado).toHaveBeenCalledWith(producto.idProducto, 0);
+    expect(mockSnackBar.open).toHaveBeenCalled();
+  }));
 
-  it('debe eliminar un producto si se confirma', () => {
-    spyOn(window, 'confirm').and.returnValue(true);
-    mockProductosService.eliminar.and.returnValue(of());
+  it('debe eliminar producto si se confirma', fakeAsync(() => {
+    const dialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['afterClosed']);
+    dialogRefSpy.afterClosed.and.returnValue(of(true));
+    mockDialog.open.and.returnValue(dialogRefSpy);
+
+    mockProductosService.eliminar.and.returnValue(of(undefined));
+    mockProductosService.obtenerTodos.and.returnValue(of(mockProductos));
 
     component.eliminarProducto(1);
+    tick();
+
     expect(mockProductosService.eliminar).toHaveBeenCalledWith(1);
+    expect(mockSnackBar.open).toHaveBeenCalledWith('Producto eliminado', 'Cerrar', { duration: 3000 });
+  }));
+
+  it('no debe eliminar producto si se cancela confirmación', () => {
+    const dialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['afterClosed']);
+    dialogRefSpy.afterClosed.and.returnValue(of(false));
+    mockDialog.open.and.returnValue(dialogRefSpy);
+
+    component.eliminarProducto(1);
+
+    expect(mockProductosService.eliminar).not.toHaveBeenCalled();
   });
+
 });

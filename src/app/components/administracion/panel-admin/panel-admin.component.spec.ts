@@ -5,16 +5,14 @@ import { Router } from '@angular/router';
 describe('PanelAdminComponent', () => {
   let component: PanelAdminComponent;
   let fixture: ComponentFixture<PanelAdminComponent>;
-  let routerSpy: jasmine.SpyObj<Router>;
+  let mockRouter: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
-    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    mockRouter = jasmine.createSpyObj<Router>('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
       imports: [PanelAdminComponent],
-      providers: [
-        { provide: Router, useValue: routerSpy }
-      ]
+      providers: [{ provide: Router, useValue: mockRouter }]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PanelAdminComponent);
@@ -26,36 +24,33 @@ describe('PanelAdminComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('debe mostrar el nombre del usuario', () => {
-    component.usuario = 'Carlos';
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h2')?.textContent).toContain('Carlos');
+  it('debe navegar a /mantenedor-productos', () => {
+    component.irAMantenedorProductos();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/mantenedor-productos']);
   });
 
-  it('debe navegar a /mantenedor-productos al hacer click', () => {
-    const card = fixture.nativeElement.querySelectorAll('.panel-admin-card')[0];
-    card.click();
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/mantenedor-productos']);
+  it('debe navegar a /mantenedor-tipo-producto', () => {
+    component.irAMantenedorTipos();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/mantenedor-tipo-producto']);
   });
 
-  it('debe navegar a /mantenedor-tipos-productos al hacer click', () => {
-    const card = fixture.nativeElement.querySelectorAll('.panel-admin-card')[1];
-    card.click();
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/mantenedor-tipos-productos']);
+  it('debe navegar a /visualizador-solicitudes', () => {
+    component.irAVisualizadorSolicitudes();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/visualizador-solicitudes']);
   });
 
-  it('debe navegar a /visualizador-solicitudes al hacer click', () => {
-    const card = fixture.nativeElement.querySelectorAll('.panel-admin-card')[2];
-    card.click();
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/visualizador-solicitudes']);
+  it('debe navegar a /mantenedor-materiales', () => {
+    component.irAMantenedorMateriales();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/mantenedor-materiales']);
   });
 
-  it('debe redirigir al login al hacer logout', () => {
-    const hrefSpy = spyOnProperty(window.location, 'href', 'set');
-    const logoutBtn = fixture.nativeElement.querySelector('.logout-btn');
-    logoutBtn.click();
-    expect(hrefSpy).toHaveBeenCalledWith('/login');
+  it('debe navegar a /gestion-solicitudes', () => {
+    component.irAGestionSolicitudes();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/gestion-solicitudes']);
   });
 
+  it('debe navegar a /mantenedor-servicios', () => {
+    component.irAMantenedorServicios();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/mantenedor-servicios']);
+  });
 });

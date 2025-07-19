@@ -72,7 +72,7 @@ export class MantenedorTipoProductoComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((response?: ResponseModel) => {
-      console.log('Response del formulario:', response); // Debug, puedes quitarlo luego
+      console.log('Response del formulario:', response);
       if (!response) return;
 
       if (response.status) {

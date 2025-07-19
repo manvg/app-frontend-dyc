@@ -1,29 +1,33 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { RouterOutlet } from '@angular/router';
+import { NavbarComponent } from './shared/navbar/navbar.component';
+import { FooterComponent } from './shared/footer/footer.component';
+import { NgIf, AsyncPipe } from '@angular/common';
 
 describe('AppComponent', () => {
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent],
+      imports: [AppComponent, RouterOutlet, NavbarComponent, FooterComponent, NgIf, AsyncPipe]
     }).compileComponents();
-  });
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
-
-  // it(`should have the 'app-frontend-dyc' title`, () => {
-  //   const fixture = TestBed.createComponent(AppComponent);
-  //   const app = fixture.componentInstance;
-  //   expect(app.title).toEqual('app-frontend-dyc');
-  // });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
     fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, app-frontend-dyc');
+  });
+
+  it('debe crear el componente', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('debe tener isAuthenticated en false por defecto', () => {
+    expect(component.isAuthenticated).toBeFalse();
+  });
+
+  it('debe tener definida la propiedad userData$', () => {
+    expect(component.userData$).toBeDefined();
   });
 });
