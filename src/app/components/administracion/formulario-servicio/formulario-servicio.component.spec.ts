@@ -52,58 +52,73 @@ describe('FormularioServicioComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // it('debe cerrar el diálogo al cancelar', () => {
-  //   component.cancelar();
-  //   expect(mockDialogRef.close).toHaveBeenCalledWith(null);
-  // });
+  it('debe cerrar el diálogo al cancelar', () => {
+    component.cancelar();
+    expect(mockDialogRef.close).toHaveBeenCalledWith(null);
+  });
 
-  // it('debe guardar un nuevo servicio', fakeAsync(() => {
-  //   component.servicio = {
-  //     idServicio: 0,
-  //     nombre: 'Nuevo Servicio',
-  //     descripcion: 'Servicio de prueba',
-  //     precio: 10000,
-  //     urlImagen: '',
-  //     activo: 1
-  //   };
+  it('debe guardar un nuevo servicio', fakeAsync(() => {
+    component.servicio = {
+      idServicio: 0,
+      nombre: 'Nuevo Servicio',
+      descripcion: 'Servicio de prueba',
+      precio: 10000,
+      urlImagen: '',
+      activo: 1
+    };
 
-  //   component.imagenFile = new File([''], 'servicio.jpg');
+    component.imagenFile = new File([''], 'servicio.jpg');
 
-  //   const expectedResponse = {
-  //     status: true,
-  //     message: 'Servicio creado exitosamente'
-  //   };
+    const expectedResponse = {
+      status: true,
+      message: 'Servicio creado exitosamente'
+    };
 
-  //   component.guardar();
-  //   tick();
+    component.guardar();
+    tick();
 
-  //   expect(mockImageService.uploadImage).toHaveBeenCalled();
-  //   expect(mockServicioService.crear).toHaveBeenCalled();
-  //   expect(mockDialogRef.close).toHaveBeenCalledWith(expectedResponse);
-  // }));
+    expect(mockImageService.uploadImage).toHaveBeenCalled();
+    expect(mockServicioService.crear).toHaveBeenCalled();
+    expect(mockDialogRef.close).toHaveBeenCalledWith(expectedResponse);
+  }));
 
-  // it('debe mostrar error si ocurre un fallo al guardar', fakeAsync(() => {
-  //   mockServicioService.crear.and.returnValue(throwError(() => ({
-  //     error: { message: 'Error desde backend' }
-  //   })));
+  it('debe guardar un nuevo servicio', fakeAsync(() => {
+    component.servicio = {
+      idServicio: 0,
+      nombre: 'Nuevo Servicio',
+      descripcion: 'Descripción del nuevo servicio',
+      precio: 15000,
+      urlImagen: '',
+      activo: 1
+    };
 
-  //   component.servicio.idServicio = 0;
-  //   component.guardar();
-  //   tick();
+    component.imagenFile = new File([''], 'servicio.jpg');
 
-  //   expect(component.mensajeError).toBe('Error desde backend');
-  // }));
+    mockImageService.uploadImage.and.returnValue(of('https://mock.url/servicio.jpg'));
+    mockServicioService.crear.and.returnValue(of({ ...component.servicio, idServicio: 1 }));
 
-  // it('debe rechazar imágenes mayores al límite de tamaño', () => {
-  //   const file = new File([new ArrayBuffer(4 * 1024 * 1024)], 'grande.jpg'); // 4MB
-  //   const event = {
-  //     target: { files: [file] }
-  //   } as unknown as Event;
+    const expectedResponse = {
+      status: true,
+      message: 'Servicio creado exitosamente'
+    };
 
-  //   component.onImagenSeleccionada(event);
+    component.guardar();
+    tick();
 
-  //   expect(component.mensajeError).toContain('supera el límite');
-  //   expect(component.imagenPreview).toBeNull();
-  //   expect(component.imagenFile).toBeNull();
-  // });
+    expect(mockDialogRef.close).toHaveBeenCalledWith(expectedResponse);
+  }));
+
+
+  it('debe rechazar imágenes mayores al límite de tamaño', () => {
+    const file = new File([new ArrayBuffer(4 * 1024 * 1024)], 'grande.jpg'); // 4MB
+    const event = {
+      target: { files: [file] }
+    } as unknown as Event;
+
+    component.onImagenSeleccionada(event);
+
+    expect(component.mensajeError).toContain('supera el límite');
+    expect(component.imagenPreview).toBeNull();
+    expect(component.imagenFile).toBeNull();
+  });
 });
