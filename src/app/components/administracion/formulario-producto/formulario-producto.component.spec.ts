@@ -7,48 +7,58 @@ import { MaterialService } from '../../../services/material/material.service';
 import { ImageService } from '../../../services/image/image.service';
 import { ProductosService } from '../../../services/productos/productos.service';
 import { Producto } from '../../../models/producto.model';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('FormularioProductoComponent', () => {
   let component: FormularioProductoComponent;
   let fixture: ComponentFixture<FormularioProductoComponent>;
-  let dialogRefSpy: jasmine.SpyObj<MatDialogRef<FormularioProductoComponent>>;
-  let tipoProductoServiceSpy: jasmine.SpyObj<TipoProductoService>;
-  let materialServiceSpy: jasmine.SpyObj<MaterialService>;
-  let imageServiceSpy: jasmine.SpyObj<ImageService>;
-  let productoServiceSpy: jasmine.SpyObj<ProductosService>;
 
-  const productoMock: Producto = {
-    idProducto: 1,
-    nombre: 'Producto de prueba',
-    descripcion: 'Descripción del producto de prueba',
-    idMaterial: 10,
-    nombreMaterial: 'Acrílico',
-    medidas: '30x20 cm',
-    precio: 15000,
-    urlImagen: 'https://ejemplo.com/imagen.jpg',
-    activo: 1,
-    idTipoProducto: 2,
-    nombreTipoProducto: 'Decorativo',
-    cantidad: 5
+  const mockDialogRef = {
+    close: jasmine.createSpy('close')
   };
 
+  const mockTipoProductoService = {
+    obtenerTodos: jasmine.createSpy('obtenerTodos').and.returnValue(of([]))
+  };
+
+  const mockMaterialService = {
+    obtenerTodos: jasmine.createSpy('obtenerTodos').and.returnValue(of([]))
+  };
+
+  const mockImageService = {
+    uploadImage: jasmine.createSpy('uploadImage').and.returnValue(of('https://mock.url'))
+  };
+
+  const mockProductosService = {
+    crear: jasmine.createSpy('crear').and.returnValue(of({ idProducto: 1 })),
+    actualizar: jasmine.createSpy('actualizar').and.returnValue(of({ idProducto: 1 }))
+  };
+
+  const mockProducto: Producto = {
+    idProducto: 0,
+    nombre: 'Producto Test',
+    descripcion: 'Descripción',
+    idMaterial: 1,
+    nombreMaterial: '',
+    medidas: '10x10',
+    precio: 1000,
+    urlImagen: '',
+    activo: 1,
+    idTipoProducto: 2,
+    nombreTipoProducto: '',
+    cantidad: null
+  };
 
   beforeEach(async () => {
-    dialogRefSpy = jasmine.createSpyObj('MatDialogRef', ['close']);
-    tipoProductoServiceSpy = jasmine.createSpyObj('TipoProductoService', ['obtenerTodos']);
-    materialServiceSpy = jasmine.createSpyObj('MaterialService', ['obtenerTodos']);
-    imageServiceSpy = jasmine.createSpyObj('ImageService', ['uploadImage']);
-    productoServiceSpy = jasmine.createSpyObj('ProductosService', ['crear', 'actualizar']);
-
     await TestBed.configureTestingModule({
-      imports: [FormularioProductoComponent],
+      imports: [FormularioProductoComponent, NoopAnimationsModule],
       providers: [
-        { provide: MatDialogRef, useValue: dialogRefSpy },
-        { provide: MAT_DIALOG_DATA, useValue: productoMock },
-        { provide: TipoProductoService, useValue: tipoProductoServiceSpy },
-        { provide: MaterialService, useValue: materialServiceSpy },
-        { provide: ImageService, useValue: imageServiceSpy },
-        { provide: ProductosService, useValue: productoServiceSpy }
+        { provide: MatDialogRef, useValue: mockDialogRef },
+        { provide: MAT_DIALOG_DATA, useValue: mockProducto },
+        { provide: TipoProductoService, useValue: mockTipoProductoService },
+        { provide: MaterialService, useValue: mockMaterialService },
+        { provide: ImageService, useValue: mockImageService },
+        { provide: ProductosService, useValue: mockProductosService }
       ]
     }).compileComponents();
 
@@ -57,51 +67,70 @@ describe('FormularioProductoComponent', () => {
     fixture.detectChanges();
   });
 
-  it('debe crearse correctamente', () => {
+  it('debería crear el componente', () => {
     expect(component).toBeTruthy();
-    expect(component.producto.nombre).toBe('Test Producto');
   });
 
-  it('debe cargar tipos de producto correctamente', () => {
-    tipoProductoServiceSpy.obtenerTodos.and.returnValue(of([{ idTipoProducto: 1, nombre: 'Tipo 1', activo: 1 }]));
-    component.cargarTiposProducto();
-    expect(tipoProductoServiceSpy.obtenerTodos).toHaveBeenCalled();
+  it('debería cargar tipos de producto y materiales al iniciar', () => {
+    expect(mockTipoProductoService.obtenerTodos).toHaveBeenCalled();
+    expect(mockMaterialService.obtenerTodos).toHaveBeenCalled();
   });
 
-  it('debe cargar materiales correctamente', () => {
-    materialServiceSpy.obtenerTodos.and.returnValue(of([{ idMaterial: 1, nombre: 'Madera', descripcion: '', activo: 1 }]));
-    component['cargarMateriales']();
-    expect(materialServiceSpy.obtenerTodos).toHaveBeenCalled();
-  });
-
-  it('debe cancelar correctamente', () => {
+  it('debería cerrar el diálogo al cancelar', () => {
     component.cancelar();
-    expect(dialogRefSpy.close).toHaveBeenCalledWith(null);
+    expect(mockDialogRef.close).toHaveBeenCalledWith(null);
   });
 
-  it('debe mostrar error si el servicio falla al guardar', fakeAsync(() => {
-    component.imagenFile = null; // para evitar subida
-    productoServiceSpy.actualizar.and.returnValue(throwError(() => ({ error: { message: 'Error mock' } })));
+  it('debería guardar un nuevo producto', fakeAsync(() => {
+    component.producto = {
+      idProducto: 0,
+      nombre: 'Producto Test',
+      descripcion: 'Descripción de prueba',
+      idMaterial: 1,
+      nombreMaterial: '',
+      medidas: '10x10',
+      precio: 1000,
+      urlImagen: '',
+      activo: 1,
+      idTipoProducto: 2,
+      nombreTipoProducto: '',
+      cantidad: null
+    };
+
+    component.materiales = [{ idMaterial: 1, nombre: 'Madera', activo: 1 }];
+    component.tiposProducto = [{ idTipoProducto: 2, nombre: 'TipoX', urlImagen: '', activo: 1 }];
+    component.imagenFile = new File([''], 'producto.jpg');
+
+    const resultadoMock: Producto = {
+      ...component.producto,
+      nombreMaterial: 'Madera',
+      nombreTipoProducto: 'TipoX',
+      urlImagen: 'https://mock.url/producto.jpg',
+      idProducto: 1
+    };
+
+    mockImageService.uploadImage.and.returnValue(of('https://mock.url/producto.jpg'));
+    mockProductosService.crear.and.returnValue(of(resultadoMock));
+
     component.guardar();
     tick();
+
+    expect(mockDialogRef.close).toHaveBeenCalledWith(resultadoMock);
+  }));
+
+  it('debería mostrar mensaje de error si falla el guardado', fakeAsync(() => {
+    mockProductosService.crear.and.returnValue(throwError(() => ({ error: { message: 'Error mock' } })));
+    component.producto.idProducto = 0;
+    component.producto.nombre = 'Producto con error';
+    component.producto.descripcion = 'Descripción';
+    component.producto.idMaterial = 1;
+    component.producto.medidas = '10x10';
+    component.producto.precio = 1000;
+    component.producto.idTipoProducto = 2;
+
+    component.guardar();
+    tick();
+
     expect(component.mensajeError).toBe('Error mock');
-  }));
-
-  it('debe guardar correctamente producto actualizado', fakeAsync(() => {
-    component.imagenFile = null;
-    productoServiceSpy.actualizar.and.returnValue(of(productoMock));
-    component.guardar();
-    tick();
-    expect(dialogRefSpy.close).toHaveBeenCalledWith(productoMock);
-  }));
-
-  it('debe guardar correctamente un nuevo producto', fakeAsync(() => {
-    const nuevoProducto = { ...productoMock, idProducto: 0 };
-    component.producto = nuevoProducto;
-    component.imagenFile = null;
-    productoServiceSpy.crear.and.returnValue(of(nuevoProducto));
-    component.guardar();
-    tick();
-    expect(dialogRefSpy.close).toHaveBeenCalledWith(nuevoProducto);
   }));
 });

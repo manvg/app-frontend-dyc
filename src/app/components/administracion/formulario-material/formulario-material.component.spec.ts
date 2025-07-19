@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('FormularioMaterialComponent', () => {
   let component: FormularioMaterialComponent;
@@ -31,7 +32,8 @@ describe('FormularioMaterialComponent', () => {
         MatFormFieldModule,
         MatInputModule,
         MatSelectModule,
-        MatButtonModule
+        MatButtonModule,
+        BrowserAnimationsModule
       ],
       providers: [
         { provide: MatDialogRef, useValue: dialogRefSpy },

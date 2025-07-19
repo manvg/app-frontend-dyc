@@ -14,8 +14,6 @@ import { MaterialService } from '../../../services/material/material.service';
 import { ImageService } from '../../../services/image/image.service';
 import { ProductosService } from '../../../services/productos/productos.service';
 import { firstValueFrom } from 'rxjs';
-import { v4 as uuid } from 'uuid';
-import { url } from 'inspector';
 import { environment } from '../../../../environments/environment';
 
 @Component({
